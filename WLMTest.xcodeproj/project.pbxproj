@@ -38,6 +38,7 @@
 		D447CEEE154F16180033663B /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D447CEED154F16180033663B /* MainViewController.m */; };
 		D447CEF0154F16180033663B /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D447CEEF154F16180033663B /* MainViewController.xib */; };
 		D447CEF4154F16180033663B /* verify.sh in Resources */ = {isa = PBXBuildFile; fileRef = D447CEF3154F16180033663B /* verify.sh */; };
+		D447CEFB154F16810033663B /* www in Resources */ = {isa = PBXBuildFile; fileRef = D447CEFA154F16810033663B /* www */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,10 +56,10 @@
 		D447CEB6154F16180033663B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		D447CEB8154F16180033663B /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		D447CEBA154F16180033663B /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		D447CEBE154F16180033663B /* WLMTest-Info.plist */ = {isa = PBXFileReference; path = "WLMTest-Info.plist"; sourceTree = "<group>"; };
+		D447CEBE154F16180033663B /* WLMTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WLMTest-Info.plist"; sourceTree = "<group>"; };
 		D447CEC0154F16180033663B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D447CEC2154F16180033663B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		D447CEC4154F16180033663B /* WLMTest-Prefix.pch */ = {isa = PBXFileReference; path = "WLMTest-Prefix.pch"; sourceTree = "<group>"; };
+		D447CEC4154F16180033663B /* WLMTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WLMTest-Prefix.pch"; sourceTree = "<group>"; };
 		D447CEC5154F16180033663B /* Cordova.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cordova.framework; path = /Users/Shared/Cordova/Frameworks/Cordova.framework; sourceTree = "<absolute>"; };
 		D447CECA154F16180033663B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D447CECE154F16180033663B /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Resources/es.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -71,13 +72,14 @@
 		D447CEE2154F16180033663B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/splash/Default@2x.png"; sourceTree = "<group>"; };
 		D447CEE4154F16180033663B /* Capture.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Capture.bundle; path = Resources/Capture.bundle; sourceTree = "<group>"; };
 		D447CEE6154F16180033663B /* Cordova.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Cordova.plist; sourceTree = "<group>"; };
-		D447CEE9154F16180033663B /* AppDelegate.h */ = {isa = PBXFileReference; name = AppDelegate.h; path = Classes/AppDelegate.h; sourceTree = "<group>"; };
+		D447CEE9154F16180033663B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Classes/AppDelegate.h; sourceTree = "<group>"; };
 		D447CEEA154F16180033663B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Classes/AppDelegate.m; sourceTree = "<group>"; };
-		D447CEEC154F16180033663B /* MainViewController.h */ = {isa = PBXFileReference; name = MainViewController.h; path = Classes/MainViewController.h; sourceTree = "<group>"; };
+		D447CEEC154F16180033663B /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = Classes/MainViewController.h; sourceTree = "<group>"; };
 		D447CEED154F16180033663B /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MainViewController.m; path = Classes/MainViewController.m; sourceTree = "<group>"; };
 		D447CEEF154F16180033663B /* MainViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainViewController.xib; path = Classes/MainViewController.xib; sourceTree = "<group>"; };
-		D447CEF2154F16180033663B /* README */ = {isa = PBXFileReference; name = README; path = Plugins/README; sourceTree = "<group>"; };
+		D447CEF2154F16180033663B /* README */ = {isa = PBXFileReference; lastKnownFileType = text; name = README; path = Plugins/README; sourceTree = "<group>"; };
 		D447CEF3154F16180033663B /* verify.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = verify.sh; sourceTree = "<group>"; };
+		D447CEFA154F16810033663B /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 				D447CEBC154F16180033663B /* WLMTest */,
 				D447CEA1154F16180033663B /* Frameworks */,
 				D447CE9F154F16180033663B /* Products */,
+				D447CEFA154F16810033663B /* www */,
 			);
 			sourceTree = "<group>";
 		};
@@ -330,6 +333,7 @@
 				D447CEE7154F16180033663B /* Cordova.plist in Resources */,
 				D447CEF0154F16180033663B /* MainViewController.xib in Resources */,
 				D447CEF4154F16180033663B /* verify.sh in Resources */,
+				D447CEFB154F16810033663B /* www in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
