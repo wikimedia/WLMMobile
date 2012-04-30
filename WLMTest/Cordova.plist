@@ -22,7 +22,8 @@
 	<false/>
 	<key>ExternalHosts</key>
 	<array>
-		<string>pancake.local</string>
+		<string>*.wikipedia.org</string>
+		<string>*.wikimedia.org</string>
 	</array>
 	<key>Plugins</key>
 	<dict>
