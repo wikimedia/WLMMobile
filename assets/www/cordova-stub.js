@@ -4,7 +4,7 @@
 
 	if (navigator.userAgent.match(/Android/)) {
 		os = 'android';
-	} else if (navigator.userAgent.match(/iOS/)) {
+	} else if (navigator.userAgent.match(/iPhone|iPad|iPod Touch/)) {
 		os = 'ios';
 	}
 	
