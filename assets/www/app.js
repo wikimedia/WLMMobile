@@ -26,6 +26,14 @@ function onBodyLoad()
 
 var api = "https://test.wikipedia.org/w/api.php";
 
+var state = {
+	fileUri: null,
+	fileKey: null,
+	fileSize: null,
+	title: null
+};
+
+
 /* When this function is called, Cordova has been initialized and is ready to roll */
 /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
 see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
@@ -76,17 +84,19 @@ function onDeviceReady()
 		};
 		submitLogin(function(ok) {
 			if (ok) {
-				alert('logged in');
+				showPage('upload-page');
 			} else {
 				alert('not logged in');
 			}
 		});
 	});
+	
+	// upload-page
 	$('#takephoto').click(function() {
 		navigator.camera.getPicture(function(data) {
 			// success
-			//alert('success: ' + data);
-			doUpload(data);
+			state.fileUri = data;
+			prepUploadConfirmation();
 		}, function(msg) {
 			// error
 			alert('fail: ' + msg);
@@ -98,8 +108,8 @@ function onDeviceReady()
 	$('#selectphoto').click(function() {
 		navigator.camera.getPicture(function(data) {
 			// success
-			//alert('success: ' + data);
-			doUpload(data);
+			state.fileUri = data;
+			prepUploadConfirmation();
 		}, function(msg) {
 			// error
 			alert('fail: ' + msg);
@@ -109,9 +119,58 @@ function onDeviceReady()
 			sourceType: Camera.PictureSourceType.PHOTOLIBRARY
 		});
 	});
+	
+	// upload-status-page
+	$('#continue').click(function() {
+		showPage('upload-progress');
+		continueButtonCheck();
+		startUpload(state.fileUri);
+	});
+	$('#change-photo').click(function() {
+		showPage('upload-page');
+	});
+	
+	// upload-progress
+	$('#self-confirmation').click(function() {
+		continueButtonCheck();
+	});
+	$('#cancel-post-upload').click(function() {
+		// @fixme cancel the file transfer if still running
+		showPage('upload-status-page');
+	});
+	$('#continue-post-upload').click(function() {
+		if (!state.fileKey) {
+			alert('no file key yet');
+		} else {
+			showPage('upload-description');
+		}
+	});
+	
+	// upload-description
+	$('#submit-upload').click(function() {
+		console.log('Completing upload...');
+		completeUpload(state.fileKey);
+	});
+	
+	showPage('login-page');
 }
 
-function doUpload(sourceUri) {
+function showPage(page) {
+	$('.page').hide();
+	$('#' + page).show();
+}
+
+
+function prepUploadConfirmation() {
+	showPage('upload-status-page');
+}
+
+
+/**
+ * @return promise, resolves with token value, rejects with error message
+ */
+function getToken() {
+	var defer = new $.Deferred();
 	$.ajax({
 		url: api,
 		data: {
@@ -123,41 +182,120 @@ function doUpload(sourceUri) {
 		},
 		success: function(data) {
 			var token;
-			console.log(JSON.stringify(data));
 			$.each(data.query.pages, function(i, item) {
 				token = item.edittoken;
 			});
-			console.log('token is ' + token);
-			
-			var options = new FileUploadOptions();
-			options.fileKey = "file";
-			options.fileName = sourceUri.substr(sourceUri.lastIndexOf('/')+1);
-			options.mimeType = "image/jpg";
-			options.chunkedMode = false;
-			options.params = {
+			if (token) {
+				defer.resolve(token);
+			} else {
+				defer.reject("No token found");
+			}
+		},
+		fail: function(xhr, err) {
+			defer.reject("HTTP error");
+		}
+	});
+	return defer.promise();
+}
+
+
+/**
+ * @return promise, resolves with stashed file key, rejects with error message
+ */
+function doUpload(sourceUri) {
+	var defer = new $.Deferred();
+	getToken().done(function(token) {
+		var options = new FileUploadOptions();
+		options.fileKey = "file";
+		options.fileName = sourceUri.substr(sourceUri.lastIndexOf('/')+1);
+		options.mimeType = "image/jpg";
+		options.chunkedMode = false;
+		options.params = {
+			action: 'upload',
+			filename: 'Test_file.jpg',
+			comment: 'Uploaded with WLMTest',
+			text: 'Photo uploaded with WLMTest',
+			ignorewarnings: 1,
+			stash: 1,
+			token: token,
+			format: 'json'
+		};
+		
+		var ft = new FileTransfer();
+		ft.upload(sourceUri, api, function(r) {
+			// success
+			console.log("Code = " + r.responseCode);
+			console.log("Response = " + r.response);
+			console.log("Sent = " + r.bytesSent);
+			var data = JSON.parse(r.response);
+			if (data.upload.result == 'Success') {
+				defer.resolve(data.upload.filekey);
+			} else {
+				defer.reject("Upload did not succeed");
+			}
+		}, function(error) {
+			console.log("upload error source " + error.source);
+			console.log("upload error target " + error.target);
+			defer.reject("HTTP error");
+		}, options);
+	});
+	return defer.promise();
+}
+
+/**
+ * @return promise resolves with imageinfo structure, rejects with error message
+ */
+function completeUpload(fileKey) {
+	var defer = new $.Deferred();
+	console.log('upload completing... getting token...');
+	getToken().done(function(token) {
+		console.log('.... got token');
+		console.log('starting ajax upload completion...');
+		$.ajax({
+			url: api,
+			type: 'POST',
+			data: {
 				action: 'upload',
+				filekey: fileKey,
 				filename: 'Test_file.jpg',
 				comment: 'Uploaded with WLMTest',
 				text: 'Photo uploaded with WLMTest',
 				ignorewarnings: 1,
 				token: token,
 				format: 'json'
-			};
-			
-			var ft = new FileTransfer();
-			ft.upload(sourceUri, api, function(r) {
-				// success
-				alert('success');
-				console.log("Code = " + r.responseCode);
-				console.log("Response = " + r.response);
-				console.log("Sent = " + r.bytesSent);
-			}, function(error) {
-				alert("An error has occurred: Code = " + error.code);
+			},
+			success: function(data) {
+				console.log(JSON.stringify(data));
+				if (data.upload.result == 'Success') {
+					defer.resolve(data.upload.imageinfo);
+				} else {
+					defer.reject("Upload did not succeed");
+				}
+			},
+			fail: function(xhr, error) {
 				console.log("upload error source " + error.source);
 				console.log("upload error target " + error.target);
-			}, options);
-		}
+				defer.reject("HTTP error");
+			}
+		});
+	});
+	return defer.promise();
+}
+
+function startUpload(fileUri) {
+	doUpload(fileUri).done(function(fileKey) {
+		state.fileKey = fileKey;
+		$('#upload-progress-bar').text('done');
+		continueButtonCheck();
 	});
 }
 
+function continueButtonCheck() {
+	var okToContinue = (state.fileKey && $('#self-confirmation').is(':checked'));
+	if (okToContinue) {
+		$('#continue-post-upload').removeAttr('disabled');
+	} else {
+		$('#continue-post-upload').attr('disabled', 'disabled');
+	}
+}
 
