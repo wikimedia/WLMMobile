@@ -1,0 +1,8 @@
+Contains iOS and Android thingies.
+
+
+PhoneGap/Cordova issues:
+
+* https://issues.apache.org/jira/browse/CB-622 - no way to get progress information from FileTransfer
+
+
