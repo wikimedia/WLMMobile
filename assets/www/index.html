@@ -11,186 +11,72 @@
 	<link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />		
 	<link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />		
 	-->
-	<!-- If your application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
 	<script type="text/javascript" charset="utf-8" src="cordova-stub.js"></script>
 	<script type="text/javascript" charset="utf-8" src="jquery-1.7.2.js"></script>
-    <script type="text/javascript">
-
-
-	// If you want to prevent dragging, uncomment this section
-	/*
-	function preventBehavior(e) 
-	{ 
-      e.preventDefault(); 
-    };
-	document.addEventListener("touchmove", preventBehavior, false);
-	*/
-	
-	/* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
-	see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
-	for more details -jm */
-	/*
-	function handleOpenURL(url)
-	{
-		// TODO: do something with the url passed in.
-	}
-	*/
-	
-	function onBodyLoad()
-	{		
-		document.addEventListener("deviceready", onDeviceReady, false);
-	}
-
-	var api = "https://test.wikipedia.org/w/api.php";
-
-	/* When this function is called, Cordova has been initialized and is ready to roll */
-	/* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
-	see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
-	for more details -jm */
-	function onDeviceReady()
-	{
-		// do your thing!
-		//navigator.notification.alert("Cordova is working")
-		$('#login').click(function() {
-			function submitLogin(callback, token) {
-				var params = {
-					action: 'login',
-					lgname: $('#login-user').val(),
-					lgpassword: $('#login-pass').val(),
-					format: 'json'
-				};
-				if (token) {
-					params.lgtoken = token;
-				}
-				$.ajax({
-					url: api,
-					data: params,
-					type: 'POST',
-					success: function(data) {
-						console.log(JSON.stringify(data));
-						console.log('data.login.result is ' + data.login.result);
-						if (data.login.result == 'NeedToken') {
-							console.log('got NeedToken');
-							if (!token) {
-								console.log('resubmitting with token');
-								submitLogin(callback, data.login.token);
-							} else {
-								console.log('got asked for token twice');
-							}
-						} else if (data.login.result == 'Success') {
-							console.log('success');
-							callback(true);
-						} else {
-							console.log('fail');
-							callback(false);
-						}
-					},
-					error: function(err) {
-						console.log('faaaaailed');
-						callback(false);
-					},
-				});
-			};
-			submitLogin(function(ok) {
-				if (ok) {
-					alert('logged in');
-				} else {
-					alert('not logged in');
-				}
-			});
-		});
-		$('#takephoto').click(function() {
-			navigator.camera.getPicture(function(data) {
-				// success
-				//alert('success: ' + data);
-				doUpload(data);
-			}, function(msg) {
-				// error
-				alert('fail: ' + msg);
-			}, {
-				// options
-				destinationType: Camera.DestinationType.FILE_URI
-			});
-		});
-		$('#selectphoto').click(function() {
-			navigator.camera.getPicture(function(data) {
-				// success
-				//alert('success: ' + data);
-				doUpload(data);
-			}, function(msg) {
-				// error
-				alert('fail: ' + msg);
-			}, {
-				// options
-				destinationType: Camera.DestinationType.FILE_URI,
-				sourceType: Camera.PictureSourceType.PHOTOLIBRARY
-			});
-		});
-	}
-	
-	function doUpload(sourceUri) {
-		$.ajax({
-			url: api,
-			data: {
-				action: 'query',
-				prop: 'info',
-				intoken: 'edit',
-				titles: 'Foo',
-				format: 'json'
-			},
-			success: function(data) {
-				var token;
-				console.log(JSON.stringify(data));
-				$.each(data.query.pages, function(i, item) {
-					token = item.edittoken;
-				});
-				console.log('token is ' + token);
-				
-				var options = new FileUploadOptions();
-				options.fileKey = "file";
-				options.fileName = sourceUri.substr(sourceUri.lastIndexOf('/')+1);
-				options.mimeType = "image/jpg";
-				options.chunkedMode = false;
-				options.params = {
-					action: 'upload',
-					filename: 'Test_file.jpg',
-					comment: 'Uploaded with WLMTest',
-					text: 'Photo uploaded with WLMTest',
-					ignorewarnings: 1,
-					token: token,
-					format: 'json'
-				};
-				
-				var ft = new FileTransfer();
-				ft.upload(sourceUri, api, function(r) {
-					// success
-					alert('success');
-					console.log("Code = " + r.responseCode);
-					console.log("Response = " + r.response);
-					console.log("Sent = " + r.bytesSent);
-				}, function(error) {
-					alert("An error has occurred: Code = " + error.code);
-					console.log("upload error source " + error.source);
-					console.log("upload error target " + error.target);
-				}, options);
-			}
-		});
-	}
-    
-    </script>
+    <script type="text/javascript" charset="utf-8" src="app.js"></script>
   </head>
   <body onload="onBodyLoad()">
-	<h1>Hey, it's Cordova!</h1>
-	<fieldset>
-		<legend>Log in</legend>
-		<div><input id="login-user" type="text" placeholder="Username"></div>
-		<div><input id="login-pass" type="password" placeholder="Password"></div>
+  
+  	<div class="page" id="login-page">
+		<fieldset>
+			<legend>Log in</legend>
+			<div><input id="login-user" type="text" placeholder="Username"></div>
+			<div><input id="login-pass" type="password" placeholder="Password"></div>
+			<div>
+			<button id="login">Login</button>
+		</fieldset>
+	</div>
+	
+	<div class="page" id="upload-page">
 		<div>
-		<button id="login">Login</button>
-	</fieldset>
-	<div>
-		<button id="takephoto">Take photo</button>
-		<button id="selectphoto">Select photo</button>
+			<button id="selectphoto">Gallery</button>
+		</div>
+		<div>
+			<button id="takephoto">Take photo</button>
+		</div>
+	</div>
+	
+	<div class="page" id="upload-status-page">
+		<p>The image you have selected is X KB. Continue?</p>
+		<div>
+			<button id="change-photo">Change</button>
+		</div>
+		<div>
+			<button id="continue">Continue</button>
+		</div>
+		<div>
+			<input type="checkbox" id="skip-warning"> <label for="skip-warning">Don't show this again</a>
+		</div>
+	</div>
+	
+	<div class="page" id="upload-progress">
+		<p>Images are being uploaded...</p>
+		<p>-progress bar-</p>
+		<p>Please choose a license for this work. <i>Note: do not upload
+		other people's photos or photos of copyrighted material, such as
+		posters, signs or covers.</i></p>
+		<div>
+			<input type="check" id="self-confirmation">
+			<label for="self-confirmation">I took this photo.</label>
+			I, <span class="username"></span>, the copyright holder of this work,
+			irrevocably grant anyone the right to use this work under the following license:
+		</div>
+		<div>
+			<input type="radio" checked id="cc-by-sa">
+			<label for="cc-by-sa"><b>CC-BY-SA 3.0 Unported</b> license (credit me and share with the same license)
+		</div>
+	</div>
+	
+	<div class="page" id="upload-description">
+		<img id="thumbnail">
+		<div>
+			<label for="detail-title">
+			<input id="detail-title">
+		</div>
+		
+		Notes
+		
+		Monument ID: London 12345
 	</div>
   </body>
 </html>
