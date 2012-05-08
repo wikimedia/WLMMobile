@@ -1,10 +1,10 @@
-package org.apache.cordova.example;
+package org.wikipedia.wlm;
 
 import android.app.Activity;
 import android.os.Bundle;
 import org.apache.cordova.*;
 
-public class cordovaExample extends DroidGap
+public class WikiLovesMonuments extends DroidGap
 {
     @Override
     public void onCreate(Bundle savedInstanceState)
