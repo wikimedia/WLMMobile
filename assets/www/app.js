@@ -32,6 +32,39 @@ var state = {
 	fileSize: null,
 	title: null
 };
+var countries = {
+	'ad': 'Andorra',
+	'at': 'Austria',
+	'be-bru': 'Belgium (Brussels)',
+	'be-vlg': 'Belgium (Flanders)',
+	'be-wal': 'Belgium (Wallonia)',
+	'by': 'Belarus',
+	'ch': 'Switzerland',
+	'de-by': 'Germany (Bavaria)',
+	'de-he': 'Germany (Hesse)',
+	'de-nrw-bm': 'Germany (nrw-bm)',
+	'de-nrw-k': 'Germany (nrw-k)',
+	'dk-bygning': 'Denmark (bygning)',
+	'dk-fortids': 'Denmark (fortids)',
+	'ee': 'Estonia',
+	'es': 'Spain',
+	'es-ct': 'Catalonia',
+	'es-vc': 'Valencia',
+	'fr': 'France',
+	'ie': 'Ireland',
+	'it-88': 'Italy (88)',
+	'it-bz': 'Italy (bz)',
+	'lu': 'Luxemburg',
+	'mt': 'Malta',
+	'nl': 'Netherlands',
+	'no': 'Norway',
+	'pl': 'Poland',
+	'pt': 'Portugal',
+	'ro': 'Romania',
+	'se': 'Sweden',
+	'sk': 'Slovakia',
+	'us': 'United States'
+};
 
 
 /* When this function is called, Cordova has been initialized and is ready to roll */
@@ -40,6 +73,28 @@ see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-cu
 for more details -jm */
 function onDeviceReady()
 {
+	$.each(countries, function(code, name) {
+		var $li = $('<li>'),
+			$button = $('<button>');
+		$button.addClass('country-search').text(name);
+		$button.click(function() {
+			showPage('results-page');
+			$.ajax({
+				url: wlmapi,
+				data: {
+					'action': 'search',
+					'srcountry': code,
+					'format': 'json',
+				},
+				success: function(data) {
+					showSearchResults(data);
+				}
+			});
+		});
+		$button.appendTo($li);
+		$li.appendTo('#country-list');
+	});
+
 	$('#nearby').click(function() {
 		showPage('results-page');
 		/*
@@ -60,11 +115,9 @@ function onDeviceReady()
 					
 					
 		*/
-		/*
-		 This gives... nothing so far
+		//This gives... nothing so far
 		navigator.geolocation.getCurrentPosition(function(pos) {
-			alert(pos.coords.latitude + ', ' +
-				pos.coords.longitude);
+			//alert(pos.coords.latitude + ', ' + pos.coords.longitude);
 			$.ajax({
 				url: wlmapi,
 				data: {
@@ -74,16 +127,19 @@ function onDeviceReady()
 					'format': 'json',
 				},
 				success: function(data) {
-					
+					showSearchResults(data);
 				}
 			});
 		}, function(err) {
 			alert('Error in geolocation');
 		});
-		*/
 
 	});
 	
+	$('#back-welcome').click(function() {
+		showPage('welcome-page');
+	});
+
 	$('#start-upload').click(function() {
 		showPage('login-page');
 	});
@@ -345,5 +401,9 @@ function continueButtonCheck() {
 	} else {
 		$('#continue-post-upload').attr('disabled', 'disabled');
 	}
+}
+
+function showSearchResults(data) {
+	alert(data);
 }
 
