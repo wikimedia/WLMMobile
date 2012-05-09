@@ -119,12 +119,21 @@ function onDeviceReady()
 		//This gives... nothing so far
 		navigator.geolocation.getCurrentPosition(function(pos) {
 			//alert(pos.coords.latitude + ', ' + pos.coords.longitude);
+			var dist = 1; // degree 'radius' approx on the bounding box
+			var bbox = [
+				pos.coords.longitude - dist,
+				pos.coords.latitude - dist,
+				pos.coords.longitude + dist,
+				pos.coords.latitude + dist
+			].join(',');
+			console.log(bbox);
 			$.ajax({
 				url: wlmapi,
 				data: {
 					'action': 'search',
-					'srlat': pos.coords.latitude,
-					'srlon': pos.coords.longitude,
+					//'srlat': pos.coords.latitude,
+					//'srlon': pos.coords.longitude,
+					'bbox': bbox,
 					'format': 'xml',
 				},
 				success: function(data) {
@@ -527,8 +536,12 @@ ImageFetcher.prototype.send = function() {
 		data: data,
 		success: function(data) {
 			// Get the normalization map
+			if (!('query' in data)) {
+				console.log('no return image data');
+				return;
+			}
 			var origName = {};
-			if (data.query.normalized) {
+			if ('normalized' in data.query) {
 				$.each(data.query.normalized, function(i, pair) {
 					origName[pair.to] = pair.from;
 				});
