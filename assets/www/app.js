@@ -84,7 +84,7 @@ function onDeviceReady()
 				data: {
 					'action': 'search',
 					'srcountry': code,
-					'format': 'json',
+					'format': 'xml',
 				},
 				success: function(data) {
 					showSearchResults(data);
@@ -124,7 +124,7 @@ function onDeviceReady()
 					'action': 'search',
 					'srlat': pos.coords.latitude,
 					'srlon': pos.coords.longitude,
-					'format': 'json',
+					'format': 'xml',
 				},
 				success: function(data) {
 					showSearchResults(data);
@@ -404,6 +404,38 @@ function continueButtonCheck() {
 }
 
 function showSearchResults(data) {
-	alert(data);
+	//alert(data);
+	var fields = [
+		'country',
+		'lang',
+		'id',
+		'name',
+		'address',
+		'municipality',
+		'lat',
+		'lon',
+		'image',
+		'source',
+		'monument_article',
+		'registrant_url',
+		'changed'
+	];
+	var results = [];
+	// XML -> JSON
+	$('monument', data).each(function(i, node) {
+		var obj = {};
+		$.each(fields, function(i, field) {
+			obj[field] = node.getAttribute(field);
+			if (field == 'lat' || field == 'lon') {
+				obj[field] = parseFloat(field);
+			}
+		});
+		results.push(obj);
+	});
+	// whee
+	$.each(results, function(i, item) {
+		console.log(JSON.stringify(item));
+	});
+	alert(results.length + ' items');
 }
 
