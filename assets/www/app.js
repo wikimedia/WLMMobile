@@ -25,6 +25,7 @@ function onBodyLoad()
 }
 
 var api = "https://test.wikipedia.org/w/api.php";
+var commonsApi = 'https://commons.wikimedia.org/w/api.php';
 var wlmapi = 'http://toolserver.org/~erfgoed/api/api.php';
 var state = {
 	fileUri: null,
@@ -439,8 +440,28 @@ function showSearchResults(data) {
 	// whee
 	$('#results').empty();
 	$.each(results, function(i, item) {
-		var $li = $('<li><img width=64 height=64> <span class="name"></span></li>');
+		var $li = $('<li><img> <span class="name"></span></li>');
 		$li.find('.name').text(item.name);
+		if (item.image) {
+			$.ajax({
+				url: commonsApi,
+				data: {
+					action: 'query',
+					titles: 'File:' + item.image,
+					prop: 'imageinfo',
+					iiprop: 'url',
+					iiurlwidth: 64,
+					iiurlheight: 64,
+					format: 'json'
+				},
+				success: function(data) {
+					$.each(data.query.pages, function(pageId, page) {
+						console.log(JSON.stringify(page.imageinfo));
+						$li.find('img').attr('src', page.imageinfo[0].thumburl);
+					});
+				}
+			});
+		}
 		$li.appendTo('#results');
 		$li.click(function() {
 			showPage('detail-page');
