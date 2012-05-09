@@ -25,7 +25,7 @@ function onBodyLoad()
 }
 
 var api = "https://test.wikipedia.org/w/api.php";
-
+var wlmapi = 'http://toolserver.org/~erfgoed/api/api.php';
 var state = {
 	fileUri: null,
 	fileKey: null,
@@ -40,6 +40,54 @@ see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-cu
 for more details -jm */
 function onDeviceReady()
 {
+	$('#nearby').click(function() {
+		showPage('results-page');
+		/*
+			monuments: [
+				{
+					country,
+					lang,
+					id, // string
+					name,
+					address, // may be empty
+					municipality, // may be empty
+					lat, // string
+					lon, // string
+					image, // may be empty
+					source, // URL for the image? may be empty
+					monument_article, // seems mostly empty
+					registrant_url, // what's this mean exactly?
+					
+					
+		*/
+		/*
+		 This gives... nothing so far
+		navigator.geolocation.getCurrentPosition(function(pos) {
+			alert(pos.coords.latitude + ', ' +
+				pos.coords.longitude);
+			$.ajax({
+				url: wlmapi,
+				data: {
+					'action': 'search',
+					'srlat': pos.coords.latitude,
+					'srlon': pos.coords.longitude,
+					'format': 'json',
+				},
+				success: function(data) {
+					
+				}
+			});
+		}, function(err) {
+			alert('Error in geolocation');
+		});
+		*/
+
+	});
+	
+	$('#start-upload').click(function() {
+		showPage('login-page');
+	});
+
 	// do your thing!
 	//navigator.notification.alert("Cordova is working")
 	$('#login').click(function() {
@@ -152,7 +200,7 @@ function onDeviceReady()
 		completeUpload(state.fileKey);
 	});
 	
-	showPage('login-page');
+	showPage('welcome-page');
 }
 
 function showPage(page) {
