@@ -456,7 +456,7 @@ function showSearchResults(data) {
 				},
 				success: function(data) {
 					$.each(data.query.pages, function(pageId, page) {
-						console.log(JSON.stringify(page.imageinfo));
+						//console.log(JSON.stringify(page.imageinfo));
 						$li.find('img').attr('src', page.imageinfo[0].thumburl);
 					});
 				}
@@ -476,6 +476,7 @@ function showSearchResults(data) {
 			$('#detail-source').text(item.source); // URL?
 			$('#detail-changed').text(item.changed); // timestamp - format me
 			if (item.image) {
+				/*
 				$.ajax({
 					url: commonsApi,
 					data: {
@@ -495,8 +496,82 @@ function showSearchResults(data) {
 						});
 					}
 				});
+				*/
+				var fetcher = new ImageFetcher(commonsApi, 300, 240);
+				fetcher.request(item.image, function(imageinfo) {
+					console.log('?? ' + JSON.stringify(imageinfo));
+					var $img = $('<img>');
+					$img.attr('src', imageinfo.thumburl);
+					$('#detail-image').empty().append($img);
+				});
+				fetcher.send();
 			}
 		});
 	});
 }
+
+
+/**
+ * Fetch image info for one or more images via MediaWiki API
+ */
+function ImageFetcher(api, width, height) {
+	this.api = api || commonsApi;
+	this.titles = [];
+	this.callbacks = {};
+	this.width = width;
+	this.height = height;
+}
+
+ImageFetcher.prototype.request = function(filename, callback) {
+	var title = 'File:' + filename;
+	this.titles.push(title);
+	this.callbacks[title] = callback;
+};
+
+ImageFetcher.prototype.send = function() {
+	var that = this;
+	var data = {
+		action: 'query',
+		titles: this.titles.join('|'),
+		prop: 'imageinfo',
+		iiprop: 'url',
+		format: 'json'
+	};
+	if (this.width) {
+		data.iiurlwidth = this.width;
+	}
+	if (this.height) {
+		data.iiurlheight = this.height;
+	}
+	console.log(this.api);
+	console.log(JSON.stringify(data));
+	$.ajax({
+		url: this.api,
+		data: data,
+		success: function(data) {
+			// Get the normalization map
+			var origName = {};
+			if (data.query.normalized) {
+				$.each(data.query.normalized, function(i, pair) {
+					origName[pair.to] = pair.from;
+				});
+			}
+
+			$.each(data.query.pages, function(pageId, page) {
+				var title = page.title;
+				if (title in origName) {
+					console.log('Normalizing title');
+					title = origName[title];
+				}
+				var imageinfo = page.imageinfo[0];
+				if (title in that.callbacks) {
+					console.log('Calling callback for ' + title);
+					that.callbacks[title].apply(imageinfo, [imageinfo]);
+				} else {
+					console.log('No callback for image ' + title);
+				}
+			});
+		}
+	});
+};
 
