@@ -149,6 +149,10 @@ function onDeviceReady()
 		showPage('login-page');
 	});
 
+	$('#back-detail').click(function() {
+		showPage('detail-page');
+	});
+
 	// do your thing!
 	//navigator.notification.alert("Cordova is working")
 	$('#login').click(function() {
@@ -455,9 +459,17 @@ function showSearchResults(data) {
 			$('#detail-lang').text(item.lang);
 			$('#detail-id').text(item.id);
 			$('#detail-name').text(item.name); // may contain wikitext
-			$('#detail-link').text(item.monument_article);
-			$('#detail-address').text(item.name); // may contain wikitext
-			$('#detail-municipality').text(item.name); // may contain wikitext
+			$('#detail-link').empty();
+			if (item.monument_article) {
+				var $a = $('<a>');
+				// @fixme may contain a #foo hash
+				var url = 'https://' + item.lang + '.wikipedia.org/wiki/' +
+					encodeURIComponent(item.monument_article.replace(/ /g, '_'));
+				$a.attr('href', url).text('Wikipedia article').addClass('external');
+				$('#detail-link').append($a);
+			}
+			$('#detail-address').text(item.address); // may contain wikitext
+			$('#detail-municipality').text(item.municipality); // may contain wikitext
 			$('#detail-location').text(item.lat + ', ' + item.lon);
 			$('#detail-source').text(item.source); // URL?
 			$('#detail-changed').text(item.changed); // timestamp - format me
