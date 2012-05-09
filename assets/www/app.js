@@ -439,27 +439,13 @@ function showSearchResults(data) {
 	});
 	// whee
 	$('#results').empty();
+	var fetcher = new ImageFetcher(commonsApi, 64, 64);
 	$.each(results, function(i, item) {
 		var $li = $('<li><img> <span class="name"></span></li>');
 		$li.find('.name').text(item.name);
 		if (item.image) {
-			$.ajax({
-				url: commonsApi,
-				data: {
-					action: 'query',
-					titles: 'File:' + item.image,
-					prop: 'imageinfo',
-					iiprop: 'url',
-					iiurlwidth: 64,
-					iiurlheight: 64,
-					format: 'json'
-				},
-				success: function(data) {
-					$.each(data.query.pages, function(pageId, page) {
-						//console.log(JSON.stringify(page.imageinfo));
-						$li.find('img').attr('src', page.imageinfo[0].thumburl);
-					});
-				}
+			fetcher.request(item.image, function(imageinfo) {
+				$li.find('img').attr('src', imageinfo.thumburl);
 			});
 		}
 		$li.appendTo('#results');
@@ -475,39 +461,20 @@ function showSearchResults(data) {
 			$('#detail-location').text(item.lat + ', ' + item.lon);
 			$('#detail-source').text(item.source); // URL?
 			$('#detail-changed').text(item.changed); // timestamp - format me
+			$('#detail-image').empty();
 			if (item.image) {
-				/*
-				$.ajax({
-					url: commonsApi,
-					data: {
-						action: 'query',
-						titles: 'File:' + item.image,
-						prop: 'imageinfo',
-						iiprop: 'url',
-						iiurlwidth: 300,
-						iiurlheight: 240,
-						format: 'json'
-					},
-					success: function(data) {
-						$.each(data.query.pages, function(pageId, page) {
-							var $img = $('<img>');
-							$img.attr('src', page.imageinfo[0].thumburl);
-							$('#detail-image').empty().append($img);
-						});
-					}
-				});
-				*/
-				var fetcher = new ImageFetcher(commonsApi, 300, 240);
-				fetcher.request(item.image, function(imageinfo) {
+				var fetcher2 = new ImageFetcher(commonsApi, 300, 240);
+				fetcher2.request(item.image, function(imageinfo) {
 					console.log('?? ' + JSON.stringify(imageinfo));
 					var $img = $('<img>');
 					$img.attr('src', imageinfo.thumburl);
 					$('#detail-image').empty().append($img);
 				});
-				fetcher.send();
+				fetcher2.send();
 			}
 		});
 	});
+	fetcher.send();
 }
 
 
@@ -543,8 +510,6 @@ ImageFetcher.prototype.send = function() {
 	if (this.height) {
 		data.iiurlheight = this.height;
 	}
-	console.log(this.api);
-	console.log(JSON.stringify(data));
 	$.ajax({
 		url: this.api,
 		data: data,
@@ -563,12 +528,13 @@ ImageFetcher.prototype.send = function() {
 					console.log('Normalizing title');
 					title = origName[title];
 				}
-				var imageinfo = page.imageinfo[0];
-				if (title in that.callbacks) {
-					console.log('Calling callback for ' + title);
-					that.callbacks[title].apply(imageinfo, [imageinfo]);
-				} else {
-					console.log('No callback for image ' + title);
+				if ('imageinfo' in page) {
+					var imageinfo = page.imageinfo[0];
+					if (title in that.callbacks) {
+						that.callbacks[title].apply(imageinfo, [imageinfo]);
+					} else {
+						console.log('No callback for image ' + title);
+					}
 				}
 			});
 		}
