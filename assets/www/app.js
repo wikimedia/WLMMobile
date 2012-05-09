@@ -468,7 +468,6 @@ function showSearchResults(data) {
 			$('#detail-country').text(item.country);
 			$('#detail-lang').text(item.lang);
 			$('#detail-id').text(item.id);
-			$('#detail-image').text(item.image); // commons name?
 			$('#detail-name').text(item.name); // may contain wikitext
 			$('#detail-link').text(item.monument_article);
 			$('#detail-address').text(item.name); // may contain wikitext
@@ -476,6 +475,27 @@ function showSearchResults(data) {
 			$('#detail-location').text(item.lat + ', ' + item.lon);
 			$('#detail-source').text(item.source); // URL?
 			$('#detail-changed').text(item.changed); // timestamp - format me
+			if (item.image) {
+				$.ajax({
+					url: commonsApi,
+					data: {
+						action: 'query',
+						titles: 'File:' + item.image,
+						prop: 'imageinfo',
+						iiprop: 'url',
+						iiurlwidth: 300,
+						iiurlheight: 240,
+						format: 'json'
+					},
+					success: function(data) {
+						$.each(data.query.pages, function(pageId, page) {
+							var $img = $('<img>');
+							$img.attr('src', page.imageinfo[0].thumburl);
+							$('#detail-image').empty().append($img);
+						});
+					}
+				});
+			}
 		});
 	});
 }
