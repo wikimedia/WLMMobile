@@ -140,6 +140,10 @@ function onDeviceReady()
 		showPage('welcome-page');
 	});
 
+	$('#back-results').click(function() {
+		showPage('results-page');
+	});
+
 	$('#start-upload').click(function() {
 		showPage('login-page');
 	});
@@ -427,15 +431,31 @@ function showSearchResults(data) {
 		$.each(fields, function(i, field) {
 			obj[field] = node.getAttribute(field);
 			if (field == 'lat' || field == 'lon') {
-				obj[field] = parseFloat(field);
+				obj[field] = parseFloat(obj[field]);
 			}
 		});
 		results.push(obj);
 	});
 	// whee
+	$('#results').empty();
 	$.each(results, function(i, item) {
-		console.log(JSON.stringify(item));
+		var $li = $('<li><img width=64 height=64> <span class="name"></span></li>');
+		$li.find('.name').text(item.name);
+		$li.appendTo('#results');
+		$li.click(function() {
+			showPage('detail-page');
+			$('#detail-country').text(item.country);
+			$('#detail-lang').text(item.lang);
+			$('#detail-id').text(item.id);
+			$('#detail-image').text(item.image); // commons name?
+			$('#detail-name').text(item.name); // may contain wikitext
+			$('#detail-link').text(item.monument_article);
+			$('#detail-address').text(item.name); // may contain wikitext
+			$('#detail-municipality').text(item.name); // may contain wikitext
+			$('#detail-location').text(item.lat + ', ' + item.lon);
+			$('#detail-source').text(item.source); // URL?
+			$('#detail-changed').text(item.changed); // timestamp - format me
+		});
 	});
-	alert(results.length + ' items');
 }
 
