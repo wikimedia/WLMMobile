@@ -137,7 +137,7 @@ function onDeviceReady()
 					'format': 'xml',
 				},
 				success: function(data) {
-					showSearchResults(data);
+					showSearchResults(data, pos);
 				}
 			});
 		}, function(err) {
@@ -421,7 +421,7 @@ function continueButtonCheck() {
 	}
 }
 
-function showSearchResults(data) {
+function showSearchResults(data, pos) {
 	//alert(data);
 	var fields = [
 		'country',
@@ -450,6 +450,26 @@ function showSearchResults(data) {
 		});
 		results.push(obj);
 	});
+	
+	// Sort by location
+	if (pos !== undefined) {
+		/**
+		 * Distance approximation, in degrees
+		 */
+		function dist(lat, lon) {
+			var dlat = (lat - pos.coords.latitude),
+				dlon = (lon - pos.coords.longitude),
+				degrees = Math.sqrt(dlat * dlat + dlon * dlon);
+			return degrees;
+		}
+		$.each(results, function(i, item) {
+			item.dist = dist(item.lat, item.lon);
+		});
+		results = results.sort(function(a, b) {
+			return a.dist - b.dist;
+		});
+	}
+	
 	// whee
 	$('#results').empty();
 	var fetcher = new ImageFetcher(commonsApi, 64, 64);
