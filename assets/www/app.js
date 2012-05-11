@@ -475,7 +475,7 @@ function showSearchResults(data, pos) {
 	var fetcher = new ImageFetcher(commonsApi, 64, 64);
 	$.each(results, function(i, item) {
 		var $li = $('<li><img> <span class="name"></span></li>');
-		$li.find('.name').text(item.name);
+		$li.find('.name').text(stripWikiText(item.name));
 		if (item.image) {
 			fetcher.request(item.image, function(imageinfo) {
 				$li.find('img').attr('src', imageinfo.thumburl);
@@ -585,4 +585,12 @@ ImageFetcher.prototype.send = function() {
 		}
 	});
 };
+
+
+
+function stripWikiText(str) {
+	str = str.replace(/\[\[[^\|]+\|([^\]]+)\]\]/g, '$1');
+	str = str.replace(/\[\[([^\]]+)\]\]/g, '$1');
+	return str;
+}
 
