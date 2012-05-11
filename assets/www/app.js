@@ -119,7 +119,7 @@ function onDeviceReady()
 		//This gives... nothing so far
 		navigator.geolocation.getCurrentPosition(function(pos) {
 			//alert(pos.coords.latitude + ', ' + pos.coords.longitude);
-			var dist = 1; // degree 'radius' approx on the bounding box
+			var dist = 0.5; // degree 'radius' approx on the bounding box
 			var bbox = [
 				pos.coords.longitude - dist,
 				pos.coords.latitude - dist,
