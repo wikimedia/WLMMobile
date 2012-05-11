@@ -474,8 +474,9 @@ function showSearchResults(data, pos) {
 	$('#results').empty();
 	var fetcher = new ImageFetcher(commonsApi, 64, 64);
 	$.each(results, function(i, item) {
-		var $li = $('<li><img> <span class="name"></span></li>');
+		var $li = $('<li><img> <div class="stuff"><div class="name"></div><div class="address"></div></div></li>');
 		$li.find('.name').text(stripWikiText(item.name));
+		$li.find('.address').text(stripWikiText(item.address));
 		if (item.image) {
 			fetcher.request(item.image, function(imageinfo) {
 				$li.find('img').attr('src', imageinfo.thumburl);

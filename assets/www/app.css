@@ -21,7 +21,7 @@
 	height: 64px;
 }
 
-#results li span {
+#results li div.stuff {
 	position: absolute;
 	top: 0;
 	left: 64px;
@@ -29,5 +29,9 @@
 	bottom: 0;
 	padding: 8px;
 	overflow: hidden;
+}
+
+#results li div.address {
+	font-size: 90%;
 }
 
