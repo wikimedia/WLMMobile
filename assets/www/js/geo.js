@@ -10,7 +10,7 @@ window.geo = function() {
 			geo.map = new L.Map('map');
 			//var tiles = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			var tiles = new L.TileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {
-				maxZoom: 12,
+				maxZoom: 18,
 				subdomains: '1234' // for MapQuest tiles
 			});
 			geo.map.addLayer(tiles);
@@ -25,7 +25,13 @@ window.geo = function() {
 				chrome.openExternalLink(this.href);
 				event.preventDefault();
 			});
+			geo.markerGroup = new L.LayerGroup();
+			geo.map.addLayer(geo.markerGroup);
 		}
+	}
+	
+	function clearMarkers() {
+		geo.markerGroup.clearLayers();
 	}
 	
 	function addMarker(lat, lon, title, summary, callback) {
@@ -36,13 +42,15 @@ window.geo = function() {
 			callback();
 		})[0];
 		marker.bindPopup(popupContent, {closeButton: false});
-		geo.map.addLayer(marker);
+		geo.markerGroup.addLayer(marker);
 	}
 
 	return {
 		initMap: initMap,
+		clearMarkers: clearMarkers,
 		addMarker: addMarker,
-		map: null
+		map: null,
+		markerGroup: null
 	};
 
 }();

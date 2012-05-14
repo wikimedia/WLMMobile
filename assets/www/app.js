@@ -154,7 +154,7 @@ $(document).bind('mw-messages-ready', function() {
 
 	});
 	
-	$('#back-welcome').click(function() {
+	$('#back-welcome, #back-welcome2').click(function() {
 		showPage('welcome-page');
 	});
 	$('#show-list').click(function() {
@@ -491,9 +491,30 @@ function showSearchResults(data, pos) {
 	var fetcher = new ImageFetcher(commonsApi, 64, 64);
 
 	geo.initMap();
+	geo.clearMarkers();
 	// @fixme load last-seen coordinates
 	if (pos) {
-		geo.map.setView(new L.LatLng(pos.coords.latitude, pos.coords.longitude), 18);
+		geo.map.setView(new L.LatLng(pos.coords.latitude, pos.coords.longitude), 12);
+	} else {
+		var sum = {lat: 0, lon: 0},
+			avg = {lat: 0, lon: 0},
+			count = 0;
+		$.each(results, function(i, item) {
+			if (item.lat || item.lon) {
+				// Only count things that aren't at (0, 0)
+				sum.lat += item.lat;
+				sum.lon += item.lon;
+				count++;
+			}
+		});
+		if (count == 0) {
+			// Seriously?
+			geo.map.setView(new L.LatLng(0, 0), 1);
+		} else {
+			avg.lat = sum.lat / count;
+			avg.lon = sum.lon / count;
+			geo.map.setView(new L.LatLng(avg.lat, avg.lon), 10);
+		}
 	}
 
 	$.each(results, function(i, item) {
@@ -540,7 +561,10 @@ function showSearchResults(data, pos) {
 		};
 		$li.click(showDetail);
 		
-		geo.addMarker(item.lat, item.lon, item.name, item.address, showDetail);
+		if (item.lat || item.lon) {
+			// Only add items to map that have a lat/lon
+			geo.addMarker(item.lat, item.lon, item.name, item.address, showDetail);
+		}
 	});
 	fetcher.send();
 }
