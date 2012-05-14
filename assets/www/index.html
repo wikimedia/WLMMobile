@@ -44,13 +44,13 @@
   	<div class="page" id="results-page">
   		<header>
   			<div>
-		  		<button id="back-welcome">Back</button>
-				<button id="show-map">Map view</button>
-		  		<button id="show-list">List view</button>
+		  		<button id="back-welcome"><msg key="back"></msg></button>
+				<button id="show-map"><msg key="show-map"></msg></button>
+		  		<button id="show-list"><msg key="show-list"></msg></button>
 	  		</div>
 	  		<div>
-	  			<label for="filter-input">Filter:</label>
-	  			<input id="filter-input">
+	  			<label for="filter-input"><msg key="filter-label"></msg></label>
+	  			<input id="filter-input" value="not-yet-implemented">
 	  		</div>
 	  	</header>
   		<div class="view" id="list-view">
@@ -64,57 +64,61 @@
   	</div>
   	
   	<div class="page" id="detail-page">
-  		<div>Monument details</div>
-  		<div id="detail-country"></div>
-  		<div id="detail-lang"></div>
-  		<div id="detail-id"></div>
-  		<div id="detail-name"></div>
-  		<div id="detail-link"></div>
-  		<div id="detail-image"></div>
-  		<div id="detail-address"></div>
-  		<div id="detail-municipality"></div>
-  		<div id="detail-location"></div>
-  		<div id="detail-source"></div>
-  		<div id="detail-changed"></div>
-  		<button id="back-results">Back</button>
-  		<button id="start-upload">Upload</button>
+  		<header>
+	  		<div><msg key="detail-title"></msg></div>
+	  		<button id="back-results"><msg key="back"></msg></button>
+	  		<button id="start-upload"><msg key="start-upload"></msg></button>
+	  	</header>
+	  	<div id="details">
+	  		<div id="detail-country"></div>
+	  		<div id="detail-lang"></div>
+	  		<div id="detail-id"></div>
+	  		<div id="detail-name"></div>
+	  		<div id="detail-link"><a href="#"><msg key="detail-link"></msg></a></div>
+	  		<div id="detail-image"></div>
+	  		<div id="detail-address"></div>
+	  		<div id="detail-municipality"></div>
+	  		<div id="detail-location"><a href="#"></a></div>
+	  		<div id="detail-source"><a href="#"><msg key="detail-source"></msg></a></div>
+	  		<div id="detail-changed"></div>
+	  	</div>
   	</div>
   
   	<div class="page" id="login-page">
 		<fieldset>
-			<legend>Log in</legend>
+			<legend><msg key="login-title"></msg></legend>
 			<div><input id="login-user" type="text" placeholder="Username"></div>
 			<div><input id="login-pass" type="password" placeholder="Password"></div>
 			<div>
-			<button id="login">Login</button>
+			<button id="login"><msg key="login"></msg></button>
 		</fieldset>
-		<button id="back-detail">Back</button>
+		<button id="back-detail"><msg key="back"></msg></button>
 	</div>
 	
 	<div class="page" id="upload-page">
 		<div>
-			<button id="selectphoto">Gallery</button>
+			<button id="selectphoto"><msg key="selectphoto"></msg></button>
 		</div>
 		<div>
-			<button id="takephoto">Take photo</button>
+			<button id="takephoto"><msg key="takephoto"></msg></button>
 		</div>
 	</div>
 	
 	<div class="page" id="upload-status-page">
-		<p>The image you have selected is X KB. Continue?</p>
+		<p><msg key="size-warning"></msg></p>
 		<div>
-			<button id="change-photo">Change</button>
+			<button id="change-photo"><msg key="change-photo"></msg></button>
 		</div>
 		<div>
-			<button id="continue">Continue</button>
+			<button id="continue"><msg key="continue-upload"></msg></button>
 		</div>
 		<div>
-			<input type="checkbox" id="skip-warning"> <label for="skip-warning">Don't show this again</a>
+			<input type="checkbox" id="skip-warning"> <label for="skip-warning"><msg key="skip-warning"></msg></a>
 		</div>
 	</div>
 	
 	<div class="page" id="upload-progress">
-		<p>Images are being uploaded...</p>
+		<p><msg key="uploading-status"></msg></p>
 		<p id="upload-progress-bar">-progress bar-</p>
 		<p>Please choose a license for this work. <i>Note: do not upload
 		other people's photos or photos of copyrighted material, such as

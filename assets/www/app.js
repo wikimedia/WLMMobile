@@ -78,24 +78,20 @@ function onDeviceReady()
 }
 
 $(document).bind('mw-messages-ready', function() {
-	$('#welcome-page').localize();
+	$(document).localize();
 	$.each(countries, function(code, name) {
 		var $li = $('<li>'),
 			$button = $('<button>');
 		$button.addClass('country-search').text(name);
 		$button.click(function() {
 			showPage('results-page');
-			$.ajax({
-				url: wlmapi,
-				data: {
-					'action': 'search',
-					'srcountry': code,
-					'format': 'xml',
-				},
-				success: function(data) {
-					showSearchResults(data);
-				}
-			});
+			searchParams = {
+				how: 'campaign',
+				campaign: code,
+				lat: null,
+				lon: null
+			};
+			updateSearch();
 		});
 		$button.appendTo($li);
 		$li.appendTo('#country-list');
@@ -103,53 +99,17 @@ $(document).bind('mw-messages-ready', function() {
 
 	$('#nearby').click(function() {
 		showPage('results-page');
-		/*
-			monuments: [
-				{
-					country,
-					lang,
-					id, // string
-					name,
-					address, // may be empty
-					municipality, // may be empty
-					lat, // string
-					lon, // string
-					image, // may be empty
-					source, // URL for the image? may be empty
-					monument_article, // seems mostly empty
-					registrant_url, // what's this mean exactly?
-					
-					
-		*/
-		//This gives... nothing so far
 		navigator.geolocation.getCurrentPosition(function(pos) {
-			//alert(pos.coords.latitude + ', ' + pos.coords.longitude);
-			var dist = 0.25; // degree 'radius' approx on the bounding box
-			var bbox = [
-				pos.coords.longitude - dist,
-				pos.coords.latitude - dist,
-				pos.coords.longitude + dist,
-				pos.coords.latitude + dist
-			].join(',');
-			console.log(bbox);
-			$.ajax({
-				url: wlmapi,
-				data: {
-					'action': 'search',
-					//'srlat': pos.coords.latitude,
-					//'srlon': pos.coords.longitude,
-					'bbox': bbox,
-					'limit': 50,
-					'format': 'xml',
-				},
-				success: function(data) {
-					showSearchResults(data, pos);
-				}
-			});
+			searchParams = {
+				how: 'nearby',
+				campaign: null,
+				lat: pos.coords.latitude,
+				lon: pos.coords.longitude
+			};
+			updateSearch();
 		}, function(err) {
 			alert('Error in geolocation');
 		});
-
 	});
 	
 	$('#back-welcome').click(function() {
@@ -439,7 +399,7 @@ function continueButtonCheck() {
 	}
 }
 
-function showSearchResults(data, pos) {
+function showSearchResults(data) {
 	//alert(data);
 	var fields = [
 		'country',
@@ -470,13 +430,13 @@ function showSearchResults(data, pos) {
 	});
 	
 	// Sort by location
-	if (pos !== undefined) {
+	if (searchParams.how == 'nearby') {
 		/**
 		 * Distance approximation, in degrees
 		 */
 		function dist(lat, lon) {
-			var dlat = (lat - pos.coords.latitude),
-				dlon = (lon - pos.coords.longitude),
+			var dlat = (lat - searchParams.lat),
+				dlon = (lon - searchParams.lon),
 				degrees = Math.sqrt(dlat * dlat + dlon * dlon);
 			return degrees;
 		}
@@ -494,8 +454,8 @@ function showSearchResults(data, pos) {
 
 	geo.initMap();
 	geo.clearMarkers();
-	if (pos) {
-		geo.map.setView(new L.LatLng(pos.coords.latitude, pos.coords.longitude), 10);
+	if (searchParams.how == 'nearby') {
+		geo.map.setView(new L.LatLng(searchParams.lat, searchParams.lon), 10);
 	} else {
 		var center = {lat: 0, lon: 0},
 			max = {lat: -999, lon: -999},
@@ -667,5 +627,39 @@ function stripWikiText(str) {
 	str = str.replace(/\[\[[^\|]+\|([^\]]+)\]\]/g, '$1');
 	str = str.replace(/\[\[([^\]]+)\]\]/g, '$1');
 	return str;
+}
+
+
+function updateSearch() {
+	var data = {
+		'action': 'search',
+		'limit': 50,
+		'format': 'xml',
+	}
+	if (searchParams.how == 'nearby') {
+		var dist = 0.25; // degree 'radius' approx on the bounding box
+		data.bbox = [
+			searchParams.lon - dist,
+			searchParams.lat - dist,
+			searchParams.lon + dist,
+			searchParams.lat + dist
+		].join(',');
+	} else if (searchParams.how == 'campaign') {
+		data.srcountry = searchParams.campaign;
+	}
+	/*
+	// Filter option is ssllooww and doesn't work right now.
+	var filter = $('#filter-input').val();
+	if (filter != '') {
+		data.srname = '%' + filter + '%';
+	}
+	*/
+	$.ajax({
+		url: wlmapi,
+		data: data,
+		success: function(data) {
+			showSearchResults(data);
+		}
+	});
 }
 
