@@ -22,6 +22,7 @@
 	<false/>
 	<key>ExternalHosts</key>
 	<array>
+		<string>maps.google.com</string>
 		<string>*.mqcdn.com</string>
 		<string>*.toolserver.org</string>
 		<string>*.wikipedia.org</string>

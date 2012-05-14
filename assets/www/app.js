@@ -528,14 +528,14 @@ function showSearchResults(data) {
 				$('#detail-link').hide();
 			}
 			var addr = stripWikiText(item.address); // may contain wikitext
-			var geoUri = 'geo:' + item.lat + ',' + item.lon + '?q=' + encodeURIComponent(addr);
+			var geoUri = platform.geoUrl(item.lat, item.lon, addr);
 			$('#detail-address a')
 				.text(addr)
 				.attr('href', geoUri);
 			$('#detail-municipality').text(stripWikiText(item.municipality)); // may contain wikitext
 			$('#detail-location a')
 				.text(item.lat + ', ' + item.lon)
-				.attr('href', 'geo:' + item.lat + ', ' + item.lon);
+				.attr('href', platform.geoUrl(item.lat, item.lon));
 			$('#detail-source a').attr('href', item.source); // URL?
 			$('#detail-changed').text(item.changed); // timestamp - format me
 			$('#detail-image').empty();
