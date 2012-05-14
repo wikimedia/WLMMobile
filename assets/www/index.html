@@ -14,19 +14,28 @@
 	<link rel="stylesheet" href="app.css" type="text/css" />
 	<script type="text/javascript" charset="utf-8" src="cordova-stub.js"></script>
 	<script type="text/javascript" charset="utf-8" src="jquery-1.7.2.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="js/mediawiki.js"></script>
+	<script type="text/javascript" charset="utf-8" src="js/jquery.localize.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="js/propertiesFileReader.js"></script>
+	<script type="text/javascript" charset="utf-8" src="js/l10n-setup.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="leaflet/leaflet.js"></script>
+
     <script type="text/javascript" charset="utf-8" src="app.js"></script>
   </head>
   <body onload="onBodyLoad()">
   
   	<div class="page" id="welcome-page">
-	  	<h1>Welcome to Wiki Loves Monuments 2012 - Mobile</h1>
-	  	<p>Use this app to find monuments near you and submit them as entries in this year's contest.</p>
-	  	<p>To get started, plesae choose a campaign:</p>
+	  	<h1><msg key="welcome-title"></msg></h1>
+	  	<p><msg key="welcome-intro"></msg></p>
+	  	<p><msg key="welcome-start"></msg></p>
   		<ul id="country-list">
-	  		<li><button id="nearby">Search nearby</button></li>
+	  		<li><button id="nearby"><msg key="welcome-search"></msg></button></li>
 	  	</ul>
 	  	<p><i>Please note: You must already be registered as a user on <a href="https://commons.wikimedia.org/" class="external">commons.wikimedia.org</a> in order to upload photos from this app.</i></p>
-	  	<p><a href="http://www.wikilovesmonuments.eu/contest/" class="external">Contest rules</a></p>
+	  	<p><a href="http://www.wikilovesmonuments.eu/contest/" class="external"><msg key="welcome-rules"></msg></a></p>
   	</div>
   	
   	<div class="page" id="results-page">

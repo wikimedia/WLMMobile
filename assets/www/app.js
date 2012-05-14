@@ -74,6 +74,11 @@ see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-cu
 for more details -jm */
 function onDeviceReady()
 {
+	l10n.initLanguages();
+}
+
+$(document).bind('mw-messages-ready', function() {
+	$('#welcome-page').localize();
 	$.each(countries, function(code, name) {
 		var $li = $('<li>'),
 			$button = $('<button>');
@@ -275,7 +280,7 @@ function onDeviceReady()
 	});
 	
 	showPage('welcome-page');
-}
+});
 
 function showPage(page) {
 	$('.page').hide();
