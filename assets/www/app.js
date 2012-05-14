@@ -152,19 +152,21 @@ $(document).bind('mw-messages-ready', function() {
 
 	});
 	
-	$('#list-view').hide();
-	$('#map-view').show();
-	$('#back-welcome, #back-welcome2').click(function() {
+	$('#back-welcome').click(function() {
 		showPage('welcome-page');
 	});
 	$('#show-list').click(function() {
 		$('#map-view').hide();
 		$('#list-view').show();
+		$('#show-list').hide();
+		$('#show-map').show();
 	});
 	$('#show-map').click(function() {
 		$('#list-view').hide();
 		$('#map-view').show();
-	});
+		$('#show-map').hide();
+		$('#show-list').show();
+	}).click(); // show map by default
 	
 	$('#back-results').click(function() {
 		showPage('results-page');
