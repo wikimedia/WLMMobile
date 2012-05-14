@@ -17,6 +17,7 @@
 		});
 	} else {
 		document.writeln('<script type="text/javascript" charset="utf-8" src="' + os + '/' + cordova + '"></script>');
+		document.writeln('<script type="text/javascript" charset="utf-8" src="' + os + '/platform.js"></script>');
 	}
 
 })();
