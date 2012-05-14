@@ -1,9 +1,12 @@
 window.platform = {
     geoUrl: function(lat, lon, address) {
-        var q = lat + ',' + lon;
+    	// Google maps links for web & iOS
+    	// on iOS these open in native Maps app
+        var url = 'http://maps.google.com/maps';
+        url += '?ll=' + lat + ',' + lon;
         if (address) {
-            q += ' ' + address;
+        	url += '&q=' + encodeURIComponent(address);
         }
-        return 'http://maps.google.com/maps?q=' + encodeURIComponent();
+        return url;
     }
 };

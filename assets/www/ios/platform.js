@@ -9,10 +9,5 @@ $(document).on('click', 'a.external', function(event) {
 
 $('html').addClass('ios');
 
-platform.geoUrl = function(lat, lon, address) {
-    var q = lat + ',' + lon;
-    if (address) {
-        q += ' ' + address;
-    }
-    return 'http://maps.google.com/maps?q=' + encodeURIComponent(q);
-};
+// inherit default platform.geoUrl
+
