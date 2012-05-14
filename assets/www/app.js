@@ -124,7 +124,7 @@ $(document).bind('mw-messages-ready', function() {
 		//This gives... nothing so far
 		navigator.geolocation.getCurrentPosition(function(pos) {
 			//alert(pos.coords.latitude + ', ' + pos.coords.longitude);
-			var dist = 0.5; // degree 'radius' approx on the bounding box
+			var dist = 0.25; // degree 'radius' approx on the bounding box
 			var bbox = [
 				pos.coords.longitude - dist,
 				pos.coords.latitude - dist,
@@ -139,6 +139,7 @@ $(document).bind('mw-messages-ready', function() {
 					//'srlat': pos.coords.latitude,
 					//'srlon': pos.coords.longitude,
 					'bbox': bbox,
+					'limit': 50,
 					'format': 'xml',
 				},
 				success: function(data) {

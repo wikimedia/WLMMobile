@@ -9,7 +9,12 @@
 	}
 	
 	if (!os) {
-		alert('Unrecognized OS');
+		// Assume in a browser for testing. PhoneGap-specific things will fail.
+		//alert('Unrecognized OS');
+		$(window).bind('load', function() {
+			//$(document).trigger('deviceready');
+			onDeviceReady();
+		});
 	} else {
 		document.writeln('<script type="text/javascript" charset="utf-8" src="' + os + '/' + cordova + '"></script>');
 	}
