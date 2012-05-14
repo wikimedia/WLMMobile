@@ -103,6 +103,8 @@ $(document).bind('mw-messages-ready', function() {
 
 	$('#nearby').click(function() {
 		showPage('results-page');
+		$('#list-view').hide();
+		$('#map-view').show();
 		/*
 			monuments: [
 				{
@@ -154,6 +156,14 @@ $(document).bind('mw-messages-ready', function() {
 	
 	$('#back-welcome').click(function() {
 		showPage('welcome-page');
+	});
+	$('#show-list').click(function() {
+		$('#map-view').hide();
+		$('#list-view').show();
+	});
+	$('#show-map').click(function() {
+		$('#list-view').hide();
+		$('#map-view').show();
 	});
 	
 	$('#back-results').click(function() {
