@@ -516,20 +516,27 @@ function showSearchResults(data) {
 			$('#detail-country').text(item.country);
 			$('#detail-lang').text(item.lang);
 			$('#detail-id').text(item.id);
-			$('#detail-name').text(item.name); // may contain wikitext
-			$('#detail-link').empty();
+			$('#detail-name').text(stripWikiText(item.name)); // may contain wikitext
 			if (item.monument_article) {
-				var $a = $('<a>');
 				// @fixme may contain a #foo hash
 				var url = 'https://' + item.lang + '.wikipedia.org/wiki/' +
 					encodeURIComponent(item.monument_article.replace(/ /g, '_'));
-				$a.attr('href', url).text('Wikipedia article').addClass('external');
-				$('#detail-link').append($a);
+				$('#detail-link a').attr('href', url).text(item.monument_article.replace(/_/g, ' '));
+				$('#detail-link').show();
+			} else {
+				$('#detail-link a').attr('href', '#').empty();
+				$('#detail-link').hide();
 			}
-			$('#detail-address').text(item.address); // may contain wikitext
-			$('#detail-municipality').text(item.municipality); // may contain wikitext
-			$('#detail-location').text(item.lat + ', ' + item.lon);
-			$('#detail-source').text(item.source); // URL?
+			var addr = stripWikiText(item.address); // may contain wikitext
+			var geoUri = 'geo:' + item.lat + ',' + item.lon + '?q=' + encodeURIComponent(addr);
+			$('#detail-address a')
+				.text(addr)
+				.attr('href', geoUri);
+			$('#detail-municipality').text(stripWikiText(item.municipality)); // may contain wikitext
+			$('#detail-location a')
+				.text(item.lat + ', ' + item.lon)
+				.attr('href', 'geo:' + item.lat + ', ' + item.lon);
+			$('#detail-source a').attr('href', item.source); // URL?
 			$('#detail-changed').text(item.changed); // timestamp - format me
 			$('#detail-image').empty();
 			if (item.image) {
@@ -547,7 +554,11 @@ function showSearchResults(data) {
 		
 		if (item.lat || item.lon) {
 			// Only add items to map that have a lat/lon
-			geo.addMarker(item.lat, item.lon, item.name, item.address, showDetail);
+			geo.addMarker(item.lat,
+				item.lon,
+				stripWikiText(item.name),
+				stripWikiText(item.address),
+				showDetail);
 		}
 	});
 	fetcher.send();

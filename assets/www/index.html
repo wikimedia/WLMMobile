@@ -69,19 +69,39 @@
 	  		<button id="back-results"><msg key="back"></msg></button>
 	  		<button id="start-upload"><msg key="start-upload"></msg></button>
 	  	</header>
-	  	<div id="details">
-	  		<div id="detail-country"></div>
-	  		<div id="detail-lang"></div>
-	  		<div id="detail-id"></div>
-	  		<div id="detail-name"></div>
-	  		<div id="detail-link"><a href="#"><msg key="detail-link"></msg></a></div>
-	  		<div id="detail-image"></div>
-	  		<div id="detail-address"></div>
-	  		<div id="detail-municipality"></div>
-	  		<div id="detail-location"><a href="#"></a></div>
-	  		<div id="detail-source"><a href="#"><msg key="detail-source"></msg></a></div>
-	  		<div id="detail-changed"></div>
-	  	</div>
+  		<table id="details">
+  			<tr>
+  				<td colspan=2 id="detail-name">
+  			<tr>
+  				<th><msg key="detail-link"></msg>
+  				<td id="detail-link"><a href="#"></a>
+  			<tr>
+  				<td colspan=2 id="detail-image">
+  			<tr>
+  				<th><msg key="detail-address"></msg>
+	  			<td id="detail-address"><a href="#" class="external"></a>
+	  		<tr>
+	  			<th><msg key="detail-municipality"></msg>
+		  		<td id="detail-municipality">
+		  	<tr>
+		  		<th><msg key="detail-location"></msg>
+		  		<td id="detail-location"><a href="#" class="external"></a>
+	  		<tr>
+	  			<th><msg key="detail-country"></msg>
+	  			<td id="detail-country">
+	  		<tr>
+	  			<th><msg key="detail-lang"></msg>
+	  			<td id="detail-lang">
+	  		<tr>
+	  			<th><msg key="detail-id"></msg>
+		  		<td id="detail-id">
+	  		<tr>
+	  			<th><msg key="detail-changed"></msg>
+	  			<td id="detail-changed">
+		  	<tr>
+		  		<th><msg key="detail-source"></msg>
+		  		<td id="detail-source"><a href="#" class="external"><msg key="detail-source"></msg></a>
+	  	</table>
   	</div>
   
   	<div class="page" id="login-page">
