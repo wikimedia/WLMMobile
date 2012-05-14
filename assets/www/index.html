@@ -12,6 +12,8 @@
 	<link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />		
 	-->
 	<link rel="stylesheet" href="app.css" type="text/css" />
+	<link rel="stylesheet" href="leaflet/leaflet.css" type="text/css" />
+	
 	<script type="text/javascript" charset="utf-8" src="jquery-1.7.2.js"></script>
 	<script type="text/javascript" charset="utf-8" src="cordova-stub.js"></script>
 
@@ -24,6 +26,7 @@
 	<script type="text/javascript" charset="utf-8" src="leaflet/leaflet.js"></script>
 
     <script type="text/javascript" charset="utf-8" src="app.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/geo.js"></script>
   </head>
   <body onload="onBodyLoad()">
   
@@ -39,17 +42,18 @@
   	</div>
   	
   	<div class="page" id="results-page">
-  		<button id="back-welcome">Back</button>
-  		<button id="map-view">Map view</button>
-  		<ul id="results">
-  			<li>Loading...</li>
-  		</ul>
-  	</div>
-  	
-  	<div class="page" id="map-page">
-  		<button id="back-welcome">Back</button>
-  		<button id="list-view">List view</button>
-  		<div id="map"></div>
+  		<div class="view" id="list-view">
+	  		<button id="back-welcome">Back</button>
+  			<button id="show-map">Map view</button>
+	  		<ul id="results">
+	  			<li>Loading...</li>
+	  		</ul>
+	  	</div>
+	  	<div class="view" id="list-view">
+	  		<button id="back-welcome">Back</button>
+	  		<button id="show-list">List view</button>
+	  		<div id="map"></div>
+	  	</div>  	
   	</div>
   	
   	<div class="page" id="detail-page">

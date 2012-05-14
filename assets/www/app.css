@@ -35,3 +35,8 @@
 	font-size: 90%;
 }
 
+#map {
+	width: 320px;
+	height: 320px;
+}
+

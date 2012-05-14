@@ -155,7 +155,7 @@ $(document).bind('mw-messages-ready', function() {
 	$('#back-welcome').click(function() {
 		showPage('welcome-page');
 	});
-
+	
 	$('#back-results').click(function() {
 		showPage('results-page');
 	});
@@ -479,6 +479,13 @@ function showSearchResults(data, pos) {
 	// whee
 	$('#results').empty();
 	var fetcher = new ImageFetcher(commonsApi, 64, 64);
+
+	geo.initMap();
+	// @fixme load last-seen coordinates
+	if (pos) {
+		geo.map.setView(new L.LatLng(pos.coords.latitude, pos.coords.longitude), 18);
+	}
+
 	$.each(results, function(i, item) {
 		var $li = $('<li><img> <div class="stuff"><div class="name"></div><div class="address"></div></div></li>');
 		$li.find('.name').text(stripWikiText(item.name));
@@ -489,7 +496,7 @@ function showSearchResults(data, pos) {
 			});
 		}
 		$li.appendTo('#results');
-		$li.click(function() {
+		var showDetail = function() {
 			showPage('detail-page');
 			$('#detail-country').text(item.country);
 			$('#detail-lang').text(item.lang);
@@ -520,7 +527,10 @@ function showSearchResults(data, pos) {
 				});
 				fetcher2.send();
 			}
-		});
+		};
+		$li.click(showDetail);
+		
+		geo.addMarker(item.lat, item.lon, item.name, item.address, showDetail);
 	});
 	fetcher.send();
 }
