@@ -492,18 +492,30 @@ function showSearchResults(data, pos) {
 
 	geo.initMap();
 	geo.clearMarkers();
-	// @fixme load last-seen coordinates
 	if (pos) {
 		geo.map.setView(new L.LatLng(pos.coords.latitude, pos.coords.longitude), 12);
 	} else {
-		var sum = {lat: 0, lon: 0},
-			avg = {lat: 0, lon: 0},
-			count = 0;
+		var center = {lat: 0, lon: 0},
+			max = {lat: -999, lon: -999},
+			min = {lat: 999, lon: 999},
+			count = 0,
+			dist = {lat: 0, lon: 0},
+			zoom = 0;
 		$.each(results, function(i, item) {
 			if (item.lat || item.lon) {
 				// Only count things that aren't at (0, 0)
-				sum.lat += item.lat;
-				sum.lon += item.lon;
+				if (item.lat < min.lat) {
+					min.lat = item.lat;
+				}
+				if (item.lon < min.lon) {
+					min.lon = item.lon;
+				}
+				if (item.lat > max.lat) {
+					max.lat = item.lat;
+				}
+				if (item.lon > max.lon) {
+					max.lon = item.lon;
+				}
 				count++;
 			}
 		});
@@ -511,9 +523,19 @@ function showSearchResults(data, pos) {
 			// Seriously?
 			geo.map.setView(new L.LatLng(0, 0), 1);
 		} else {
-			avg.lat = sum.lat / count;
-			avg.lon = sum.lon / count;
-			geo.map.setView(new L.LatLng(avg.lat, avg.lon), 10);
+			center.lat = (min.lat + max.lat) / 2;
+			center.lon = (min.lon + max.lon) / 2;
+			dist.lat = max.lat - min.lat;
+			dist.lon = max.lon - min.lon;
+			dist = Math.max(dist.lat,dist.lon);
+			visible = 360;
+			for (zoom = 1; zoom < 18; zoom++) {
+				visible /= 2;
+				if (dist >= visible) {
+					break;
+				}
+			}
+			geo.map.setView(new L.LatLng(center.lat, center.lon), zoom - 1);
 		}
 	}
 
