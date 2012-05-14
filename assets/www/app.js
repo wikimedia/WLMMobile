@@ -103,8 +103,6 @@ $(document).bind('mw-messages-ready', function() {
 
 	$('#nearby').click(function() {
 		showPage('results-page');
-		$('#list-view').hide();
-		$('#map-view').show();
 		/*
 			monuments: [
 				{
@@ -154,6 +152,8 @@ $(document).bind('mw-messages-ready', function() {
 
 	});
 	
+	$('#list-view').hide();
+	$('#map-view').show();
 	$('#back-welcome, #back-welcome2').click(function() {
 		showPage('welcome-page');
 	});
@@ -493,7 +493,7 @@ function showSearchResults(data, pos) {
 	geo.initMap();
 	geo.clearMarkers();
 	if (pos) {
-		geo.map.setView(new L.LatLng(pos.coords.latitude, pos.coords.longitude), 12);
+		geo.map.setView(new L.LatLng(pos.coords.latitude, pos.coords.longitude), 10);
 	} else {
 		var center = {lat: 0, lon: 0},
 			max = {lat: -999, lon: -999},
