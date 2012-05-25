@@ -44,7 +44,7 @@ window.geo = function() {
 		marker.bindPopup(popupContent, {closeButton: false});
 		geo.markerGroup.addLayer(marker);
 	}
-
+	
 	return {
 		initMap: initMap,
 		clearMarkers: clearMarkers,

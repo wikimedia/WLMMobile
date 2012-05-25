@@ -75,6 +75,27 @@ for more details -jm */
 function onDeviceReady()
 {
 	l10n.initLanguages();
+	if (window.plugins.pinchZoom !== undefined) {
+		// TODO: only enable this while on the map view?
+		window.plugins.pinchZoom.addEventListener('pinchzoom', function(event) {
+			if (event.type == "pinchzoomend") {
+				// TODO: zoom when we cross thresholds?
+				if (geo.map) {
+					console.log(JSON.stringify(event));
+					var ratio = event.distance / event.startDistance;
+					if (ratio < 0.5) {
+						// zoom out
+						console.log("ZOOM OUT");
+						geo.map.zoomOut();
+					} else if (ratio > 1.5) {
+						// zoom in
+						console.log("ZOOM IN");
+						geo.map.zoomIn();
+					}
+				}
+			}
+		});
+	}
 }
 
 $(document).bind('mw-messages-ready', function() {

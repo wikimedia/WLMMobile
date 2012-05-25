@@ -19,5 +19,9 @@
 		document.writeln('<script type="text/javascript" charset="utf-8" src="' + os + '/' + cordova + '"></script>');
 		document.writeln('<script type="text/javascript" charset="utf-8" src="' + os + '/platform.js"></script>');
 	}
+	
+	if (os == 'android') {
+		document.writeln('<script type="text/javascript" charset="utf-8" src="' + os + '/plugins/PinchZoom.js"></script>');
+	}
 
 })();
