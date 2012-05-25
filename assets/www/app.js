@@ -122,6 +122,10 @@ $(document).bind('mw-messages-ready', function() {
 		$li.appendTo('#country-list');
 	});
 
+	$('#countries').click(function() {
+		showPage('country-page');
+	});
+
 	$('#nearby').click(function() {
 		showPage('results-page');
 		navigator.geolocation.getCurrentPosition(function(pos) {

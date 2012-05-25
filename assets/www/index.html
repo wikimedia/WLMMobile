@@ -33,14 +33,21 @@
   
   	<div class="page" id="welcome-page">
 	  	<h1><msg key="welcome-title"></msg></h1>
-	  	<p><msg key="welcome-intro"></msg></p>
+	  	<a href="#">
+	  		<!-- icon here -->
+	  		<msg key="welcome-about">
+	  	</a>
+	  	<h2><msg key="welcome-intro"></msg></h2>
 	  	<p><msg key="welcome-start"></msg></p>
-  		<ul id="country-list">
-	  		<li><button id="nearby"><msg key="welcome-search"></msg></button></li>
-	  	</ul>
-	  	<p><i>Please note: You must already be registered as a user on <a href="https://commons.wikimedia.org/" class="external">commons.wikimedia.org</a> in order to upload photos from this app.</i></p>
-	  	<p><a href="http://www.wikilovesmonuments.eu/contest/" class="external"><msg key="welcome-rules"></msg></a></p>
+	  	<div><button id="countries"><msg key="welcome-browse"></msg></button></div>
+	  	<div><button id="nearby"><msg key="welcome-search"></msg></button></div>
   	</div>
+
+	<div class="page" id="country-page">
+		<h2><msg key="choose-country"></msg></h2>
+  		<ul id="country-list">
+	  	</ul>
+	</div>
   	
   	<div class="page" id="results-page">
   		<header>
