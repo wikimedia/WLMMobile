@@ -260,44 +260,11 @@ require(['jquery', 'l10n', 'geo', 'api', 'jquery.localize'], function($, l10n, g
 
 
 	/**
-	 * @return promise, resolves with token value, rejects with error message
-	 */
-	function getToken() {
-		var defer = new $.Deferred();
-		$.ajax({
-			url: api,
-			data: {
-				action: 'query',
-				prop: 'info',
-				intoken: 'edit',
-				titles: 'Foo',
-				format: 'json'
-			},
-			success: function(data) {
-				var token;
-				$.each(data.query.pages, function(i, item) {
-					token = item.edittoken;
-				});
-				if (token) {
-					defer.resolve(token);
-				} else {
-					defer.reject("No token found");
-				}
-			},
-			fail: function(xhr, err) {
-				defer.reject("HTTP error");
-			}
-		});
-		return defer.promise();
-	}
-
-
-	/**
 	 * @return promise, resolves with stashed file key, rejects with error message
 	 */
 	function doUpload(sourceUri) {
 		var defer = new $.Deferred();
-		getToken().done(function(token) {
+		api.requestEditToken().done(function(token) {
 			var options = new FileUploadOptions();
 			options.fileKey = "file";
 			options.fileName = sourceUri.substr(sourceUri.lastIndexOf('/')+1);
@@ -341,7 +308,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'jquery.localize'], function($, l10n, g
 	function completeUpload(fileKey) {
 		var defer = new $.Deferred();
 		console.log('upload completing... getting token...');
-		getToken().done(function(token) {
+		api.requestEditToken().done(function(token) {
 			console.log('.... got token');
 			console.log('starting ajax upload completion...');
 			$.ajax({
