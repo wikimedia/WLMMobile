@@ -1,23 +1,23 @@
-window.geo = function() {
+define(['jquery', '../leaflet/leaflet'], function() {
 
 	var shownURLs = [];
 
 	function initMap() {
-		if (!geo.map) {
+		if (!this.map) {
 			// Disable webkit 3d CSS transformations for tile positioning
 			// Causes lots of flicker in PhoneGap for some reason...
 			L.Browser.webkit3d = false;
-			geo.map = new L.Map('map');
+			this.map = new L.Map('map');
 			//var tiles = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			var tiles = new L.TileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {
 				maxZoom: 18,
 				subdomains: '1234' // for MapQuest tiles
 			});
-			geo.map.addLayer(tiles);
+			this.map.addLayer(tiles);
 
-			geo.map.attributionControl.setPrefix("");
-			geo.map.attributionControl.addAttribution('<span class="map-attribution">' + mw.message("attribution-mapquest") + '</span>');
-			geo.map.attributionControl.addAttribution("<br /><span class='map-attribution'>" + mw.message("attribution-osm") + '</span>');
+			this.map.attributionControl.setPrefix("");
+			this.map.attributionControl.addAttribution('<span class="map-attribution">' + mw.message("attribution-mapquest") + '</span>');
+			this.map.attributionControl.addAttribution("<br /><span class='map-attribution'>" + mw.message("attribution-osm") + '</span>');
 
 			$(".map-attribution a").bind('click', function(event) {
 				// Force web links to open in external browser
@@ -25,13 +25,13 @@ window.geo = function() {
 				chrome.openExternalLink(this.href);
 				event.preventDefault();
 			});
-			geo.markerGroup = new L.LayerGroup();
-			geo.map.addLayer(geo.markerGroup);
+			this.markerGroup = new L.LayerGroup();
+			this.map.addLayer(this.markerGroup);
 		}
 	}
 	
 	function clearMarkers() {
-		geo.markerGroup.clearLayers();
+		this.markerGroup.clearLayers();
 	}
 	
 	function addMarker(lat, lon, title, summary, callback) {
@@ -42,7 +42,7 @@ window.geo = function() {
 			callback();
 		})[0];
 		marker.bindPopup(popupContent, {closeButton: false});
-		geo.markerGroup.addLayer(marker);
+		this.markerGroup.addLayer(marker);
 	}
 	
 	return {
@@ -53,4 +53,4 @@ window.geo = function() {
 		markerGroup: null
 	};
 
-}();
+});
