@@ -18,10 +18,10 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require(['jquery', 'l10n', 'geo', 'jquery.localize'], function($, l10n, geo) {
+require(['jquery', 'l10n', 'geo', 'api', 'jquery.localize'], function($, l10n, geo, Api) {
 
-	var api = "https://test.wikipedia.org/w/api.php";
-	var commonsApi = 'https://commons.wikimedia.org/w/api.php';
+	var api = new Api("https://test.wikipedia.org/w/api.php");
+	var commonsApi = new Api('https://commons.wikimedia.org/w/api.php');
 	var wlmapi = 'http://toolserver.org/~erfgoed/api/api.php';
 	var state = {
 		fileUri: null,
@@ -168,51 +168,16 @@ require(['jquery', 'l10n', 'geo', 'jquery.localize'], function($, l10n, geo) {
 		// do your thing!
 		//navigator.notification.alert("Cordova is working")
 		$('#login').click(function() {
-			function submitLogin(callback, token) {
-				var params = {
-					action: 'login',
-					lgname: $('#login-user').val(),
-					lgpassword: $('#login-pass').val(),
-					format: 'json'
-				};
-				if (token) {
-					params.lgtoken = token;
-				}
-				$.ajax({
-					url: api,
-					data: params,
-					type: 'POST',
-					success: function(data) {
-						console.log(JSON.stringify(data));
-						console.log('data.login.result is ' + data.login.result);
-						if (data.login.result == 'NeedToken') {
-							console.log('got NeedToken');
-							if (!token) {
-								console.log('resubmitting with token');
-								submitLogin(callback, data.login.token);
-							} else {
-								console.log('got asked for token twice');
-							}
-						} else if (data.login.result == 'Success') {
-							console.log('success');
-							callback(true);
-						} else {
-							console.log('fail');
-							callback(false);
-						}
-					},
-					error: function(err) {
-						console.log('faaaaailed');
-						callback(false);
-					},
-				});
-			};
-			submitLogin(function(ok) {
-				if (ok) {
+			var username = $("#login-user").val().trim();
+			var password = $("#login-pass").val();
+			api.login(username, password).done(function(status) {
+				if(status === "Success")  {
 					showPage('upload-page');
 				} else {
-					alert('not logged in');
+					alert(status);
 				}
+			}).fail(function(err) {
+				alert(JSON.stringify(err));
 			});
 		});
 		
