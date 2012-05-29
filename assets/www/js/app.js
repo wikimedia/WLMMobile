@@ -239,7 +239,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'jquery.localize'], function($, l10n, g
 		// upload-description
 		$('#submit-upload').click(function() {
 			console.log('Completing upload...');
-			completeUpload(state.fileKey);
+			api.finishUpload(state.fileKey, 'test_wlm.jpg', 'testing wlm', 'testing wlm');
 		});
 		
 		showPage('welcome-page');
@@ -258,92 +258,8 @@ require(['jquery', 'l10n', 'geo', 'api', 'jquery.localize'], function($, l10n, g
 		showPage('upload-status-page');
 	}
 
-
-	/**
-	 * @return promise, resolves with stashed file key, rejects with error message
-	 */
-	function doUpload(sourceUri) {
-		var defer = new $.Deferred();
-		api.requestEditToken().done(function(token) {
-			var options = new FileUploadOptions();
-			options.fileKey = "file";
-			options.fileName = sourceUri.substr(sourceUri.lastIndexOf('/')+1);
-			options.mimeType = "image/jpg";
-			options.chunkedMode = false;
-			options.params = {
-				action: 'upload',
-				filename: 'Test_file.jpg',
-				comment: 'Uploaded with WLMTest',
-				text: 'Photo uploaded with WLMTest',
-				ignorewarnings: 1,
-				stash: 1,
-				token: token,
-				format: 'json'
-			};
-			
-			var ft = new FileTransfer();
-			ft.upload(sourceUri, api, function(r) {
-				// success
-				console.log("Code = " + r.responseCode);
-				console.log("Response = " + r.response);
-				console.log("Sent = " + r.bytesSent);
-				var data = JSON.parse(r.response);
-				if (data.upload.result == 'Success') {
-					defer.resolve(data.upload.filekey);
-				} else {
-					defer.reject("Upload did not succeed");
-				}
-			}, function(error) {
-				console.log("upload error source " + error.source);
-				console.log("upload error target " + error.target);
-				defer.reject("HTTP error");
-			}, options);
-		});
-		return defer.promise();
-	}
-
-	/**
-	 * @return promise resolves with imageinfo structure, rejects with error message
-	 */
-	function completeUpload(fileKey) {
-		var defer = new $.Deferred();
-		console.log('upload completing... getting token...');
-		api.requestEditToken().done(function(token) {
-			console.log('.... got token');
-			console.log('starting ajax upload completion...');
-			$.ajax({
-				url: api,
-				type: 'POST',
-				data: {
-					action: 'upload',
-					filekey: fileKey,
-					filename: 'Test_file.jpg',
-					comment: 'Uploaded with WLMTest',
-					text: 'Photo uploaded with WLMTest',
-					ignorewarnings: 1,
-					token: token,
-					format: 'json'
-				},
-				success: function(data) {
-					console.log(JSON.stringify(data));
-					if (data.upload.result == 'Success') {
-						defer.resolve(data.upload.imageinfo);
-					} else {
-						defer.reject("Upload did not succeed");
-					}
-				},
-				fail: function(xhr, error) {
-					console.log("upload error source " + error.source);
-					console.log("upload error target " + error.target);
-					defer.reject("HTTP error");
-				}
-			});
-		});
-		return defer.promise();
-	}
-
 	function startUpload(fileUri) {
-		doUpload(fileUri).done(function(fileKey) {
+		api.startUpload(fileUri, 'test_wlm.jpg', 'testing wlm', 'testing wlm').done(function(fileKey) {
 			state.fileKey = fileKey;
 			$('#upload-progress-bar').text('done');
 			continueButtonCheck();

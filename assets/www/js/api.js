@@ -42,7 +42,7 @@ define(['jquery'], function() {
 	Api.prototype.requestEditToken = function() {
 		var d = $.Deferred();
 		if(this.token) {
-			d.resolve(token);
+			d.resolve(this.token);
 			return d;
 		} 
 		var that = this;
@@ -64,6 +64,80 @@ define(['jquery'], function() {
 			}
 		}).fail(function(err) {
 			d.reject(err);
+		});
+		return d;
+	};
+
+	Api.prototype.startUpload = function(sourceUri, filename, comment, text) {
+		var d = $.Deferred();
+		var that = this;
+		that.requestEditToken().done(function(token) {
+			var options = new FileUploadOptions();
+			options.fileKey = 'file';
+			options.fileName = sourceUri.substr(sourceUri.lastIndexOf('/')+1);
+			//options.fileName = filename;
+			options.mimeType = "image/jpg";
+			options.chunkedMode = false;
+			options.params = {
+				action: 'upload',
+				filename: filename,
+				comment: comment,
+				text: text,
+				ignorewarnings: 1,
+				stash: 1,
+				token: token,
+				format: 'json'
+			};
+
+			var ft = new FileTransfer();
+			ft.upload(sourceUri, that.url, function(r) {
+				// success
+				console.log("Code = " + r.responseCode);
+				console.log("Response = " + r.response);
+				console.log("Sent = " + r.bytesSent);
+				var data = JSON.parse(r.response);
+				if (data.upload.result == 'Success') {
+					d.resolve(data.upload.filekey);
+				} else {
+					d.reject(data);
+				}
+			}, function(error) {
+				console.log("upload error source " + error.source);
+				console.log("upload error target " + error.target);
+				console.log(JSON.stringify(error));
+				d.reject("HTTP error");
+			}, options);
+		});
+		return d;
+	};
+
+	Api.prototype.finishUpload = function(fileKey, filename, comment, text) {
+		var d = $.Deferred();
+		console.log('upload completing... getting token...');
+		var that = this;
+		this.requestEditToken().done(function(token) {
+			console.log('.... got token');
+			console.log('starting ajax upload completion...');
+			that.request('POST', {
+				action: 'upload',
+				filekey: fileKey,
+				filename: filename,
+				comment: comment,
+				text: text,
+				token: token,
+				ignorewarnings: 1
+			}).done(function(data) {
+				console.log(JSON.stringify(data));
+				if (data.upload.result == 'Success') {
+					d.resolve(data.upload.imageinfo);
+				} else {
+					d.reject("Upload did not succeed");
+				}
+			}).fail(function(xhr, err) {
+				console.log("upload error source " + error.source);
+				console.log("upload error target " + error.target);
+				d.reject("HTTP error");
+			});
 		});
 		return d;
 	};
