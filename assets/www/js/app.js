@@ -18,10 +18,10 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require(['jquery', 'l10n', 'geo', 'jquery.localize'], function($, l10n, geo) {
+require(['jquery', 'l10n', 'geo', 'api', 'jquery.localize'], function($, l10n, geo, Api) {
 
-	var api = "https://test.wikipedia.org/w/api.php";
-	var commonsApi = 'https://commons.wikimedia.org/w/api.php';
+	var api = new Api("https://test.wikipedia.org/w/api.php");
+	var commonsApi = new Api('https://commons.wikimedia.org/w/api.php');
 	var wlmapi = 'http://toolserver.org/~erfgoed/api/api.php';
 	var state = {
 		fileUri: null,
@@ -168,51 +168,16 @@ require(['jquery', 'l10n', 'geo', 'jquery.localize'], function($, l10n, geo) {
 		// do your thing!
 		//navigator.notification.alert("Cordova is working")
 		$('#login').click(function() {
-			function submitLogin(callback, token) {
-				var params = {
-					action: 'login',
-					lgname: $('#login-user').val(),
-					lgpassword: $('#login-pass').val(),
-					format: 'json'
-				};
-				if (token) {
-					params.lgtoken = token;
-				}
-				$.ajax({
-					url: api,
-					data: params,
-					type: 'POST',
-					success: function(data) {
-						console.log(JSON.stringify(data));
-						console.log('data.login.result is ' + data.login.result);
-						if (data.login.result == 'NeedToken') {
-							console.log('got NeedToken');
-							if (!token) {
-								console.log('resubmitting with token');
-								submitLogin(callback, data.login.token);
-							} else {
-								console.log('got asked for token twice');
-							}
-						} else if (data.login.result == 'Success') {
-							console.log('success');
-							callback(true);
-						} else {
-							console.log('fail');
-							callback(false);
-						}
-					},
-					error: function(err) {
-						console.log('faaaaailed');
-						callback(false);
-					},
-				});
-			};
-			submitLogin(function(ok) {
-				if (ok) {
+			var username = $("#login-user").val().trim();
+			var password = $("#login-pass").val();
+			api.login(username, password).done(function(status) {
+				if(status === "Success")  {
 					showPage('upload-page');
 				} else {
-					alert('not logged in');
+					alert(status);
 				}
+			}).fail(function(err) {
+				alert(JSON.stringify(err));
 			});
 		});
 		
@@ -274,7 +239,7 @@ require(['jquery', 'l10n', 'geo', 'jquery.localize'], function($, l10n, geo) {
 		// upload-description
 		$('#submit-upload').click(function() {
 			console.log('Completing upload...');
-			completeUpload(state.fileKey);
+			api.finishUpload(state.fileKey, 'test_wlm.jpg', 'testing wlm', 'testing wlm');
 		});
 		
 		showPage('welcome-page');
@@ -293,125 +258,8 @@ require(['jquery', 'l10n', 'geo', 'jquery.localize'], function($, l10n, geo) {
 		showPage('upload-status-page');
 	}
 
-
-	/**
-	 * @return promise, resolves with token value, rejects with error message
-	 */
-	function getToken() {
-		var defer = new $.Deferred();
-		$.ajax({
-			url: api,
-			data: {
-				action: 'query',
-				prop: 'info',
-				intoken: 'edit',
-				titles: 'Foo',
-				format: 'json'
-			},
-			success: function(data) {
-				var token;
-				$.each(data.query.pages, function(i, item) {
-					token = item.edittoken;
-				});
-				if (token) {
-					defer.resolve(token);
-				} else {
-					defer.reject("No token found");
-				}
-			},
-			fail: function(xhr, err) {
-				defer.reject("HTTP error");
-			}
-		});
-		return defer.promise();
-	}
-
-
-	/**
-	 * @return promise, resolves with stashed file key, rejects with error message
-	 */
-	function doUpload(sourceUri) {
-		var defer = new $.Deferred();
-		getToken().done(function(token) {
-			var options = new FileUploadOptions();
-			options.fileKey = "file";
-			options.fileName = sourceUri.substr(sourceUri.lastIndexOf('/')+1);
-			options.mimeType = "image/jpg";
-			options.chunkedMode = false;
-			options.params = {
-				action: 'upload',
-				filename: 'Test_file.jpg',
-				comment: 'Uploaded with WLMTest',
-				text: 'Photo uploaded with WLMTest',
-				ignorewarnings: 1,
-				stash: 1,
-				token: token,
-				format: 'json'
-			};
-			
-			var ft = new FileTransfer();
-			ft.upload(sourceUri, api, function(r) {
-				// success
-				console.log("Code = " + r.responseCode);
-				console.log("Response = " + r.response);
-				console.log("Sent = " + r.bytesSent);
-				var data = JSON.parse(r.response);
-				if (data.upload.result == 'Success') {
-					defer.resolve(data.upload.filekey);
-				} else {
-					defer.reject("Upload did not succeed");
-				}
-			}, function(error) {
-				console.log("upload error source " + error.source);
-				console.log("upload error target " + error.target);
-				defer.reject("HTTP error");
-			}, options);
-		});
-		return defer.promise();
-	}
-
-	/**
-	 * @return promise resolves with imageinfo structure, rejects with error message
-	 */
-	function completeUpload(fileKey) {
-		var defer = new $.Deferred();
-		console.log('upload completing... getting token...');
-		getToken().done(function(token) {
-			console.log('.... got token');
-			console.log('starting ajax upload completion...');
-			$.ajax({
-				url: api,
-				type: 'POST',
-				data: {
-					action: 'upload',
-					filekey: fileKey,
-					filename: 'Test_file.jpg',
-					comment: 'Uploaded with WLMTest',
-					text: 'Photo uploaded with WLMTest',
-					ignorewarnings: 1,
-					token: token,
-					format: 'json'
-				},
-				success: function(data) {
-					console.log(JSON.stringify(data));
-					if (data.upload.result == 'Success') {
-						defer.resolve(data.upload.imageinfo);
-					} else {
-						defer.reject("Upload did not succeed");
-					}
-				},
-				fail: function(xhr, error) {
-					console.log("upload error source " + error.source);
-					console.log("upload error target " + error.target);
-					defer.reject("HTTP error");
-				}
-			});
-		});
-		return defer.promise();
-	}
-
 	function startUpload(fileUri) {
-		doUpload(fileUri).done(function(fileKey) {
+		api.startUpload(fileUri, 'test_wlm.jpg', 'testing wlm', 'testing wlm').done(function(fileKey) {
 			state.fileKey = fileKey;
 			$('#upload-progress-bar').text('done');
 			continueButtonCheck();
