@@ -65,10 +65,6 @@ require(['jquery', 'l10n', 'geo', 'api', 'jquery.localize'], function($, l10n, g
 
 
 	onDeviceReady();
-	/* When this function is called, Cordova has been initialized and is ready to roll */
-	/* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
-	see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
-	for more details -jm */
 	function onDeviceReady()
 	{
 		l10n.initLanguages();
