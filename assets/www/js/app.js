@@ -68,7 +68,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'jquery.localize'], functi
 	function onDeviceReady()
 	{
 		l10n.initLanguages();
-		if (window.plugins !== undefined && window.plugins.pinchZoom !== undefined) {
+		if (window.plugins !== undefined && window.plugins.pinchZoom !== undefined && navigator.userAgent.match(/Android 2/)) {
 			// TODO: only enable this while on the map view?
 			(function() {
 				var origDistance;
