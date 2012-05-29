@@ -19,7 +19,13 @@
 	<script type="text/javascript" charset="utf-8" src="js/platform-stub.js"></script>
   </head>
   <body onLoad="onBodyLoad();">
-  
+	<script type="text/html" id="country-list-template">
+		<% _.each(countries, function(name, code) { %>
+			<li>
+				<button class='country-search' data-campaign='<%= code %>'><%= name %></button>
+			</li>
+		<% }); %>
+	</script>
   	<div class="page" id="welcome-page">
 	  	<h1><msg key="welcome-title"></msg></h1>
 	  	<a href="#">
