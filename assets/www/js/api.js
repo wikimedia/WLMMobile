@@ -36,14 +36,14 @@ define(['jquery'], function() {
 		}).fail(function(err) {
 			d.reject(err);
 		});
-		return d;
+		return d.promise();
 	};
 
 	Api.prototype.requestEditToken = function() {
 		var d = $.Deferred();
 		if(this.token) {
 			d.resolve(this.token);
-			return d;
+			return d.promise();
 		} 
 		var that = this;
 		that.request('GET',  {
@@ -65,7 +65,7 @@ define(['jquery'], function() {
 		}).fail(function(err) {
 			d.reject(err);
 		});
-		return d;
+		return d.promise();
 	};
 
 	Api.prototype.startUpload = function(sourceUri, filename, comment, text) {
@@ -108,7 +108,7 @@ define(['jquery'], function() {
 				d.reject("HTTP error");
 			}, options);
 		});
-		return d;
+		return d.promise();
 	};
 
 	Api.prototype.finishUpload = function(fileKey, filename, comment, text) {
@@ -139,7 +139,68 @@ define(['jquery'], function() {
 				d.reject("HTTP error");
 			});
 		});
-		return d;
+		return d.promise();
+	};
+
+	Api.prototype.getImageFetcher = function(width, height) {
+		return new ImageFetcher(this, width, height);
+	};
+
+	function ImageFetcher(api, width, height) {
+		this.api = api;
+		this.titles = [];
+		this.deferreds = {};
+		this.width = width;
+		this.height = height;
+	}
+
+	ImageFetcher.prototype.request = function(filename) {
+		var d = $.Deferred();
+		var title = 'File:' + filename;
+		this.titles.push(title);
+		this.deferreds[title] = d;
+		return d.promise();
+	};
+
+	ImageFetcher.prototype.send = function() {
+		var that = this;
+		var data = {
+			action: 'query',
+			titles: this.titles.join('|'),
+			prop: 'imageinfo',
+			iiprop: 'url',
+			format: 'json'
+		};
+		if (this.width) {
+			data.iiurlwidth = this.width;
+		}
+		if (this.height) {
+			data.iiurlheight = this.height;
+		}
+		this.api.request('GET', data).done(function(data) {
+			if (!('query' in data)) {
+				console.log('no return image data');
+				return;
+			}
+			var origName = {};
+			if ('normalized' in data.query) {
+				$.each(data.query.normalized, function(i, pair) {
+					origName[pair.to] = pair.from;
+				});
+			}
+
+			$.each(data.query.pages, function(pageId, page) {
+				var title = page.title;
+				if (title in origName) {
+					console.log('Normalizing title');
+					title = origName[title];
+				}
+				if ('imageinfo' in page) {
+					var imageinfo = page.imageinfo[0];
+					that.deferreds[title].resolve(imageinfo);
+				}
+			});
+		});
 	};
 
 	return Api;

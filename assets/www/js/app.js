@@ -65,10 +65,6 @@ require(['jquery', 'l10n', 'geo', 'api', 'jquery.localize'], function($, l10n, g
 
 
 	onDeviceReady();
-	/* When this function is called, Cordova has been initialized and is ready to roll */
-	/* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
-	see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
-	for more details -jm */
 	function onDeviceReady()
 	{
 		l10n.initLanguages();
@@ -326,7 +322,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'jquery.localize'], function($, l10n, g
 		
 		// whee
 		$('#results').empty();
-		var fetcher = new ImageFetcher(commonsApi, 64, 64);
+		var fetcher = commonsApi.getImageFetcher(64, 64);
 
 		geo.initMap();
 		geo.clearMarkers();
@@ -382,7 +378,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'jquery.localize'], function($, l10n, g
 			$li.find('.name').text(stripWikiText(item.name));
 			$li.find('.address').text(stripWikiText(item.address));
 			if (item.image) {
-				fetcher.request(item.image, function(imageinfo) {
+				fetcher.request(item.image).done(function(imageinfo) {
 					$li.find('img').attr('src', imageinfo.thumburl);
 				});
 			}
@@ -416,8 +412,8 @@ require(['jquery', 'l10n', 'geo', 'api', 'jquery.localize'], function($, l10n, g
 				$('#detail-changed').text(item.changed); // timestamp - format me
 				$('#detail-image').empty();
 				if (item.image) {
-					var fetcher2 = new ImageFetcher(commonsApi, 300, 240);
-					fetcher2.request(item.image, function(imageinfo) {
+					var fetcher2 = commonsApi.getImageFetcher(300, 240);
+					fetcher2.request(item.image).done(function(imageinfo) {
 						console.log('?? ' + JSON.stringify(imageinfo));
 						var $img = $('<img>');
 						$img.attr('src', imageinfo.thumburl);
@@ -439,76 +435,6 @@ require(['jquery', 'l10n', 'geo', 'api', 'jquery.localize'], function($, l10n, g
 		});
 		fetcher.send();
 	}
-
-
-	/**
-	 * Fetch image info for one or more images via MediaWiki API
-	 */
-	function ImageFetcher(api, width, height) {
-		this.api = api || commonsApi;
-		this.titles = [];
-		this.callbacks = {};
-		this.width = width;
-		this.height = height;
-	}
-
-	ImageFetcher.prototype.request = function(filename, callback) {
-		var title = 'File:' + filename;
-		this.titles.push(title);
-		this.callbacks[title] = callback;
-	};
-
-	ImageFetcher.prototype.send = function() {
-		var that = this;
-		var data = {
-			action: 'query',
-			titles: this.titles.join('|'),
-			prop: 'imageinfo',
-			iiprop: 'url',
-			format: 'json'
-		};
-		if (this.width) {
-			data.iiurlwidth = this.width;
-		}
-		if (this.height) {
-			data.iiurlheight = this.height;
-		}
-		$.ajax({
-			url: this.api,
-			data: data,
-			success: function(data) {
-				// Get the normalization map
-				if (!('query' in data)) {
-					console.log('no return image data');
-					return;
-				}
-				var origName = {};
-				if ('normalized' in data.query) {
-					$.each(data.query.normalized, function(i, pair) {
-						origName[pair.to] = pair.from;
-					});
-				}
-
-				$.each(data.query.pages, function(pageId, page) {
-					var title = page.title;
-					if (title in origName) {
-						console.log('Normalizing title');
-						title = origName[title];
-					}
-					if ('imageinfo' in page) {
-						var imageinfo = page.imageinfo[0];
-						if (title in that.callbacks) {
-							that.callbacks[title].apply(imageinfo, [imageinfo]);
-						} else {
-							console.log('No callback for image ' + title);
-						}
-					}
-				});
-			}
-		});
-	};
-
-
 
 	function stripWikiText(str) {
 		str = str.replace(/\[\[[^\|]+\|([^\]]+)\]\]/g, '$1');
