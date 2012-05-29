@@ -36,14 +36,14 @@ define(['jquery'], function() {
 		}).fail(function(err) {
 			d.reject(err);
 		});
-		return d;
+		return d.promise();
 	};
 
 	Api.prototype.requestEditToken = function() {
 		var d = $.Deferred();
 		if(this.token) {
 			d.resolve(this.token);
-			return d;
+			return d.promise();
 		} 
 		var that = this;
 		that.request('GET',  {
@@ -65,7 +65,7 @@ define(['jquery'], function() {
 		}).fail(function(err) {
 			d.reject(err);
 		});
-		return d;
+		return d.promise();
 	};
 
 	Api.prototype.startUpload = function(sourceUri, filename, comment, text) {
@@ -108,7 +108,7 @@ define(['jquery'], function() {
 				d.reject("HTTP error");
 			}, options);
 		});
-		return d;
+		return d.promise();
 	};
 
 	Api.prototype.finishUpload = function(fileKey, filename, comment, text) {
@@ -139,7 +139,7 @@ define(['jquery'], function() {
 				d.reject("HTTP error");
 			});
 		});
-		return d;
+		return d.promise();
 	};
 
 	Api.prototype.getImageFetcher = function(width, height) {
@@ -159,7 +159,7 @@ define(['jquery'], function() {
 		var title = 'File:' + filename;
 		this.titles.push(title);
 		this.deferreds[title] = d;
-		return d;
+		return d.promise();
 	};
 
 	ImageFetcher.prototype.send = function() {
