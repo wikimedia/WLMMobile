@@ -1,4 +1,4 @@
-window.l10n = function() {
+define(['jquery', 'propertiesFileReader'], function($, propertiesFileReader) {
 	/**
 	 * Validate and normalize a language code.
 	 * Doesn't guarantee we know it or it's legit, but confirms the format is safe.
@@ -126,4 +126,4 @@ window.l10n = function() {
 		normalizeLanguageCode: normalizeLanguageCode,
 		isLangRTL: isLangRTL
 	};
-}();
+});

@@ -1,5 +1,5 @@
 (function() {
-	var cordova = 'cordova-1.7.0rc1.js',
+	var cordova = 'cordova-1.7.0rc1',
 		os = false;
 
 	if (navigator.userAgent.match(/Android/)) {
@@ -16,12 +16,10 @@
 			onDeviceReady();
 		});
 	} else {
-		document.writeln('<script type="text/javascript" charset="utf-8" src="' + os + '/' + cordova + '"></script>');
-		document.writeln('<script type="text/javascript" charset="utf-8" src="' + os + '/platform.js"></script>');
+		window.CORDOVA_MODULE = '../' + os + '/' + cordova;
+		window.PLATFORM_MODULE = '../' + os + '/platform';
 	}
-	
 	if (os == 'android') {
-		document.writeln('<script type="text/javascript" charset="utf-8" src="' + os + '/plugins/PinchZoom.js"></script>');
+		window.CORDOVA_PLUGINS = ['../android/plugins/PinchZoom'];
 	}
-
 })();
