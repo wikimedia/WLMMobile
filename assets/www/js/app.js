@@ -18,7 +18,7 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require(['jquery', 'l10n', 'geo', 'api', 'jquery.localize'], function($, l10n, geo, Api) {
+require(['jquery', 'l10n', 'geo', 'api', 'templates', 'jquery.localize'], function($, l10n, geo, Api, templates) {
 
 	var api = new Api("https://test.wikipedia.org/w/api.php");
 	var commonsApi = new Api('https://commons.wikimedia.org/w/api.php');
@@ -100,22 +100,17 @@ require(['jquery', 'l10n', 'geo', 'api', 'jquery.localize'], function($, l10n, g
 	}
 
 	$(document).bind('mw-messages-ready', function() {
-		$.each(countries, function(code, name) {
-			var $li = $('<li>'),
-				$button = $('<button>');
-			$button.addClass('country-search').text(name);
-			$button.click(function() {
-				showPage('results-page');
-				searchParams = {
-					how: 'campaign',
-					campaign: code,
-					lat: null,
-					lon: null
-				};
-				updateSearch();
-			});
-			$button.appendTo($li);
-			$li.appendTo('#country-list');
+		var countriesListTemplate = templates.getTemplate('country-list-template');
+		$("#country-list").html(countriesListTemplate({countries: countries}))
+		$("#country-list button.country-search").click(function() {
+			showPage('results-page');
+			searchParams = {
+				how: 'campaign',
+				campaign: $(this).data('campaign'),
+				lat: null,
+				lon: null
+			};
+			updateSearch();
 		});
 
 		$('#countries').click(function() {
