@@ -436,13 +436,6 @@ require(['jquery', 'l10n', 'geo', 'api', 'jquery.localize'], function($, l10n, g
 		fetcher.send();
 	}
 
-
-	/**
-	 * Fetch image info for one or more images via MediaWiki API
-	 */
-
-
-
 	function stripWikiText(str) {
 		str = str.replace(/\[\[[^\|]+\|([^\]]+)\]\]/g, '$1');
 		str = str.replace(/\[\[([^\]]+)\]\]/g, '$1');
