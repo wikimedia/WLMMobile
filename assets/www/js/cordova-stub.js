@@ -11,7 +11,7 @@
 	if (!os) {
 		// Assume in a browser for testing. PhoneGap-specific things will fail.
 		//alert('Unrecognized OS');
-		$(window).bind('load', function() {
+		window.addEventListener('load', function() {
 			//$(document).trigger('deviceready');
 			onDeviceReady();
 		});
