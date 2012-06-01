@@ -21,7 +21,7 @@
 	height: 64px;
 }
 
-#results li div.stuff {
+#results li div.list-detail {
 	position: absolute;
 	top: 0;
 	left: 64px;
@@ -39,4 +39,3 @@
 	width: 320px;
 	height: 320px;
 }
-

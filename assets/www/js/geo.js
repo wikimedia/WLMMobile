@@ -1,4 +1,4 @@
-define(['jquery', '../leaflet/leaflet'], function() {
+define(['jquery', '../leaflet/leaflet-src'], function() {
 
 	var shownURLs = [];
 
@@ -38,6 +38,7 @@ define(['jquery', '../leaflet/leaflet'], function() {
 	}
 	
 	function addMarker(lat, lon, title, summary, callback) {
+		console.log('adding marker ' + title);
 		var marker = new L.Marker(new L.LatLng(lat, lon));
 
 		html = "<div><strong>" + title + "</strong><p>" + summary + "</p></div>";
