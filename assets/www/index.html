@@ -26,6 +26,24 @@
 			</li>
 		<% }); %>
 	</script>
+	<script type="text/html" id="monument-list-item-template">
+		<li>
+			<img class='monument-thumbnail' />
+			<div class='list-detail'>
+				<div class='monument-name'> <%= monument.name %> </div>
+				<div class='monument-address'> <%= monument.address %> </div>
+			</div>
+		</li>
+	</script>
+	<script type="text/html" id="monument-details-template">
+		<img class='monument-thumbnail' />
+		<h2 class='monument-name'> <%= monument.name %> </h2>
+		<span class='monument-country'> <%= monument.country %> </span>
+		<span class='monument-address'> <%= monument.address %> </span>
+		<a class='monument-directions' href="<% monument.addressLink %>">
+			<msg key='monument-get-directions' />
+		</a>
+	</script>
   	<div class="page" id="welcome-page">
 	  	<h1><msg key="welcome-title"></msg></h1>
 	  	<a href="#">
@@ -58,7 +76,6 @@
 	  	</header>
   		<div class="view" id="list-view">
 	  		<ul id="results">
-	  			<li>Loading...</li>
 	  		</ul>
 	  	</div>
 	  	<div class="view" id="map-view">
@@ -72,39 +89,8 @@
 	  		<button id="back-results"><msg key="back"></msg></button>
 	  		<button id="start-upload"><msg key="start-upload"></msg></button>
 	  	</header>
-  		<table id="details">
-  			<tr>
-  				<td colspan=2 id="detail-name">
-  			<tr>
-  				<th><msg key="detail-link"></msg>
-  				<td id="detail-link"><a href="#" class="external"></a>
-  			<tr>
-  				<td colspan=2 id="detail-image">
-  			<tr>
-  				<th><msg key="detail-address"></msg>
-	  			<td id="detail-address"><a href="#" class="external"></a>
-	  		<tr>
-	  			<th><msg key="detail-municipality"></msg>
-		  		<td id="detail-municipality">
-		  	<tr>
-		  		<th><msg key="detail-location"></msg>
-		  		<td id="detail-location"><a href="#" class="external"></a>
-	  		<tr>
-	  			<th><msg key="detail-country"></msg>
-	  			<td id="detail-country">
-	  		<tr>
-	  			<th><msg key="detail-lang"></msg>
-	  			<td id="detail-lang">
-	  		<tr>
-	  			<th><msg key="detail-id"></msg>
-		  		<td id="detail-id">
-	  		<tr>
-	  			<th><msg key="detail-changed"></msg>
-	  			<td id="detail-changed">
-		  	<tr>
-		  		<th><msg key="detail-source"></msg>
-		  		<td id="detail-source"><a href="#" class="external"><msg key="detail-source"></msg></a>
-	  	</table>
+		<div id="monument-detail">
+		</div>
   	</div>
   
   	<div class="page" id="login-page">

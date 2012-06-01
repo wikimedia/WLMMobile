@@ -18,10 +18,11 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require(['jquery', 'l10n', 'geo', 'api', 'templates', 'jquery.localize'], function($, l10n, geo, Api, templates) {
+require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.localize'], function($, l10n, geo, Api, templates, MonumentsApi) {
 
 	var api = new Api("https://test.wikipedia.org/w/api.php");
 	var commonsApi = new Api('https://commons.wikimedia.org/w/api.php');
+	var monuments = new MonumentsApi('http://toolserver.org/~erfgoed/api/api.php', commonsApi);
 	var wlmapi = 'http://toolserver.org/~erfgoed/api/api.php';
 	var state = {
 		fileUri: null,
@@ -99,14 +100,9 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'jquery.localize'], functi
 		var countriesListTemplate = templates.getTemplate('country-list-template');
 		$("#country-list").html(countriesListTemplate({countries: countries}))
 		$("#country-list button.country-search").click(function() {
-			showPage('results-page');
-			searchParams = {
-				how: 'campaign',
-				campaign: $(this).data('campaign'),
-				lat: null,
-				lon: null
-			};
-			updateSearch();
+			monuments.getForCountry($(this).data('campaign')).done(function(monuments) {
+				showMonumentsList(monuments);
+			});
 		});
 
 		$('#countries').click(function() {
@@ -244,6 +240,33 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'jquery.localize'], functi
 		$('#' + page).show();
 	}
 
+	function showMonumentDetail(monument) {
+		var monumentTemplate = templates.getTemplate('monument-details-template');
+		var imageFetcher = commonsApi.getImageFetcher(300, 240);
+		var $monumentDetail = $(monumentTemplate({monument: monument}));
+		$("#monument-detail").html($monumentDetail);
+		monument.requestThumbnail(imageFetcher).done(function(imageinfo) {
+			$monumentDetail.find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
+		});
+		imageFetcher.send();
+		showPage('detail-page');
+	}
+
+	function showMonumentsList(monuments) {
+		var monumentTemplate = templates.getTemplate('monument-list-item-template');	
+		var listThumbFetcher = commonsApi.getImageFetcher(64, 64);
+		$.each(monuments, function(i, monument) {
+			var $monumentItem = $(monumentTemplate({monument: monument}));
+			monument.requestThumbnail(listThumbFetcher).done(function(imageinfo) {
+				$monumentItem.find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
+			});
+			$("#results").append($monumentItem).click(function() {
+				showMonumentDetail(monument);
+			});
+		});
+		listThumbFetcher.send();
+		showPage('results-page');
+	}
 
 	function prepUploadConfirmation() {
 		showPage('upload-status-page');
@@ -317,7 +340,6 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'jquery.localize'], functi
 		
 		// whee
 		$('#results').empty();
-		var fetcher = commonsApi.getImageFetcher(64, 64);
 
 		geo.initMap();
 		geo.clearMarkers();
@@ -407,7 +429,6 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'jquery.localize'], functi
 				$('#detail-changed').text(item.changed); // timestamp - format me
 				$('#detail-image').empty();
 				if (item.image) {
-					var fetcher2 = commonsApi.getImageFetcher(300, 240);
 					fetcher2.request(item.image).done(function(imageinfo) {
 						console.log('?? ' + JSON.stringify(imageinfo));
 						var $img = $('<img>');
