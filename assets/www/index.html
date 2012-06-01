@@ -65,7 +65,7 @@
   	<div class="page" id="results-page">
   		<header>
   			<div>
-		  		<button id="back-welcome"><msg key="back"></msg></button>
+		  		<button class="back-welcome"><msg key="back"></msg></button>
 				<button id="show-map"><msg key="show-map"></msg></button>
 		  		<button id="show-list"><msg key="show-list"></msg></button>
 	  		</div>
@@ -78,9 +78,6 @@
 	  		<ul id="results">
 	  		</ul>
 	  	</div>
-	  	<div class="view" id="map-view">
-	  		<div id="map"></div>
-	  	</div>  	
   	</div>
   	
   	<div class="page" id="detail-page">
@@ -92,7 +89,16 @@
 		<div id="monument-detail">
 		</div>
   	</div>
-  
+
+	<div class='page' id='map-page'>
+		<header>
+			<button class="back-welcome"><msg key="back" /></button>
+		</header>
+		<div>
+			<div id="map"> </div>
+		</div>
+	</div>
+
   	<div class="page" id="login-page">
 		<fieldset>
 			<legend><msg key="login-title"></msg></legend>

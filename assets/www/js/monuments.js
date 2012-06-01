@@ -24,6 +24,7 @@ define(['jquery'], function($) {
 				// Pick up only the last line of the response
 				// This ignores all the PHP errors and warnings spouted by the API
 				// FIXME: Fix the errors and warnings in the server of the API
+				console.log(text);
 				var split = text.split("\n");
 				var data = JSON.parse(split[split.length -1]);
 				var monuments = [];
@@ -40,6 +41,15 @@ define(['jquery'], function($) {
 		return this.request({
 			action: 'search',
 			srcountry: country
+		});
+	};
+
+	MonumentsApi.prototype.getInBoundingBox = function(minLon, minLat, maxLon, maxLat) {
+		var bboxString = [minLon, minLat, maxLon, maxLat].join(',');
+		console.log(bboxString);
+		return this.request({
+			action:'search',
+			bbox: bboxString
 		});
 	};
 

@@ -24,6 +24,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 	var commonsApi = new Api('https://commons.wikimedia.org/w/api.php');
 	var monuments = new MonumentsApi('http://toolserver.org/~erfgoed/api/api.php', commonsApi);
 	var wlmapi = 'http://toolserver.org/~erfgoed/api/api.php';
+	var nearbyDeg = 1.5; // degree 'radius' approx on the bounding box
 	var state = {
 		fileUri: null,
 		fileKey: null,
@@ -102,6 +103,10 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		$("#country-list button.country-search").click(function() {
 			monuments.getForCountry($(this).data('campaign')).done(function(monuments) {
 				showMonumentsList(monuments);
+				$("#show-map").unbind('click').click(function() {
+					console.log("Switching to map view");
+					showMonumentsMap(monuments);
+				});
 			});
 		});
 
@@ -110,21 +115,25 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		});
 
 		$('#nearby').click(function() {
-			showPage('results-page');
 			navigator.geolocation.getCurrentPosition(function(pos) {
-				searchParams = {
-					how: 'nearby',
-					campaign: null,
-					lat: pos.coords.latitude,
-					lon: pos.coords.longitude
-				};
-				updateSearch();
+				console.log("Got position");
+				monuments.getInBoundingBox(pos.coords.longitude - nearbyDeg,
+					pos.coords.latitude - nearbyDeg,
+					pos.coords.longitude + nearbyDeg,
+					pos.coords.latitude + nearbyDeg
+				).done(function(monuments) {
+					console.log("OM NOM NOM");
+					showMonumentsMap(monuments, {
+						lat: pos.coords.latitude,
+						lon: pos.coords.longitude
+					}, 10);
+				});
 			}, function(err) {
 				alert('Error in geolocation');
 			});
 		});
-		
-		$('#back-welcome').click(function() {
+
+		$('.back-welcome').click(function() {
 			showPage('welcome-page');
 		});
 		$('#show-list').click(function() {
@@ -268,6 +277,73 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		showPage('results-page');
 	}
 
+	function calculateCenterAndZoom(monuments) {
+		var center = {lat: 0, lon: 0},
+			max = {lat: -999, lon: -999},
+			min = {lat: 999, lon: 999},
+			count = 0,
+			dist = {lat: 0, lon: 0},
+			zoom = 0;
+		$.each(monuments, function(i, item) {
+			if (item.lat || item.lon) {
+				// Only count things that aren't at (0, 0)
+				if (item.lat < min.lat) {
+					min.lat = item.lat;
+				}
+				if (item.lon < min.lon) {
+					min.lon = item.lon;
+				}
+				if (item.lat > max.lat) {
+					max.lat = item.lat;
+				}
+				if (item.lon > max.lon) {
+					max.lon = item.lon;
+				}
+				count++;
+			}
+		});
+		if (count == 0) {
+			// Seriously?
+			return {center: {lat: 0, lon: 0}, zoom: 1};
+		} else {
+			center.lat = (min.lat + max.lat) / 2;
+			center.lon = (min.lon + max.lon) / 2;
+			dist.lat = max.lat - min.lat;
+			dist.lon = max.lon - min.lon;
+			dist = Math.max(dist.lat,dist.lon);
+			visible = 360;
+			for (zoom = 1; zoom < 18; zoom++) {
+				visible /= 2;
+				if (dist >= visible) {
+					break;
+				}
+			}
+			return { center: center, zoom: zoom -1 };
+		}
+	}
+
+	function showMonumentsMap(monuments, center, zoom) {
+		if(typeof center === "undefined" && typeof zoom === "undefined") {
+			var centerAndZoom = calculateCenterAndZoom(monuments);
+			center = centerAndZoom.center;
+			zoom = centerAndZoom.zoom;
+		}
+		geo.initMap();
+		geo.clearMarkers();
+		geo.map.setView(new L.LatLng(center.lat, center.lon), zoom);
+		$.each(monuments, function(i, monument) {
+			if(monument.lat && monument.lon) {
+				geo.addMarker(monument.lat,
+					monument.lon,
+					monument.name,
+					monument.address,
+					function() { showMonumentDetail(monument); }
+				);
+			}
+		});
+		showPage('map-page');
+	}
+
 	function prepUploadConfirmation() {
 		showPage('upload-status-page');
 	}
@@ -287,208 +363,5 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		} else {
 			$('#continue-post-upload').attr('disabled', 'disabled');
 		}
-	}
-
-	function showSearchResults(data) {
-		//alert(data);
-		var fields = [
-			'country',
-			'lang',
-			'id',
-			'name',
-			'address',
-			'municipality',
-			'lat',
-			'lon',
-			'image',
-			'source',
-			'monument_article',
-			'registrant_url',
-			'changed'
-		];
-		var results = [];
-		// XML -> JSON
-		$('monument', data).each(function(i, node) {
-			var obj = {};
-			$.each(fields, function(i, field) {
-				obj[field] = node.getAttribute(field);
-				if (field == 'lat' || field == 'lon') {
-					obj[field] = parseFloat(obj[field]);
-				}
-			});
-			results.push(obj);
-		});
-		
-		// Sort by location
-		if (searchParams.how == 'nearby') {
-			/**
-			 * Distance approximation, in degrees
-			 */
-			function dist(lat, lon) {
-				var dlat = (lat - searchParams.lat),
-					dlon = (lon - searchParams.lon),
-					degrees = Math.sqrt(dlat * dlat + dlon * dlon);
-				return degrees;
-			}
-			$.each(results, function(i, item) {
-				item.dist = dist(item.lat, item.lon);
-			});
-			results = results.sort(function(a, b) {
-				return a.dist - b.dist;
-			});
-		}
-		
-		// whee
-		$('#results').empty();
-
-		geo.initMap();
-		geo.clearMarkers();
-		if (searchParams.how == 'nearby') {
-			geo.map.setView(new L.LatLng(searchParams.lat, searchParams.lon), 10);
-		} else {
-			var center = {lat: 0, lon: 0},
-				max = {lat: -999, lon: -999},
-				min = {lat: 999, lon: 999},
-				count = 0,
-				dist = {lat: 0, lon: 0},
-				zoom = 0;
-			$.each(results, function(i, item) {
-				if (item.lat || item.lon) {
-					// Only count things that aren't at (0, 0)
-					if (item.lat < min.lat) {
-						min.lat = item.lat;
-					}
-					if (item.lon < min.lon) {
-						min.lon = item.lon;
-					}
-					if (item.lat > max.lat) {
-						max.lat = item.lat;
-					}
-					if (item.lon > max.lon) {
-						max.lon = item.lon;
-					}
-					count++;
-				}
-			});
-			if (count == 0) {
-				// Seriously?
-				geo.map.setView(new L.LatLng(0, 0), 1);
-			} else {
-				center.lat = (min.lat + max.lat) / 2;
-				center.lon = (min.lon + max.lon) / 2;
-				dist.lat = max.lat - min.lat;
-				dist.lon = max.lon - min.lon;
-				dist = Math.max(dist.lat,dist.lon);
-				visible = 360;
-				for (zoom = 1; zoom < 18; zoom++) {
-					visible /= 2;
-					if (dist >= visible) {
-						break;
-					}
-				}
-				geo.map.setView(new L.LatLng(center.lat, center.lon), zoom - 1);
-			}
-		}
-
-		$.each(results, function(i, item) {
-			var $li = $('<li><img> <div class="stuff"><div class="name"></div><div class="address"></div></div></li>');
-			$li.find('.name').text(stripWikiText(item.name));
-			$li.find('.address').text(stripWikiText(item.address));
-			if (item.image) {
-				fetcher.request(item.image).done(function(imageinfo) {
-					$li.find('img').attr('src', imageinfo.thumburl);
-				});
-			}
-			$li.appendTo('#results');
-			var showDetail = function() {
-				showPage('detail-page');
-				$('#detail-country').text(item.country);
-				$('#detail-lang').text(item.lang);
-				$('#detail-id').text(item.id);
-				$('#detail-name').text(stripWikiText(item.name)); // may contain wikitext
-				if (item.monument_article) {
-					// @fixme may contain a #foo hash
-					var url = 'https://' + item.lang + '.wikipedia.org/wiki/' +
-						encodeURIComponent(item.monument_article.replace(/ /g, '_'));
-					$('#detail-link a').attr('href', url).text(item.monument_article.replace(/_/g, ' '));
-					$('#detail-link').show();
-				} else {
-					$('#detail-link a').attr('href', '#').empty();
-					$('#detail-link').hide();
-				}
-				var addr = stripWikiText(item.address); // may contain wikitext
-				var geoUri = platform.geoUrl(item.lat, item.lon, addr);
-				$('#detail-address a')
-					.text(addr)
-					.attr('href', geoUri);
-				$('#detail-municipality').text(stripWikiText(item.municipality)); // may contain wikitext
-				$('#detail-location a')
-					.text(item.lat + ', ' + item.lon)
-					.attr('href', platform.geoUrl(item.lat, item.lon));
-				$('#detail-source a').attr('href', item.source); // URL?
-				$('#detail-changed').text(item.changed); // timestamp - format me
-				$('#detail-image').empty();
-				if (item.image) {
-					fetcher2.request(item.image).done(function(imageinfo) {
-						console.log('?? ' + JSON.stringify(imageinfo));
-						var $img = $('<img>');
-						$img.attr('src', imageinfo.thumburl);
-						$('#detail-image').empty().append($img);
-					});
-					fetcher2.send();
-				}
-			};
-			$li.click(showDetail);
-			
-			if (item.lat || item.lon) {
-				// Only add items to map that have a lat/lon
-				geo.addMarker(item.lat,
-					item.lon,
-					stripWikiText(item.name),
-					stripWikiText(item.address),
-					showDetail);
-			}
-		});
-		fetcher.send();
-	}
-
-	function stripWikiText(str) {
-		str = str.replace(/\[\[[^\|]+\|([^\]]+)\]\]/g, '$1');
-		str = str.replace(/\[\[([^\]]+)\]\]/g, '$1');
-		return str;
-	}
-
-
-	function updateSearch() {
-		var data = {
-			'action': 'search',
-			'limit': 50,
-			'format': 'xml',
-		}
-		if (searchParams.how == 'nearby') {
-			var dist = 0.25; // degree 'radius' approx on the bounding box
-			data.bbox = [
-				searchParams.lon - dist,
-				searchParams.lat - dist,
-				searchParams.lon + dist,
-				searchParams.lat + dist
-			].join(',');
-		} else if (searchParams.how == 'campaign') {
-			data.srcountry = searchParams.campaign;
-		}
-		/*
-		// Filter option is ssllooww and doesn't work right now.
-		var filter = $('#filter-input').val();
-		if (filter != '') {
-			data.srname = '%' + filter + '%';
-		}
-		*/
-		$.ajax({
-			url: wlmapi,
-			data: data,
-			success: function(data) {
-				showSearchResults(data);
-			}
-		});
 	}
 });
