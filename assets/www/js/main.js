@@ -21,5 +21,3 @@ function onDeviceReady() {
 		l10n.initLanguages();
 	});
 }
-
-onBodyLoad();
