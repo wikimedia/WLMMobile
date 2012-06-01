@@ -11,6 +11,8 @@ define(['jquery'], function($) {
 	}
 
 	MonumentsApi.prototype.request = function(params) {
+		var that = this;
+
 		// Force JSON
 		params.format = 'json';
 		return $.ajax({
@@ -18,33 +20,27 @@ define(['jquery'], function($) {
 			data: params,
 			dataType: 'text',
 			type: 'GET',
-			dataFilter: function(data) {
+			dataFilter: function(text) {
 				// Pick up only the last line of the response
 				// This ignores all the PHP errors and warnings spouted by the API
 				// FIXME: Fix the errors and warnings in the server of the API
-				var split = data.split("\n");
-				return JSON.parse(split[split.length -1]);
+				var split = text.split("\n");
+				var data = JSON.parse(split[split.length -1]);
+				var monuments = [];
+				$.each(data.monuments, function(i, monument) {
+					monuments.push(new Monument(monument, that.mwApi));
+				});
+				return monuments;
 			}
 		});
 	};
 
 	MonumentsApi.prototype.getForCountry = function(country) {
 		var d = $.Deferred();
-		this.request({
+		return this.request({
 			action: 'search',
 			srcountry: country
-		}).done(function(data) {
-			var monuments = [];
-			var that = this;
-			console.log(JSON.stringify(data));
-			$.each(data['monuments'], function(i, monument) {
-				monuments.push(new Monument(monument, that.mwApi));
-			});
-			d.resolve(monuments);
-		}).fail(function() {
-			d.reject.apply(d, args);
 		});
-		return d.promise();
 	};
 
 	function Monument(data, mwApi) {
