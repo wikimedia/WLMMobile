@@ -101,7 +101,10 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		var countriesListTemplate = templates.getTemplate('country-list-template');
 		$("#country-list").html(countriesListTemplate({countries: countries}))
 		$("#country-list button.country-search").click(function() {
-			monuments.getForCountry($(this).data('campaign')).done(function(monuments) {
+			var params = {
+				limit: 200
+			};
+			monuments.getForCountry($(this).data('campaign'), params).done(function(monuments) {
 				showMonumentsList(monuments);
 				$("#show-map").unbind('click').click(function() {
 					console.log("Switching to map view");
