@@ -141,12 +141,10 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			showPage('welcome-page');
 		});
 		$('#show-list').click(function() {
-			$('#map-view').hide();
-			$('#list-view').show();
+			showPage('results-page');
 		}).click(); // show list by default
 		$('#show-map').click(function() {
-			$('#list-view').hide();
-			$('#map-view').show();
+			showPage('map-page');
 		});
 		
 		$('#back-results').click(function() {
