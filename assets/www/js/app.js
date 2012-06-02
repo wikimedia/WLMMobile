@@ -253,7 +253,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		var $monumentDetail = $(monumentTemplate({monument: monument}));
 		$("#monument-detail").html($monumentDetail);
 		monument.requestThumbnail(imageFetcher).done(function(imageinfo) {
-			$monumentDetail.find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
+			$('#monument-detail').find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
 		});
 		imageFetcher.send();
 		showPage('detail-page');
