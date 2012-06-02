@@ -267,7 +267,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			monument.requestThumbnail(listThumbFetcher).done(function(imageinfo) {
 				$monumentItem.find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
 			});
-			$("#results").append($monumentItem).click(function() {
+			$monumentItem.appendTo('#results').click(function() {
 				showMonumentDetail(monument);
 			});
 		});
