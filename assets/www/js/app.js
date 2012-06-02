@@ -101,6 +101,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		var countriesListTemplate = templates.getTemplate('country-list-template');
 		$("#country-list").html(countriesListTemplate({countries: countries}))
 		$("#country-list button.country-search").click(function() {
+			$('#results').empty();
 			var params = {
 				limit: 200
 			};
@@ -142,15 +143,11 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		$('#show-list').click(function() {
 			$('#map-view').hide();
 			$('#list-view').show();
-			$('#show-list').hide();
-			$('#show-map').show();
-		});
+		}).click(); // show list by default
 		$('#show-map').click(function() {
 			$('#list-view').hide();
 			$('#map-view').show();
-			$('#show-map').hide();
-			$('#show-list').show();
-		}).click(); // show map by default
+		});
 		
 		$('#back-results').click(function() {
 			showPage('results-page');
