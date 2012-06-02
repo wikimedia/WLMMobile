@@ -251,10 +251,11 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		var monumentTemplate = templates.getTemplate('monument-details-template');
 		var imageFetcher = commonsApi.getImageFetcher(300, 240);
 		var $monumentDetail = $(monumentTemplate({monument: monument}));
-		$("#monument-detail").html($monumentDetail);
+		$("#monument-detail").html($monumentDetail).localize();
 		monument.requestThumbnail(imageFetcher).done(function(imageinfo) {
 			$('#monument-detail').find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
 		});
+		console.log('addressLink is ' + monument.addressLink);
 		imageFetcher.send();
 		showPage('detail-page');
 	}

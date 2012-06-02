@@ -67,6 +67,7 @@ define(['jquery'], function($) {
 				that[key] = value;
 			}
 		});
+		this.addressLink = platform.geoUrl(this.lat, this.lon, this.address);
 		this.mwApi = mwApi;
 	}
 

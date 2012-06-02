@@ -36,7 +36,7 @@
 		<h2 class='monument-name'> <%= monument.name %> </h2>
 		<span class='monument-country'> <%= monument.country %> </span>
 		<span class='monument-address'> <%= monument.address %> </span>
-		<a class='monument-directions' href="<% monument.addressLink %>">
+		<a class="external monument-directions" href="<%= monument.addressLink %>">
 			<msg key='monument-get-directions' />
 		</a>
 	</script>
