@@ -4,6 +4,7 @@ To import Android project to Eclipse:
 * create new project
 ** new "Android project"
 ** "from existing sources"
+** set API level to 2.3.3
 * go to project properties, make sure compiler is set to Java 1.6
 
 
