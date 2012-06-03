@@ -1,5 +1,11 @@
 Contains iOS and Android thingies.
 
+To import Android project to Eclipse:
+* create new project
+** new "Android project"
+** "from existing sources"
+* go to project properties, make sure compiler is set to Java 1.6
+
 
 PhoneGap/Cordova issues:
 
