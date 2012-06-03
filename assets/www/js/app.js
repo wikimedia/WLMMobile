@@ -327,6 +327,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			center = centerAndZoom.center;
 			zoom = centerAndZoom.zoom;
 		}
+		showPage('map-page');
 		geo.initMap();
 		geo.clearMarkers();
 		geo.map.setView(new L.LatLng(center.lat, center.lon), zoom);
@@ -340,7 +341,6 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 				);
 			}
 		});
-		showPage('map-page');
 	}
 
 	function prepUploadConfirmation() {
