@@ -120,13 +120,12 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 
 		$('#nearby').click(function() {
 			navigator.geolocation.getCurrentPosition(function(pos) {
-				console.log("Got position");
 				monuments.getInBoundingBox(pos.coords.longitude - nearbyDeg,
 					pos.coords.latitude - nearbyDeg,
 					pos.coords.longitude + nearbyDeg,
 					pos.coords.latitude + nearbyDeg
 				).done(function(monuments) {
-					console.log("OM NOM NOM");
+					showMonumentsList(monuments);
 					showMonumentsMap(monuments, {
 						lat: pos.coords.latitude,
 						lon: pos.coords.longitude
