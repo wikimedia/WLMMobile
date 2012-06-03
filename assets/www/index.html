@@ -41,11 +41,15 @@
 		</a>
 	</script>
   	<div class="page" id="welcome-page">
-	  	<h1><msg key="welcome-title"></msg></h1>
-	  	<a href="#">
-	  		<!-- icon here -->
-	  		<msg key="welcome-about">
-	  	</a>
+	  	<header>
+	  		<div class="welcome-icon"></div>
+		  	<a href="#" class="welcome-info">
+		  		<!-- icon here -->
+		  		<msg key="welcome-about">
+		  	</a>
+		  	<h1><msg key="welcome-title"></msg></h1>
+	  	</header>
+	  	<div class="welcome-pin"></div>
 	  	<h2><msg key="welcome-intro"></msg></h2>
 	  	<p><msg key="welcome-start"></msg></p>
 	  	<div><button id="countries"><msg key="welcome-browse"></msg></button></div>
@@ -61,7 +65,7 @@
   	<div class="page" id="results-page">
   		<header>
   			<div>
-		  		<button class="back-welcome"><msg key="back"></msg></button>
+		  		<button class="back-welcome"></button>
 				<button id="show-map"><msg key="show-map"></msg></button>
 	  		</div>
 	  		<div>
@@ -78,7 +82,7 @@
   	<div class="page" id="detail-page">
   		<header>
 	  		<div><msg key="detail-title"></msg></div>
-	  		<button id="back-results"><msg key="back"></msg></button>
+	  		<button id="back-results"></button>
 	  		<button id="start-upload"><msg key="start-upload"></msg></button>
 	  	</header>
 		<div id="monument-detail">
@@ -87,7 +91,7 @@
 
 	<div class='page' id='map-page'>
 		<header>
-			<button class="back-welcome"><msg key="back" /></button>
+			<button class="back-welcome"></button>
 			<button id="show-list"><msg key="show-list"></msg></button>
 		</header>
 		<div>
