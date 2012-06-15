@@ -18,7 +18,7 @@
 	<script type="text/html" id="country-list-template">
 		<% _.each(countries, function(name, code) { %>
 			<li>
-				<button class='country-search' data-campaign='<%= code %>'><%= name %></button>
+				<a class='country-search' data-campaign='<%= code %>' href="#"><%= name %></a>
 			</li>
 		<% }); %>
 	</script>
@@ -59,9 +59,13 @@
   	</div>
 
 	<div class="page" id="country-page">
-		<h2><msg key="choose-country"></msg></h2>
-  		<ul id="country-list">
-	  	</ul>
+		<header>
+			<h2><msg key="choose-country"></msg></h2>
+		</header>
+		<div class="content">
+			<ul id="country-list">
+			</ul>
+		</div>
 	</div>
   	
   	<div class="page" id="results-page">

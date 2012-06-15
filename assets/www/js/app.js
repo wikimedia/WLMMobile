@@ -100,7 +100,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 	$(document).bind('mw-messages-ready', function() {
 		var countriesListTemplate = templates.getTemplate('country-list-template');
 		$("#country-list").html(countriesListTemplate({countries: countries}))
-		$("#country-list button.country-search").click(function() {
+		$("#country-list .country-search").click(function() {
 			$('#results').empty();
 			var params = {
 				limit: 200
