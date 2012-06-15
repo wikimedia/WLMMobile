@@ -76,7 +76,7 @@ a {
 
 .page header h2 {
 	font-size: 18px;
-	margin-left: 10px;
+	margin-left: 5px;
 }
 
 .page .content {
@@ -113,6 +113,16 @@ li {
 li a {
 	display: block;
 	padding: 10px 5px;
+}
+
+/* Generic interaction items styles */
+
+header .back {
+	display: block;
+	background: url('images/button-dark-back.png') no-repeat;
+	width: 24px;
+	height: 48px;
+	margin-left: 5px;
 }
 
 /* Welcome page Styles */

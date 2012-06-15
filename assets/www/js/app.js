@@ -114,6 +114,12 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			});
 		});
 
+		$("a.back").click(function() {
+			var toPage = $(this).data('page');
+			showPage(toPage);
+			return false;
+		});
+
 		$('#countries').click(function() {
 			showPage('country-page');
 		});
