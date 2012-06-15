@@ -40,20 +40,22 @@
 			<msg key='monument-get-directions' />
 		</a>
 	</script>
+
   	<div class="page" id="welcome-page">
 	  	<header>
-	  		<div class="welcome-icon"></div>
-		  	<a href="#" class="welcome-info">
-		  		<!-- icon here -->
-		  		<msg key="welcome-about">
-		  	</a>
-		  	<h1><msg key="welcome-title"></msg></h1>
+			<img src="images/icon-small.png" />
+		  	<h2><msg key="welcome-title"></msg></h2>
 	  	</header>
-	  	<div class="welcome-pin"></div>
-	  	<h2><msg key="welcome-intro"></msg></h2>
-	  	<p><msg key="welcome-start"></msg></p>
-	  	<div><button id="countries"><msg key="welcome-browse"></msg></button></div>
-	  	<div><button id="nearby"><msg key="welcome-search"></msg></button></div>
+		<div class="content">
+			<div class='center'><img src="images/pin.png" /></div>
+			<h3><msg key="welcome-intro"></msg></h3>
+			<p><msg key="welcome-start"></msg></p>
+			<div class='center'>
+				<button id="countries"><msg key="welcome-browse"></msg></button>
+				<br />
+				<button id="nearby"><msg key="welcome-search"></msg></button>
+			</div>
+		</div>
   	</div>
 
 	<div class="page" id="country-page">

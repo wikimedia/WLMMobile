@@ -4,30 +4,6 @@ body {
 	margin: 0;
 }
 
-#welcome-page h1 {
-	font-size: 18px;
-	margin-top: 18px;
-}
-.welcome-icon {
-	float: left;
-	width: 48px;
-	height: 48px;
-	background-image: url(images/icon-small.png);
-	background-size: 48px 48px;
-}
-.welcome-info {
-	float: right;
-	width: 48px;
-	height: 48px;
-}
-.welcome-pin {
-	background-image: url(images/pin.png);
-	width: 67px;
-	height: 104px;
-	display: inline-block;
-	margin: auto;
-}
-
 #results-page header,
 #map-page header,
 #detail-page header {
@@ -88,4 +64,49 @@ button#back-results {
 	top: 52px;
 	bottom: 0px;
 	right: 0px;
+}
+
+/* General utility styles */
+
+.center {
+	text-align: center;
+}
+
+/* Generic page layout styles */
+
+.page header {
+	position: fixed;
+	height: 52px;
+	width: 100%;
+	background-color: #eee;
+	display: -webkit-box;
+}
+
+.page header h2 {
+	font-size: 18px;
+}
+
+.page .content {
+	position: absolute;
+	top: 52px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	font-size: 14px;
+	padding: 5px 10px;
+}
+
+/* Generic look and feel styles */
+
+.content h3 {
+	color: #888;
+	border-bottom: 4px #eee solid;
+	padding-left: 5px;
+	text-align: left;
+	font-size: 16px;
+}
+
+/* Welcome page Styles */
+
+#welcome-page .content {
 }
