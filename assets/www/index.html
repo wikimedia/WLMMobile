@@ -32,13 +32,28 @@
 		</li>
 	</script>
 	<script type="text/html" id="monument-details-template">
-		<img class='monument-thumbnail' />
-		<h2 class='monument-name'> <%= monument.name %> </h2>
-		<span class='monument-country'> <%= monument.country %> </span>
-		<span class='monument-address'> <%= monument.address %> </span>
-		<a class="external monument-directions" href="<%= monument.addressLink %>">
-			<msg key='monument-get-directions' />
-		</a>
+		<img class='monument-thumbnail' src="images/placeholder-300x240.png" />
+		<div class='monument-name'> 
+			<%= monument.name %> 
+		</div>
+		<span class='monument-country'> 
+			<strong> <msg key='monument-country' / > </strong>
+			<%= monument.country %> 
+		</span>
+		<div class='monument-sub-details'>
+			<% if(monument.address) { %>
+				<span class='monument-address'> 
+					<strong> <msg key='monument-address' / > </strong>
+					<%= monument.address %> 
+				</span>
+				<a class="external monument-directions" href="<%= monument.addressLink %>">
+					<msg key='monument-directions' />
+				</a>
+			<% } else { %>
+				<strong> <msg key='monument-no-address' /></strong>
+			<% } %>	
+
+		</div>
 	</script>
 
   	<div class="page" id="welcome-page">
@@ -87,12 +102,12 @@
   	</div>
   	
   	<div class="page" id="detail-page">
-  		<header>
-	  		<div><msg key="detail-title"></msg></div>
-	  		<button id="back-results"></button>
-	  		<button id="start-upload"><msg key="start-upload"></msg></button>
+  		<header class="actionbar">
+			<a class='back page-link' data-page="results-page" href="#"> </a>
+	  		<h2><msg key="detail-title"></msg></h2>
+			<a class='upload-picture'><img src='images/placeholder-32x32.png' /></a>
 	  	</header>
-		<div id="monument-detail">
+		<div class='content' id="monument-detail">
 		</div>
   	</div>
 

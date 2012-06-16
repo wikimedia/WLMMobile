@@ -147,3 +147,33 @@ header .back {
 .monuments-list .monument-address {
 	color: #999;
 }
+
+/* Monument details styles */
+
+#monument-detail .monument-name {
+	font-size: 16px;
+}
+
+#monument-detail .monument-sub-details {
+	border-top: 1px solid #eee;
+	margin-top: 5px;
+	padding-top: 10px;
+	font-size: 12px;
+	color: #666;
+}
+
+#monument-detail .monument-country {
+	font-size: 12px;
+	color: #666;
+}
+
+#monument-detail .monument-sub-details span,
+#monument-detail .monument-sub-details a
+{
+	display: block;
+}
+
+#monument-detail strong {
+	font-weight: normal;
+	color: #333;
+}
