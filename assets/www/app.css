@@ -34,12 +34,15 @@ a {
 	width: 100%;
 	background-color: #eee;
 	display: -webkit-box;
+	-webkit-box-align: center;
 	z-index: 9999;
+	padding: 0px 5px;
 }
 
 .page header h2 {
 	font-size: 18px;
 	margin-left: 5px;
+	-webkit-box-flex: 1;
 }
 
 .page .content {

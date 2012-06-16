@@ -114,7 +114,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			});
 		});
 
-		$("a.back").click(function() {
+		$(".page-link").click(function() {
 			var toPage = $(this).data('page');
 			showPage(toPage);
 			return false;
@@ -142,9 +142,6 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			});
 		});
 
-		$('.back-welcome').click(function() {
-			showPage('welcome-page');
-		});
 		$('#show-list').click(function() {
 			showPage('results-page');
 		}).click(); // show list by default
@@ -152,17 +149,11 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			showPage('map-page');
 		});
 		
-		$('#back-results').click(function() {
-			showPage('results-page');
-		});
 
 		$('#start-upload').click(function() {
 			showPage('login-page');
 		});
 
-		$('#back-detail').click(function() {
-			showPage('detail-page');
-		});
 
 		// do your thing!
 		//navigator.notification.alert("Cordova is working")
