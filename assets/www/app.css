@@ -28,15 +28,39 @@ a {
 
 /* Generic page layout styles */
 
-.page header {
+.page header.actionbar {
 	position: fixed;
-	height: 52px;
+	height: 48px;
 	width: 100%;
 	background-color: #eee;
 	display: -webkit-box;
 	-webkit-box-align: center;
 	z-index: 9999;
-	padding: 0px 5px;
+	padding: 2px 5px;
+}
+
+.page header.tabbar {
+	position: fixed;
+	height: 16px;
+	top: 52px;
+	width: 100%;
+	background-color: #ccc;
+	display: -webkit-box;
+	-webkit-box-align: center;
+	z-index: 9999;
+	text-transform: uppercase;
+}
+
+.page header.tabbar a {
+	font-size: 12px;
+	text-align: center;
+	display: block;
+	padding: 2px 0px;
+	-webkit-box-flex: 1;
+}
+
+.page header.tabbar a.active {
+	background-color: #eee;
 }
 
 .page header h2 {
@@ -47,13 +71,14 @@ a {
 
 .page .content {
 	position: absolute;
-	top: 52px;
+	top: 68px;
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
 	font-size: 14px;
 	padding: 5px 10px;
 }
+
 
 /* Generic look and feel styles */
 
