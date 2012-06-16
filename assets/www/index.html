@@ -24,11 +24,11 @@
 	</script>
 	<script type="text/html" id="monument-list-item-template">
 		<li>
-			<img class='monument-thumbnail' />
-			<div class='list-detail'>
+			<a class='monument-detail' href="#">
 				<div class='monument-name'> <%= monument.name %> </div>
-				<div class='monument-address'> <%= monument.address %> </div>
-			</div>
+				<small class='monument-address'> <%= monument.address %> </small>
+			</a>
+			<img class='monument-thumbnail' src="images/placeholder-64x64.png"/>
 		</li>
 	</script>
 	<script type="text/html" id="monument-details-template">
@@ -71,17 +71,11 @@
   	
   	<div class="page" id="results-page">
   		<header>
-  			<div>
-		  		<button class="back-welcome"></button>
-				<button id="show-map"><msg key="show-map"></msg></button>
-	  		</div>
-	  		<div>
-	  			<label for="filter-input"><msg key="filter-label"></msg></label>
-	  			<input id="filter-input" value="not-yet-implemented">
-	  		</div>
+			<a class='back' data-page="welcome-page" href="#"> </a>
+			<h2><msg key="choose-country"></msg></h2>
 	  	</header>
-  		<div class="view" id="list-view">
-	  		<ul id="results">
+		<div class="content">
+	  		<ul class="monuments-list" id="results">
 	  		</ul>
 	  	</div>
   	</div>
