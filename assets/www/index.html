@@ -122,14 +122,23 @@
 	</div>
 
   	<div class="page" id="login-page">
-		<fieldset>
-			<legend><msg key="login-title"></msg></legend>
-			<div><input id="login-user" type="text" placeholder="Username"></div>
-			<div><input id="login-pass" type="password" placeholder="Password"></div>
-			<div>
-			<button id="login"><msg key="login"></msg></button>
-		</fieldset>
-		<button id="back-detail"><msg key="back"></msg></button>
+  		<header class="actionbar">
+			<a class='back' href="#"> </a>
+	  		<h2><msg key="login-title"></msg></h2>
+	  	</header>
+		<div class='content'>
+			<ul>
+				<li>
+					<input id="login-user" type="text" placeholder="Username" />
+				</li>
+				<li>
+					<input id="login-pass" type="password" placeholder="Password" />
+				</li>
+				<li>
+					<input type='submit' id="login" value="Login" />
+				</li>
+			</li>
+		</div>
 	</div>
 
 	<div class="popup-container-container" id="upload-page">

@@ -208,3 +208,25 @@ header .back {
 	font-weight: normal;
 	color: #333;
 }
+
+/* Login specific styles */
+
+#login-page ul li {
+	border: 0px;
+}
+
+#login-page input[type='text'], 
+#login-page input[type='password'] {
+	width: 90%;
+	padding: 10px;
+	margin: 5px;
+	font-size: 14px;
+	-webkit-appearance: none;
+	border: 0px;
+	border-bottom: 1px solid #ccc;
+}
+
+#login-page #login {
+	float: right;
+	padding: 5px;
+}
