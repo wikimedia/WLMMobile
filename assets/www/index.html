@@ -105,7 +105,7 @@
   		<header class="actionbar">
 			<a class='back page-link' data-page="results-page" href="#"> </a>
 	  		<h2><msg key="detail-title"></msg></h2>
-			<a class='upload-picture'><img src='images/placeholder-32x32.png' /></a>
+			<a class='page-link' data-page="upload-page"><img src='images/placeholder-32x32.png' /></a>
 	  	</header>
 		<div class='content' id="monument-detail">
 		</div>
@@ -131,13 +131,18 @@
 		</fieldset>
 		<button id="back-detail"><msg key="back"></msg></button>
 	</div>
-	
-	<div class="page" id="upload-page">
-		<div>
-			<button id="selectphoto"><msg key="selectphoto"></msg></button>
-		</div>
-		<div>
-			<button id="takephoto"><msg key="takephoto"></msg></button>
+
+	<div class="popup-container-container" id="upload-page">
+		<div class="popup-container">
+			<div class="popup" id="upload-page">
+				<header>
+					<h2><msg key='add-photo-title' /></h2>
+				</header>
+				<ul>
+					<li><a href="#" id="selectphoto"><msg key="add-photo-gallery"></msg></a></li>
+					<li><a href="#" id="takephoto"><msg key="add-photo-camera"></msg></a></li>
+				</ul>
+			</div>
 		</div>
 	</div>
 	

@@ -35,7 +35,7 @@ a {
 	background-color: #eee;
 	display: -webkit-box;
 	-webkit-box-align: center;
-	z-index: 9999;
+	z-index: 200;
 	padding: 2px 5px;
 }
 
@@ -47,7 +47,7 @@ a {
 	background-color: #ccc;
 	display: -webkit-box;
 	-webkit-box-align: center;
-	z-index: 9999;
+	z-index: 200;
 	text-transform: uppercase;
 }
 
@@ -106,6 +106,37 @@ li a {
 	padding: 10px 5px;
 }
 
+/* Popup dialogs styles */
+
+.popup-container-container {
+	display: none;
+}
+
+.popup-container {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	background: rgba(128, 128, 128, 0.5);
+	z-index: 300;
+	display: -webkit-box;
+	-webkit-box-pack: center;
+	-webkit-box-align: center;
+}
+
+.popup {
+	background-color: #eee;
+	padding: 5px 10px;
+	width: 80%;
+	-webkit-border-radius: 5px;
+}
+
+.popup header h2 {
+	font-size: 16px;
+	text-transform: Uppercase;
+	color: #999;
+}
 /* Generic interaction items styles */
 
 header .back {

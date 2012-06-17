@@ -238,9 +238,12 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		console.log("localized!");
 	});
 
-	function showPage(page) {
-		$('.page').hide();
-		$('#' + page).show();
+	function showPage(pageName) {
+		var $page = $("#" + pageName); 
+		if(!$page.hasClass('popup-container-container')) {
+			$('.page, .popup-container-container').hide();
+		} 	
+		$page.show();
 	}
 
 	function showMonumentDetail(monument) {
