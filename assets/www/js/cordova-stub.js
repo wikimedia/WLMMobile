@@ -1,5 +1,5 @@
 (function() {
-	var cordova = 'cordova-1.7.0rc1',
+	var cordova = 'cordova-1.8.1',
 		os = false;
 
 	if (navigator.userAgent.match(/Android/)) {
