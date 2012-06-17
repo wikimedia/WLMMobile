@@ -33,6 +33,7 @@ define(['jquery'], function() {
 			}).fail(function(err) {
 				d.reject(err);
 			});
+			that.loggedIn = true;
 		}).fail(function(err) {
 			d.reject(err);
 		});

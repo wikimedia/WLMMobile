@@ -65,7 +65,8 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		'us': 'United States'
 	};
 
-
+	var curPageName = null;
+	
 	onDeviceReady();
 	function onDeviceReady()
 	{
@@ -97,6 +98,29 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		}
 	}
 
+	// Need to use callbacks instead of deferreds
+	// since callbacks need to be called multiple times
+	// For example, when the user tries to login but can not
+	// Would have to add a 'cancel' callback in the future
+	function doLogin(success, fail) {
+		var prevPage = curPageName;
+		$("#login").unbind('click').click(function() {
+			var username = $("#login-user").val().trim();
+			var password = $("#login-pass").val();
+			api.login(username, password).done(function(status) {
+				if(status === "Success")  {
+					showPage(prevPage);
+					success();
+				} else {
+					fail(status);
+				}
+			}).fail(function(err, textStatus) {
+				fail(textStatus);
+			});
+		});
+		showPage("login-page");
+	}
+
 	$(document).bind('mw-messages-ready', function() {
 		var countriesListTemplate = templates.getTemplate('country-list-template');
 		$("#country-list").html(countriesListTemplate({countries: countries}))
@@ -116,7 +140,19 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 
 		$(".page-link").click(function() {
 			var toPage = $(this).data('page');
-			showPage(toPage);
+			if($(this).data('login') === 'required') {
+				if(api.loggedIn) {
+					showPage(toPage);
+				} else {
+					doLogin(function() {
+						showPage(toPage);
+					}, function(err) {
+						alert(err);
+					});
+				}
+			} else {
+				showPage(toPage);
+			}
 			return false;
 		});
 
@@ -155,22 +191,6 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		});
 
 
-		// do your thing!
-		//navigator.notification.alert("Cordova is working")
-		$('#login').click(function() {
-			var username = $("#login-user").val().trim();
-			var password = $("#login-pass").val();
-			api.login(username, password).done(function(status) {
-				if(status === "Success")  {
-					showPage('upload-page');
-				} else {
-					alert(status);
-				}
-			}).fail(function(err) {
-				alert(JSON.stringify(err));
-			});
-		});
-		
 		// upload-page
 		$('#takephoto').click(function() {
 			navigator.camera.getPicture(function(data) {
@@ -242,6 +262,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		var $page = $("#" + pageName); 
 		if(!$page.hasClass('popup-container-container')) {
 			$('.page, .popup-container-container').hide();
+			curPageName = pageName;
 		} 	
 		$page.show();
 	}
