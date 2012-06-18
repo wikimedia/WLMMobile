@@ -180,19 +180,6 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			});
 		});
 
-		$('#show-list').click(function() {
-			showPage('results-page');
-		}).click(); // show list by default
-		$('#show-map').click(function() {
-			showPage('map-page');
-		});
-		
-
-		$('#start-upload').click(function() {
-			showPage('login-page');
-		});
-
-
 		// upload-page
 		$('#takephoto').click(function() {
 			navigator.camera.getPicture(function(data) {
