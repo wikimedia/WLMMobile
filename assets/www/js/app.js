@@ -67,6 +67,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 
 	var curPageName = null;
 	
+	onDeviceReady();
 	function onDeviceReady()
 	{
 		l10n.initLanguages();
