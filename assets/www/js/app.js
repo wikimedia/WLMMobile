@@ -20,7 +20,7 @@ function handleOpenURL(url)
 */
 require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.localize'], function($, l10n, geo, Api, templates, MonumentsApi) {
 
-	var api = new Api("http://test.wikipedia.org/w/api.php");
+	var api = new Api("https://test.wikipedia.org/w/api.php");
 	var commonsApi = new Api('https://commons.wikimedia.org/w/api.php');
 	var monuments = new MonumentsApi('http://toolserver.org/~erfgoed/api/api.php', commonsApi);
 	var wlmapi = 'http://toolserver.org/~erfgoed/api/api.php';
