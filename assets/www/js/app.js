@@ -107,13 +107,17 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		$("#upload-confirm").html(uploadConfirmTemplate({monument: curMonument, fileUrl: fileUrl})).localize();
 		$("#confirm-license-text").html(mw.msg('confirm-license-text', api.userName));
 		$("#continue-upload").click(function() {
+			showPage("upload-progress-page");
 			api.startUpload(fileUrl, fileName, 'Uploaded via WLM Mobile App', 'Testing WLM').done(function(fileKey) {
+				$("#upload-progress-state").html(mw.msg("upload-progress-in-progress"));
 				api.finishUpload(fileKey, fileName, 'Uploaded via WLM Mobile App', 'Testing WLM').done(function(imageinfo) {
 					console.log(JSON.stringify(imageinfo));
-					alert('finishing upload!');
+					$("#upload-progress-state").html(mw.msg("upload-progress-done"));
+					setTimeout(function() {
+						showPage('detail-page');
+					}, 2 * 1000);
 				});
 			});
-			alert('starting upload!');
 		});
 		showPage('upload-confirm-page');
 	}
