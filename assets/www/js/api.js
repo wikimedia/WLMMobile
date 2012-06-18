@@ -34,6 +34,7 @@ define(['jquery'], function() {
 				d.reject(err);
 			});
 			that.loggedIn = true;
+			that.userName = username;
 		}).fail(function(err) {
 			d.reject(err);
 		});
@@ -75,7 +76,7 @@ define(['jquery'], function() {
 		that.requestEditToken().done(function(token) {
 			var options = new FileUploadOptions();
 			options.fileKey = 'file';
-			options.fileName = sourceUri.substr(sourceUri.lastIndexOf('/')+1);
+			options.fileName = filename;
 			//options.fileName = filename;
 			options.mimeType = "image/jpg";
 			options.chunkedMode = false;

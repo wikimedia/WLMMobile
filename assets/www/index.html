@@ -55,6 +55,17 @@
 
 		</div>
 	</script>
+	<script type="text/html" id="upload-confirm-template">
+		<h3> <%= monument.name %> </h3>
+		<img class='preview-image' src="<%= fileUrl %>" />
+
+		<h3><msg key="confirm-license-title" /></h3>
+		<p id="confirm-license-text"></p>
+
+		<div class="center">
+			<button id="continue-upload"><msg key="confirm-license-upload" /></button>
+		</div>
+	</script>
 
   	<div class="page" id="welcome-page">
 	  	<header class='actionbar'>
@@ -155,16 +166,12 @@
 		</div>
 	</div>
 	
-	<div class="page" id="upload-status-page">
-		<p><msg key="size-warning"></msg></p>
-		<div>
-			<button id="change-photo"><msg key="change-photo"></msg></button>
-		</div>
-		<div>
-			<button id="continue"><msg key="continue-upload"></msg></button>
-		</div>
-		<div>
-			<input type="checkbox" id="skip-warning"> <label for="skip-warning"><msg key="skip-warning"></msg></a>
+	<div class="page"  id="upload-confirm-page">
+  		<header class="actionbar">
+			<a class='back' href="#"> </a>
+	  		<h2><msg key="upload-confirm-title"></msg></h2>
+	  	</header>
+		<div class="content" id="upload-confirm">
 		</div>
 	</div>
 	

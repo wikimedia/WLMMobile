@@ -230,3 +230,10 @@ header .back {
 	float: right;
 	padding: 5px;
 }
+
+/* Upload confirmation specific CSS */
+
+#upload-confirm-page img.preview-image {
+	width: 80%;
+	height: auto;
+}

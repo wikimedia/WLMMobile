@@ -20,7 +20,7 @@ function handleOpenURL(url)
 */
 require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.localize'], function($, l10n, geo, Api, templates, MonumentsApi) {
 
-	var api = new Api("https://test.wikipedia.org/w/api.php");
+	var api = new Api("http://test.wikipedia.org/w/api.php");
 	var commonsApi = new Api('https://commons.wikimedia.org/w/api.php');
 	var monuments = new MonumentsApi('http://toolserver.org/~erfgoed/api/api.php', commonsApi);
 	var wlmapi = 'http://toolserver.org/~erfgoed/api/api.php';
@@ -66,8 +66,10 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 	};
 
 	var curPageName = null;
+	var curMonument = null; // Used to store state for take photo, etc
 	
 	onDeviceReady();
+
 	function onDeviceReady()
 	{
 		l10n.initLanguages();
@@ -96,6 +98,24 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 				});
 			})();
 		}
+	}
+
+	function showPhotoConfirmation(fileUrl) {
+		var uploadConfirmTemplate = templates.getTemplate('upload-confirm-template');
+		var fileName = curMonument.generateFilename();
+		console.log("Filename is " + fileName);
+		$("#upload-confirm").html(uploadConfirmTemplate({monument: curMonument, fileUrl: fileUrl})).localize();
+		$("#confirm-license-text").html(mw.msg('confirm-license-text', api.userName));
+		$("#continue-upload").click(function() {
+			api.startUpload(fileUrl, fileName, 'Uploaded via WLM Mobile App', 'Testing WLM').done(function(fileKey) {
+				api.finishUpload(fileKey, fileName, 'Uploaded via WLM Mobile App', 'Testing WLM').done(function(imageinfo) {
+					console.log(JSON.stringify(imageinfo));
+					alert('finishing upload!');
+				});
+			});
+			alert('starting upload!');
+		});
+		showPage('upload-confirm-page');
 	}
 
 	// Need to use callbacks instead of deferreds
@@ -186,7 +206,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			navigator.camera.getPicture(function(data) {
 				// success
 				state.fileUri = data;
-				prepUploadConfirmation();
+				showPhotoConfirmation(data);
 			}, function(msg) {
 				// error
 				alert('fail: ' + msg);
@@ -199,7 +219,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			navigator.camera.getPicture(function(data) {
 				// success
 				state.fileUri = data;
-				prepUploadConfirmation();
+				showPhotoConfirmation(data);
 			}, function(msg) {
 				// error
 				alert('fail: ' + msg);
@@ -210,42 +230,8 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			});
 		});
 		
-		// upload-status-page
-		$('#continue').click(function() {
-			showPage('upload-progress');
-			continueButtonCheck();
-			startUpload(state.fileUri);
-		});
-		$('#change-photo').click(function() {
-			showPage('upload-page');
-		});
-		
-		// upload-progress
-		$('#self-confirmation').click(function() {
-			continueButtonCheck();
-		});
-		$('#cancel-post-upload').click(function() {
-			// @fixme cancel the file transfer if still running
-			showPage('upload-status-page');
-		});
-		$('#continue-post-upload').click(function() {
-			if (!state.fileKey) {
-				alert('no file key yet');
-			} else {
-				showPage('upload-description');
-			}
-		});
-		
-		// upload-description
-		$('#submit-upload').click(function() {
-			console.log('Completing upload...');
-			api.finishUpload(state.fileKey, 'test_wlm.jpg', 'testing wlm', 'testing wlm');
-		});
-		
 		showPage('welcome-page');
-		console.log("About to localize!");
 		$(document).localize();
-		console.log("localized!");
 	});
 
 	function showPage(pageName) {
@@ -267,6 +253,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		});
 		console.log('addressLink is ' + monument.addressLink);
 		imageFetcher.send();
+		curMonument = monument;
 		showPage('detail-page');
 	}
 
@@ -351,26 +338,5 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 				);
 			}
 		});
-	}
-
-	function prepUploadConfirmation() {
-		showPage('upload-status-page');
-	}
-
-	function startUpload(fileUri) {
-		api.startUpload(fileUri, 'test_wlm.jpg', 'testing wlm', 'testing wlm').done(function(fileKey) {
-			state.fileKey = fileKey;
-			$('#upload-progress-bar').text('done');
-			continueButtonCheck();
-		});
-	}
-
-	function continueButtonCheck() {
-		var okToContinue = (state.fileKey && $('#self-confirmation').is(':checked'));
-		if (okToContinue) {
-			$('#continue-post-upload').removeAttr('disabled');
-		} else {
-			$('#continue-post-upload').attr('disabled', 'disabled');
-		}
 	}
 });
