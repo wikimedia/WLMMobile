@@ -21,8 +21,12 @@ define(['jquery', '../leaflet/leaflet-src'], function() {
 			this.map.addLayer(tiles);
 
 			this.map.attributionControl.setPrefix("");
-			this.map.attributionControl.addAttribution('<span class="map-attribution">' + mw.message("attribution-mapquest") + '</span>');
-			this.map.attributionControl.addAttribution("<br /><span class='map-attribution'>" + mw.message("attribution-osm") + '</span>');
+			this.map.attributionControl.addAttribution(
+				'<span class="map-attribution">' + mw.message("attribution-mapquest") + '</span>'
+				);
+			this.map.attributionControl.addAttribution(
+				'<br /><span class="map-attribution">' + mw.message("attribution-osm") + '</span>'
+				);
 
 			$(".map-attribution a").bind('click', function(event) {
 				// Force web links to open in external browser
