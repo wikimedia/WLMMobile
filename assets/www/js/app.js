@@ -1,4 +1,5 @@
-
+/*global window, navigator, mw, document, L, alert, Camera*/
+/*jslint sloppy: true, white:true, maxerr: 50, indent: 4, plusplus: true, vars:true */
 
 // If you want to prevent dragging, uncomment this section
 /*
@@ -18,7 +19,8 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.localize'], function($, l10n, geo, Api, templates, MonumentsApi) {
+require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.localize'],
+	function($, l10n, geo, Api, templates, MonumentsApi) {
 
 	var api = new Api("https://test.wikipedia.org/w/api.php");
 	var commonsApi = new Api('https://commons.wikimedia.org/w/api.php');
@@ -67,11 +69,117 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 
 	var curPageName = null;
 	var curMonument = null; // Used to store state for take photo, etc
-	
-	onDeviceReady();
 
-	function onDeviceReady()
-	{
+	function showPage(pageName) {
+		var $page = $("#" + pageName); 
+		if(!$page.hasClass('popup-container-container')) {
+			$('.page, .popup-container-container').hide();
+			curPageName = pageName;
+		}
+		$page.show();
+	}
+
+	function showMonumentDetail(monument) {
+		var monumentTemplate = templates.getTemplate('monument-details-template');
+		var imageFetcher = commonsApi.getImageFetcher(300, 240);
+		var $monumentDetail = $(monumentTemplate({monument: monument}));
+		$("#monument-detail").html($monumentDetail).localize();
+		monument.requestThumbnail(imageFetcher).done(function(imageinfo) {
+			$('#monument-detail').find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
+		});
+		console.log('addressLink is ' + monument.addressLink);
+		imageFetcher.send();
+		curMonument = monument;
+		showPage('detail-page');
+	}
+
+	function showMonumentsList(monuments) {
+		var monumentTemplate = templates.getTemplate('monument-list-item-template');	
+		var listThumbFetcher = commonsApi.getImageFetcher(64, 64);
+		$.each(monuments, function(i, monument) {
+			var $monumentItem = $(monumentTemplate({monument: monument}));
+			monument.requestThumbnail(listThumbFetcher).done(function(imageinfo) {
+				$monumentItem.find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
+			});
+			$monumentItem.appendTo('#results').click(function() {
+				showMonumentDetail(monument);
+			});
+		});
+		listThumbFetcher.send();
+		showPage('results-page');
+	}
+
+	function calculateCenterAndZoom(monuments) {
+		var center = {lat: 0, lon: 0},
+			max = {lat: -999, lon: -999},
+			min = {lat: 999, lon: 999},
+			count = 0,
+			location = {},
+			visible,
+			dist = {lat: 0, lon: 0},
+			zoom = 0;
+		$.each(monuments, function(i, item) {
+			if (item.lat || item.lon) {
+				// Only count things that aren't at (0, 0)
+				if (item.lat < min.lat) {
+					min.lat = item.lat;
+				}
+				if (item.lon < min.lon) {
+					min.lon = item.lon;
+				}
+				if (item.lat > max.lat) {
+					max.lat = item.lat;
+				}
+				if (item.lon > max.lon) {
+					max.lon = item.lon;
+				}
+				count++;
+			}
+		});
+		if (count === 0) {
+			// Seriously?
+			location = {center: {lat: 0, lon: 0}, zoom: 1};
+		} else {
+			center.lat = (min.lat + max.lat) / 2;
+			center.lon = (min.lon + max.lon) / 2;
+			dist.lat = max.lat - min.lat;
+			dist.lon = max.lon - min.lon;
+			dist = Math.max(dist.lat,dist.lon);
+			visible = 360;
+			for (zoom = 1; zoom < 18; zoom++) {
+				visible /= 2;
+				if (dist >= visible) {
+					break;
+				}
+			}
+			location = { center: center, zoom: zoom -1 };
+		}
+		return location;
+	}
+
+	function showMonumentsMap(monuments, center, zoom) {
+		if(typeof center === "undefined" && typeof zoom === "undefined") {
+			var centerAndZoom = calculateCenterAndZoom(monuments);
+			center = centerAndZoom.center;
+			zoom = centerAndZoom.zoom;
+		}
+		showPage('map-page');
+		geo.initMap();
+		geo.clearMarkers();
+		geo.map.setView(new L.LatLng(center.lat, center.lon), zoom);
+		$.each(monuments, function(i, monument) {
+			if(monument.lat && monument.lon) {
+				geo.addMarker(monument.lat,
+					monument.lon,
+					monument.name,
+					monument.address,
+					function() { showMonumentDetail(monument); }
+				);
+			}
+		});
+	}
+
+	function onDeviceReady() {
 		l10n.initLanguages();
 		if (window.plugins !== undefined && window.plugins.pinchZoom !== undefined && navigator.userAgent.match(/Android 2/)) {
 			// TODO: only enable this while on the map view?
@@ -79,10 +187,10 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 				var origDistance;
 				window.plugins.pinchZoom.addEventListener('pinchzoom', function(event) {
 					if (geo.map) {
-						if (event.type == "pinchzoomstart") {
+						if(event.type === "pinchzoomstart") {
 							origDistance = event.distance;
 						}
-						else if (event.type == "pinchzoommove" || event.type == "pinchzoomend") {
+						else if (event.type === "pinchzoommove" || event.type === "pinchzoomend") {
 							var ratio = event.distance / origDistance;
 							if (ratio < 0.67) {
 								// Zooming out
@@ -96,7 +204,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 						}
 					}
 				});
-			})();
+			}());
 		}
 	}
 
@@ -148,9 +256,10 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		showPage("login-page");
 	}
 
+	onDeviceReady();
 	$(document).bind('mw-messages-ready', function() {
 		var countriesListTemplate = templates.getTemplate('country-list-template');
-		$("#country-list").html(countriesListTemplate({countries: countries}))
+		$("#country-list").html(countriesListTemplate({countries: countries}));
 		$("#country-list .country-search").click(function() {
 			$('#results').empty();
 			var params = {
@@ -233,114 +342,8 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 				sourceType: Camera.PictureSourceType.PHOTOLIBRARY
 			});
 		});
-		
+
 		showPage('welcome-page');
 		$(document).localize();
 	});
-
-	function showPage(pageName) {
-		var $page = $("#" + pageName); 
-		if(!$page.hasClass('popup-container-container')) {
-			$('.page, .popup-container-container').hide();
-			curPageName = pageName;
-		} 	
-		$page.show();
-	}
-
-	function showMonumentDetail(monument) {
-		var monumentTemplate = templates.getTemplate('monument-details-template');
-		var imageFetcher = commonsApi.getImageFetcher(300, 240);
-		var $monumentDetail = $(monumentTemplate({monument: monument}));
-		$("#monument-detail").html($monumentDetail).localize();
-		monument.requestThumbnail(imageFetcher).done(function(imageinfo) {
-			$('#monument-detail').find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
-		});
-		console.log('addressLink is ' + monument.addressLink);
-		imageFetcher.send();
-		curMonument = monument;
-		showPage('detail-page');
-	}
-
-	function showMonumentsList(monuments) {
-		var monumentTemplate = templates.getTemplate('monument-list-item-template');	
-		var listThumbFetcher = commonsApi.getImageFetcher(64, 64);
-		$.each(monuments, function(i, monument) {
-			var $monumentItem = $(monumentTemplate({monument: monument}));
-			monument.requestThumbnail(listThumbFetcher).done(function(imageinfo) {
-				$monumentItem.find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
-			});
-			$monumentItem.appendTo('#results').click(function() {
-				showMonumentDetail(monument);
-			});
-		});
-		listThumbFetcher.send();
-		showPage('results-page');
-	}
-
-	function calculateCenterAndZoom(monuments) {
-		var center = {lat: 0, lon: 0},
-			max = {lat: -999, lon: -999},
-			min = {lat: 999, lon: 999},
-			count = 0,
-			dist = {lat: 0, lon: 0},
-			zoom = 0;
-		$.each(monuments, function(i, item) {
-			if (item.lat || item.lon) {
-				// Only count things that aren't at (0, 0)
-				if (item.lat < min.lat) {
-					min.lat = item.lat;
-				}
-				if (item.lon < min.lon) {
-					min.lon = item.lon;
-				}
-				if (item.lat > max.lat) {
-					max.lat = item.lat;
-				}
-				if (item.lon > max.lon) {
-					max.lon = item.lon;
-				}
-				count++;
-			}
-		});
-		if (count == 0) {
-			// Seriously?
-			return {center: {lat: 0, lon: 0}, zoom: 1};
-		} else {
-			center.lat = (min.lat + max.lat) / 2;
-			center.lon = (min.lon + max.lon) / 2;
-			dist.lat = max.lat - min.lat;
-			dist.lon = max.lon - min.lon;
-			dist = Math.max(dist.lat,dist.lon);
-			visible = 360;
-			for (zoom = 1; zoom < 18; zoom++) {
-				visible /= 2;
-				if (dist >= visible) {
-					break;
-				}
-			}
-			return { center: center, zoom: zoom -1 };
-		}
-	}
-
-	function showMonumentsMap(monuments, center, zoom) {
-		if(typeof center === "undefined" && typeof zoom === "undefined") {
-			var centerAndZoom = calculateCenterAndZoom(monuments);
-			center = centerAndZoom.center;
-			zoom = centerAndZoom.zoom;
-		}
-		showPage('map-page');
-		geo.initMap();
-		geo.clearMarkers();
-		geo.map.setView(new L.LatLng(center.lat, center.lon), zoom);
-		$.each(monuments, function(i, monument) {
-			if(monument.lat && monument.lon) {
-				geo.addMarker(monument.lat,
-					monument.lon,
-					monument.name,
-					monument.address,
-					function() { showMonumentDetail(monument); }
-				);
-			}
-		});
-	}
 });
