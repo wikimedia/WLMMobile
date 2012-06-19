@@ -1,3 +1,5 @@
+/*global define, L, mw, $, chrome*/
+/*jslint sloppy: true, white:true, maxerr: 50, indent: 4, plusplus: true, vars:true */
 define(['jquery', '../leaflet/leaflet-src'], function() {
 
 	var shownURLs = [];
@@ -25,7 +27,8 @@ define(['jquery', '../leaflet/leaflet-src'], function() {
 			$(".map-attribution a").bind('click', function(event) {
 				// Force web links to open in external browser
 				// instead of the app, where navigation will be broken.
-				chrome.openExternalLink(this.href);
+				// TODO: define chrome
+				// chrome.openExternalLink(this.href);
 				event.preventDefault();
 			});
 			this.markerGroup = new L.LayerGroup();
@@ -40,8 +43,7 @@ define(['jquery', '../leaflet/leaflet-src'], function() {
 	function addMarker(lat, lon, title, summary, callback) {
 		console.log('adding marker ' + title);
 		var marker = new L.Marker(new L.LatLng(lat, lon));
-
-		html = "<div><strong>" + title + "</strong><p>" + summary + "</p></div>";
+		var html = "<div><strong>" + title + "</strong><p>" + summary + "</p></div>";
 		var popupContent = $(html).click(function() {
 			callback();
 		})[0];
