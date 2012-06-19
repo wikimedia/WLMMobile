@@ -1,3 +1,5 @@
+/*global define, FileTransfer, FileUploadOptions, console, $*/
+/*jslint sloppy: true, white:true, maxerr: 50, indent: 4, plusplus: true, vars:true */
 define(['jquery'], function() {
 	function Api(url) {
 		this.url = url;
@@ -98,7 +100,7 @@ define(['jquery'], function() {
 				console.log("Response = " + r.response);
 				console.log("Sent = " + r.bytesSent);
 				var data = JSON.parse(r.response);
-				if (data.upload.result == 'Success') {
+				if (data.upload.result === 'Success') {
 					d.resolve(data.upload.filekey);
 				} else {
 					d.reject(data);
@@ -130,22 +132,18 @@ define(['jquery'], function() {
 				ignorewarnings: 1
 			}).done(function(data) {
 				console.log(JSON.stringify(data));
-				if (data.upload.result == 'Success') {
+				if (data.upload.result === 'Success') {
 					d.resolve(data.upload.imageinfo);
 				} else {
 					d.reject("Upload did not succeed");
 				}
-			}).fail(function(xhr, err) {
+			}).fail(function(xhr, error) {
 				console.log("upload error source " + error.source);
 				console.log("upload error target " + error.target);
 				d.reject("HTTP error");
 			});
 		});
 		return d.promise();
-	};
-
-	Api.prototype.getImageFetcher = function(width, height) {
-		return new ImageFetcher(this, width, height);
 	};
 
 	function ImageFetcher(api, width, height) {
@@ -180,12 +178,12 @@ define(['jquery'], function() {
 			data.iiurlheight = this.height;
 		}
 		this.api.request('GET', data).done(function(data) {
-			if (!('query' in data)) {
+			if(!data.query) {
 				console.log('no return image data');
 				return;
 			}
 			var origName = {};
-			if ('normalized' in data.query) {
+			if(data.query.normalized) {
 				$.each(data.query.normalized, function(i, pair) {
 					origName[pair.to] = pair.from;
 				});
@@ -193,16 +191,20 @@ define(['jquery'], function() {
 
 			$.each(data.query.pages, function(pageId, page) {
 				var title = page.title;
-				if (title in origName) {
+				if(origName.title) {
 					console.log('Normalizing title');
 					title = origName[title];
 				}
-				if ('imageinfo' in page) {
+				if(page.imageinfo) {
 					var imageinfo = page.imageinfo[0];
 					that.deferreds[title].resolve(imageinfo);
 				}
 			});
 		});
+	};
+
+	Api.prototype.getImageFetcher = function(width, height) {
+		return new ImageFetcher(this, width, height);
 	};
 
 	return Api;
