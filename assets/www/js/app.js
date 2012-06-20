@@ -265,6 +265,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			var params = {
 				limit: 200
 			};
+			showMonumentsList([]); // load page blank to start with
 			monuments.getForCountry($(this).data('campaign'), params).done(function(monuments) {
 				showMonumentsList(monuments);
 				$("#show-map").unbind('click').click(function() {
