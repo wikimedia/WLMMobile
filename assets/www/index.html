@@ -67,11 +67,11 @@
 		</div>
 	</script>
 
-  	<div class="page" id="welcome-page">
-	  	<header class='actionbar'>
+	<div class="page" id="welcome-page">
+		<header class='actionbar'>
 			<img src="images/icon-small.png" />
-		  	<h2><msg key="welcome-title"></msg></h2>
-	  	</header>
+			<h2><msg key="welcome-title"></msg></h2>
+		</header>
 		<div class="content">
 			<div class='center'><img src="images/pin.png" /></div>
 			<h3><msg key="welcome-intro"></msg></h3>
@@ -82,7 +82,7 @@
 				<button id="nearby"><msg key="welcome-search"></msg></button>
 			</div>
 		</div>
-  	</div>
+	</div>
 
 	<div class="page" id="country-page">
 		<header class='actionbar'>
@@ -90,13 +90,12 @@
 			<h2><msg key="placeholder">Placeholder</msg></h2>
 		</header>
 		<div class="content">
-			<ul id="country-list">
-			</ul>
+			<ul id="country-list"></ul>
 		</div>
 	</div>
-  	
-  	<div class="page" id="results-page">
-  		<header class='actionbar'>
+
+	<div class="page" id="results-page">
+		<header class='actionbar'>
 			<a class='back page-link' data-page="country-page" href="#"> </a>
 			<h2><msg key="choose-country"></msg></h2>
 			<a class='page-link' data-page='country-page'><img src='images/placeholder-32x32.png' /></a>
@@ -107,20 +106,35 @@
 			<a href="#" class='page-link' data-page='uploads-page'><msg key='tabbar-uploads' /></a>
 		</header>
 		<div class="content">
-	  		<ul class="monuments-list" id="results">
-	  		</ul>
-	  	</div>
-  	</div>
-  	
-  	<div class="page" id="detail-page">
-  		<header class="actionbar">
+			<ul class="monuments-list" id="results"></ul>
+		</div>
+	</div>
+
+	<div class="page" id="uploads-page">
+		<header class='actionbar'>
+			<a class='back page-link' data-page="country-page" href="#"></a>
+			<h2><msg key="tabbar-uploads"></msg></h2>
+			<a class='page-link' data-page='country-page'><img src='images/placeholder-32x32.png' /></a>
+			<a class='page-link' data-page='settings-page'><img src='images/placeholder-32x32.png' /></a>
+		</header>
+		<header class="tabbar">
+			<a href="#" class='page-link' data-page='results-page'><msg key='tabbar-monuments' /></a>
+			<a href="#" class='active'><msg key='tabbar-uploads' /></a>
+		</header>
+		<div class="content">
+			Placeholder for upload interface
+		</div>
+	</div>
+
+	<div class="page" id="detail-page">
+		<header class="actionbar">
 			<a class='back page-link' data-page="results-page" href="#"> </a>
-	  		<h2><msg key="detail-title"></msg></h2>
+			<h2><msg key="detail-title"></msg></h2>
 			<a class='page-link' data-login='required' data-page="upload-page"><img src='images/placeholder-32x32.png' /></a>
-	  	</header>
+		</header>
 		<div class='content' id="monument-detail">
 		</div>
-  	</div>
+	</div>
 
 	<div class='page' id='map-page'>
 		<header>
@@ -132,11 +146,11 @@
 		</div>
 	</div>
 
-  	<div class="page" id="login-page">
-  		<header class="actionbar">
+	<div class="page" id="login-page">
+		<header class="actionbar">
 			<a class='back' href="#"> </a>
-	  		<h2><msg key="login-title"></msg></h2>
-	  	</header>
+			<h2><msg key="login-title"></msg></h2>
+		</header>
 		<div class='content'>
 			<ul>
 				<li>
@@ -178,17 +192,17 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="page"  id="upload-confirm-page">
-  		<header class="actionbar">
+		<header class="actionbar">
 			<a class='back' href="#"> </a>
-	  		<h2><msg key="upload-confirm-title"></msg></h2>
-	  	</header>
+			<h2><msg key="upload-confirm-title"></msg></h2>
+		</header>
 		<div class="content" id="upload-confirm">
 			<msg key='upload-progress-starting' />
 		</div>
 	</div>
-	
+
 	<script type="text/javascript" charset="utf-8" src="js/cordova-stub.js"></script>
 	<script type="text/javascript" charset="utf-8" data-main="js/main" src="js/require-jquery.js"></script>
 	<script type="text/javascript" charset="utf-8" src="js/platform-stub.js"></script>
