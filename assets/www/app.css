@@ -10,20 +10,14 @@ a {
 	color: inherit;
 }
 
-/* Random assorted styles that should be removed soon */
-
-#map {
-	position: absolute;
-	left: 0;
-	top: 52px;
-	bottom: 0px;
-	right: 0px;
-}
-
 /* General utility styles */
 
 .center {
 	text-align: center;
+}
+
+.hidden {
+	display: none;
 }
 
 /* Generic page layout styles */
@@ -177,6 +171,15 @@ header .back {
 
 .monuments-list .monument-address {
 	color: #999;
+}
+
+/* Maps styles */
+
+.leaflet-marker-pane,
+.leaflet-shadow-pane,
+.leaflet-overlay-pane {
+	/* hack to work around https://github.com/CloudMade/Leaflet/issues/335 */
+    -webkit-transform: translateZ(0px);
 }
 
 /* Monument details styles */
