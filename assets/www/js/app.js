@@ -123,8 +123,8 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			}
 		});
 		showPage('results-page');
-		$("#map").hide();
 		$("#monuments-list").show();
+		$("#map").hide();
 	}
 
 
