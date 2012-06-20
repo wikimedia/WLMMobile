@@ -274,7 +274,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 				}
 				name = this.value;
 				timeout = window.setTimeout(function() {
-					monuments.filterByNameForCountry($(this).data('campaign'), name).done(function(monuments) {
+					monuments.filterByNameForCountry(countryCode, name).done(function(monuments) {
 						currentMonumentList = monuments;
 						showMonumentsList(monuments);
 					});
