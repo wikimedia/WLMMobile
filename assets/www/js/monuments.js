@@ -28,7 +28,7 @@ define(['jquery'], function($) {
 				var split = text.split("\n");
 				var data = JSON.parse(split[split.length -1]);
 				var monuments = [];
-				$.each(data.monuments, function(i, monument) {
+				$.each(data.monuments || [], function(i, monument) {
 					monuments.push(new Monument(monument, that.mwApi));
 				});
 				return monuments;
@@ -41,6 +41,15 @@ define(['jquery'], function($) {
 		return this.request({
 			action: 'search',
 			srcountry: country
+		});
+	};
+
+	MonumentsApi.prototype.filterByNameForCountry = function(country, str) {
+		var d = $.Deferred();
+		return this.request({
+			action: 'search',
+			srcountry: country,
+			srname: str + '%'
 		});
 	};
 
