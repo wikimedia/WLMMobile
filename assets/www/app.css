@@ -26,6 +26,10 @@ a {
 	text-align: center;
 }
 
+.hidden {
+	display: none;
+}
+
 /* Generic page layout styles */
 
 .page header.actionbar {
