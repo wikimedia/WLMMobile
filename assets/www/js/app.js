@@ -259,7 +259,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 
 	onDeviceReady();
 	$(document).bind('mw-messages-ready', function() {
-		var timeout, name;
+		var currentMonumentList = [], timeout, name;
 		var countriesListTemplate = templates.getTemplate('country-list-template');
 		$("#country-list").html(countriesListTemplate({countries: countries}));
 		$("#country-list .country-search").click(function() {
@@ -274,18 +274,21 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 				}
 				name = this.value;
 				timeout = window.setTimeout(function() {
-					monuments.filterByNameForCountry(countryCode, name).done(function(monuments) {
+					monuments.filterByNameForCountry($(this).data('campaign'), name).done(function(monuments) {
+						currentMonumentList = monuments;
 						showMonumentsList(monuments);
 					});
 				}, 200);
 			});
-			monuments.getForCountry($(this).data('campaign'), params).done(function(monuments) {
+			monuments.getForCountry(countryCode, params).done(function(monuments) {
+				currentMonumentList = monuments;
 				showMonumentsList(monuments);
-				$("#show-map").unbind('click').click(function() {
-					console.log("Switching to map view");
-					showMonumentsMap(monuments);
-				});
 			});
+		});
+
+		$("#show-map").click(function() {
+			console.log("Switching to map view");
+			showMonumentsMap(currentMonumentList);
 		});
 
 		$(".page-link").click(function() {
