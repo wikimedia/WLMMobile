@@ -98,6 +98,7 @@
 		<header class='actionbar'>
 			<a class='back page-link' data-page="country-page" href="#"> </a>
 			<h2><msg key="choose-country"></msg></h2>
+			<a id='toggle-result-view'><img src='images/placeholder-32x32.png' /></a>
 			<a class='page-link' data-page='country-page'><img src='images/placeholder-32x32.png' /></a>
 			<a class='page-link' data-page='settings-page'><img src='images/placeholder-32x32.png' /></a>
 		</header>
@@ -105,8 +106,10 @@
 			<a href="#" class='active'><msg key='tabbar-monuments' /></a>
 			<a href="#" class='page-link' data-page='uploads-page'><msg key='tabbar-uploads' /></a>
 		</header>
-		<div class="content">
+		<div class="content" id="monuments-list">
 			<ul class="monuments-list" id="results"></ul>
+		</div>
+		<div class="content hidden" id="map">
 		</div>
 	</div>
 
@@ -133,16 +136,6 @@
 			<a class='page-link' data-login='required' data-page="upload-page"><img src='images/placeholder-32x32.png' /></a>
 		</header>
 		<div class='content' id="monument-detail">
-		</div>
-	</div>
-
-	<div class='page' id='map-page'>
-		<header>
-			<button class="back-welcome"></button>
-			<button id="show-list"><msg key="show-list"></msg></button>
-		</header>
-		<div>
-			<div id="map"> </div>
 		</div>
 	</div>
 
