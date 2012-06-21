@@ -227,7 +227,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			var params = {
 				limit: 200
 			};
-			monuments.getForCountry($(this).data('campaign'), params).done(function(monuments) {
+			monuments.getForCountry( countryCode, params ).done( function( monuments ) {
 				showMonumentsList(monuments);
 			});
 		});
