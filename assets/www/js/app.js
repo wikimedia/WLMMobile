@@ -94,6 +94,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 	}
 
 	function showMonumentsList(monuments) {
+		$("#results").empty();
 		var monumentTemplate = templates.getTemplate('monument-list-item-template');	
 		var listThumbFetcher = commonsApi.getImageFetcher(64, 64);
 		$.each(monuments, function(i, monument) {
@@ -198,16 +199,29 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 
 	onDeviceReady();
 	$(document).bind('mw-messages-ready', function() {
+		var timeout, name, countryCode;
 		var countriesListTemplate = templates.getTemplate('country-list-template');
 		$("#country-list").html(countriesListTemplate({countries: countries}));
 		$("#country-list .country-search").click(function() {
-			$('#results').empty();
+			countryCode = $(this).data('campaign');
 			var params = {
 				limit: 200
 			};
-			monuments.getForCountry($(this).data('campaign'), params).done(function(monuments) {
+			monuments.getForCountry( countryCode, params ).done( function( monuments ) {
 				showMonumentsList(monuments);
 			});
+		});
+
+		$( '#filter-results' ).keyup( function() {
+			var value = this.value;
+			if( timeout ) {
+				window.clearTimeout( timeout );
+			}
+			timeout = window.setTimeout( function() {
+				monuments.filterByNameForCountry( countryCode, value ).done( function( monuments ) {
+					showMonumentsList( monuments );
+				} );
+			}, 200 );
 		});
 
 		$(".page-link").click(function() {
