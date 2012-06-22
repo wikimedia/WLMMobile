@@ -190,9 +190,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 				fail(textStatus);
 			});
 		});
-		$("#login-page .back").unbind('click').click(function() {
-			showPage(prevPage);
-		});
+		$("#login-page .back").data('page', prevPage);
 		showPage("login-page");
 	}
 
