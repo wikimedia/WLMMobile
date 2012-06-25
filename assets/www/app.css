@@ -203,6 +203,10 @@ header .back {
 
 /* Maps styles */
 
+#map {
+	bottom: 0px;
+}
+
 .leaflet-marker-pane,
 .leaflet-shadow-pane,
 .leaflet-overlay-pane {
