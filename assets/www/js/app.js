@@ -108,8 +108,8 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		listThumbFetcher.send();
 
 		var mapPopulated = false;
-		$("#toggle-result-view").unbind("click").click(function() {
-			var mapVisible = $("#map").is(":visible");
+		$("#toggle-result-view").unbind("change").change(function() {
+			var mapVisible = $("#toggle-result-view").val() !== "map-view";
 			if(mapVisible) {
 				$("#monuments-list").show();
 				$("#map").hide();

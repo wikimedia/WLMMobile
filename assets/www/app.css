@@ -122,6 +122,11 @@ input[type='text'] {
 	border-bottom: 1px solid #ccc;
 }
 
+select {
+	-webkit-appearance: none;
+	border: 0px;
+}
+
 /* Search styles */
 
 header h2 input[type='text'] {

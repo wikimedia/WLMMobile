@@ -98,8 +98,14 @@
 	<div class="page has-tabbar" id="results-page">
 		<header class='actionbar'>
 			<a class='back page-link' data-page="country-page" href="#"> </a>
-			<h2></h2>
-			<a id='toggle-result-view'><img src='images/placeholder-32x32.png' /></a>
+			<h2>
+				<select id="toggle-result-view">
+					<!-- FIXME: Find why jquery.localize doesn't seem to hit <option> tags -->
+					<option value="list-view">List View</option>
+					<option value="map-view">Map View</option>
+				</select>
+			</h2>
+			<a id="search-results"><img src='images/{{DPR}}/2-action-search.png' /></a>
 			<a class='page-link' data-page='country-page'><img src='images/{{DPR}}/7-location-place.png' /></a>
 			<a class='page-link' data-page='settings-page'><img src='images/{{DPR}}/2-action-settings.png' /></a>
 		</header>
