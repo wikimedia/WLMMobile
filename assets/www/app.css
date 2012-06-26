@@ -108,7 +108,7 @@ ul {
 }
 
 li {
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid #d1d1d1;
 	width: 100%;
 	list-style: none;
 }
@@ -196,7 +196,7 @@ header .back {
 	min-height: 64px;
 	position: relative;
 	padding: 5px;
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid #d1d1d1;
 	display: -webkit-box;
 	width: 100%;
 }
@@ -237,7 +237,7 @@ header .back {
 }
 
 #monument-detail .monument-sub-details {
-	border-top: 1px solid #eee;
+	border-top: 1px solid #d1d1d1;
 	margin-top: 5px;
 	padding-top: 10px;
 	font-size: 12px;
