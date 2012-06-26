@@ -233,6 +233,25 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			showPage('country-page');
 		});
 
+		var campaignSearchTimeout = null;
+		$( "#filter-campaign" ).keyup( function() {
+			if( campaignSearchTimeout ) {
+				window.clearTimeout( campaignSearchTimeout );
+			}
+			campaignSearchTimeout = window.setTimeout( function() {
+				var val = $( "#filter-campaign" ).val().toLowerCase();
+				$( ".country-search" ).each( function() {
+					var country = $(this).text().toLowerCase();
+					console.log(country + ' === ' + val);
+					if( country.substring( 0, val.length ) === val ) {
+						$(this).show();
+					} else {
+						$(this).hide();
+					}
+				});
+			}, 400);
+		});
+
 		$('#nearby').click(function() {
 			navigator.geolocation.getCurrentPosition(function(pos) {
 				monuments.getInBoundingBox(pos.coords.longitude - nearbyDeg,
