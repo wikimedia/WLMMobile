@@ -144,7 +144,7 @@ select {
 /* Search styles */
 
 header h2 input[type='text'] {
-	width: 90%;
+	width: 100%;
 }
 
 /* Popup dialogs styles */
