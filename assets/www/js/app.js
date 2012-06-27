@@ -19,7 +19,7 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.localize'],
+require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.localize', 'jquery.dpr'],
 	function($, l10n, geo, Api, templates, MonumentsApi) {
 
 	var api = new Api("https://test.wikipedia.org/w/api.php");
@@ -108,8 +108,8 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		listThumbFetcher.send();
 
 		var mapPopulated = false;
-		$("#toggle-result-view").unbind("click").click(function() {
-			var mapVisible = $("#map").is(":visible");
+		$("#toggle-result-view").unbind("change").change(function() {
+			var mapVisible = $("#toggle-result-view").val() !== "map-view";
 			if(mapVisible) {
 				$("#monuments-list").show();
 				$("#map").hide();
@@ -146,6 +146,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 
 	function onDeviceReady() {
 		l10n.initLanguages();
+		$("html").dprize();
 	}
 
 	function showPhotoConfirmation(fileUrl) {
