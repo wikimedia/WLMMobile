@@ -184,7 +184,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 					prefs.set( 'username', username );
 					prefs.set( 'password', password );
 					$( "#login-status-message" ).html( mw.msg( 'login-success' ) );
-					success();
+					setTimeout( function() {
+						$( "#login-status" ).hide();
+						success();
+					}, 3 * 1000 );
 				} else {
 					$( "#login-status-message" ).html( mw.msg( 'login-failed', status ) );
 					fail( status );
@@ -193,8 +196,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				$( "#login-status-message" ).html( mw.msg( 'login-failed', textStatus ) );
 				fail( textStatus );
 			}).always( function() {
+				$( "#login-status-spinner" ).hide();
 				$( "#login-page input" ).attr( 'disabled', false );
-				$( "#login-status" ).hide();
 			});
 		}
 
