@@ -173,19 +173,31 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 	// Would have to add a 'cancel' callback in the future
 	function doLogin(success, fail) {
 		var prevPage = curPageName;
-		$("#login").unbind('click').click(function() {
-			var username = $("#login-user").val().trim();
-			var password = $("#login-pass").val();
-			api.login(username, password).done(function(status) {
-				if(status === "Success")  {
-					showPage(prevPage);
+
+		function authenticate( username, password ) {
+			api.login( username, password ).done( function( status ) {
+				if( status === "Success" )  {
+					showPage( prevPage );
+					prefs.set( 'username', username );
+					prefs.set( 'password', password );
 					success();
 				} else {
-					fail(status);
+					fail( status );
 				}
-			}).fail(function(err, textStatus) {
-				fail(textStatus);
+			}).fail( function( err, textStatus ) {
+				fail( textStatus );
 			});
+		}
+
+		if( prefs.get( 'username' ) && prefs.get( 'password' ) ) {
+			$( "#login-user" ).val( prefs.get( 'username' ) );
+			$( "#login-pass" ).val( prefs.get( 'password' ) );
+			authenticate( prefs.get( 'username' ), prefs.get( 'password' ) );
+		}
+		$("#login").unbind('click').click(function() {
+			var username = $( "#login-user" ).val().trim();
+			var password = $( "#login-pass" ).val();
+			authenticate( username, password );
 		});
 		$("#login-page .back").unbind('click').click(function() {
 			showPage(prevPage);
