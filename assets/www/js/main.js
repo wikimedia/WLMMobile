@@ -22,6 +22,5 @@ require(GLOBAL_LIBS, function() {
 
 function onDeviceReady() {
 	require(["jquery", "l10n", 'jquery.localize', 'app'], function($, l10n) {
-		l10n.initLanguages();
 	});
 }

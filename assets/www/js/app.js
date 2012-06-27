@@ -19,8 +19,8 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.localize'],
-	function($, l10n, geo, Api, templates, MonumentsApi) {
+require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preferences', 'jquery.localize', 'jquery.dpr' ],
+	function( $, l10n, geo, Api, templates, MonumentsApi, prefs ) {
 
 	var api = new Api("https://test.wikipedia.org/w/api.php");
 	var commonsApi = new Api('https://commons.wikimedia.org/w/api.php');
@@ -108,8 +108,8 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		listThumbFetcher.send();
 
 		var mapPopulated = false;
-		$("#toggle-result-view").unbind("click").click(function() {
-			var mapVisible = $("#map").is(":visible");
+		$("#toggle-result-view").unbind("change").change(function() {
+			var mapVisible = $("#toggle-result-view").val() !== "map-view";
 			if(mapVisible) {
 				$("#monuments-list").show();
 				$("#map").hide();
@@ -144,9 +144,6 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		});
 	}
 
-	function onDeviceReady() {
-		l10n.initLanguages();
-	}
 
 	function showPhotoConfirmation(fileUrl) {
 		var uploadConfirmTemplate = templates.getTemplate('upload-confirm-template');
@@ -176,19 +173,43 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 	// Would have to add a 'cancel' callback in the future
 	function doLogin(success, fail) {
 		var prevPage = curPageName;
-		$("#login").unbind('click').click(function() {
-			var username = $("#login-user").val().trim();
-			var password = $("#login-pass").val();
-			api.login(username, password).done(function(status) {
-				if(status === "Success")  {
-					showPage(prevPage);
-					success();
+
+		function authenticate( username, password ) {
+			$( "#login-status" ).show();
+			$( "#login-page input" ).attr( 'disabled', true );
+			$( "#login-status-message" ).text( mw.msg( 'login-in-progress' ) );
+			api.login( username, password ).done( function( status ) {
+				if( status === "Success" )  {
+					showPage( prevPage );
+					prefs.set( 'username', username );
+					prefs.set( 'password', password );
+					$( "#login-status-message" ).html( mw.msg( 'login-success' ) );
+					setTimeout( function() {
+						$( "#login-status" ).hide();
+						success();
+					}, 3 * 1000 );
 				} else {
-					fail(status);
+					$( "#login-status-message" ).html( mw.msg( 'login-failed', status ) );
+					fail( status );
 				}
-			}).fail(function(err, textStatus) {
-				fail(textStatus);
+			}).fail( function( err, textStatus ) {
+				$( "#login-status-message" ).html( mw.msg( 'login-failed', textStatus ) );
+				fail( textStatus );
+			}).always( function() {
+				$( "#login-status-spinner" ).hide();
+				$( "#login-page input" ).attr( 'disabled', false );
 			});
+		}
+
+		if( prefs.get( 'username' ) && prefs.get( 'password' ) ) {
+			$( "#login-user" ).val( prefs.get( 'username' ) );
+			$( "#login-pass" ).val( prefs.get( 'password' ) );
+			authenticate( prefs.get( 'username' ), prefs.get( 'password' ) );
+		}
+		$("#login").unbind('click').click(function() {
+			var username = $( "#login-user" ).val().trim();
+			var password = $( "#login-pass" ).val();
+			authenticate( username, password );
 		});
 		$("#login-page .back").unbind('click').click(function() {
 			showPage(prevPage);
@@ -196,8 +217,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		showPage("login-page");
 	}
 
-	onDeviceReady();
-	$(document).bind('mw-messages-ready', function() {
+	function init() {
 		var countriesListTemplate = templates.getTemplate('country-list-template');
 		$("#country-list").html(countriesListTemplate({countries: countries}));
 		$("#country-list .country-search").click(function() {
@@ -219,7 +239,6 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 					doLogin(function() {
 						showPage(toPage);
 					}, function(err) {
-						alert(err);
 					});
 				}
 			} else {
@@ -279,7 +298,11 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			});
 		});
 
+		$(document).localize().dprize();
 		showPage('welcome-page');
-		$(document).localize();
+	}
+
+	l10n.init().done( function() {
+		prefs.init().done( init );
 	});
 });
