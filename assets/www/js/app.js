@@ -175,17 +175,26 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		var prevPage = curPageName;
 
 		function authenticate( username, password ) {
+			$( "#login-status" ).show();
+			$( "#login-page input" ).attr( 'disabled', true );
+			$( "#login-status-message" ).text( mw.msg( 'login-in-progress' ) );
 			api.login( username, password ).done( function( status ) {
 				if( status === "Success" )  {
 					showPage( prevPage );
 					prefs.set( 'username', username );
 					prefs.set( 'password', password );
+					$( "#login-status-message" ).html( mw.msg( 'login-success' ) );
 					success();
 				} else {
+					$( "#login-status-message" ).html( mw.msg( 'login-failed', status ) );
 					fail( status );
 				}
 			}).fail( function( err, textStatus ) {
+				$( "#login-status-message" ).html( mw.msg( 'login-failed', textStatus ) );
 				fail( textStatus );
+			}).always( function() {
+				$( "#login-page input" ).attr( 'disabled', false );
+				$( "#login-status" ).hide();
 			});
 		}
 
@@ -227,7 +236,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 					doLogin(function() {
 						showPage(toPage);
 					}, function(err) {
-						alert(err);
 					});
 				}
 			} else {

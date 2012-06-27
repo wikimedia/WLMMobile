@@ -271,7 +271,7 @@ header .back {
 
 #login-page input[type='text'], 
 #login-page input[type='password'] {
-	width: 90%;
+	width: 100%;
 	padding: 10px;
 	margin: 5px;
 }
@@ -279,6 +279,10 @@ header .back {
 #login-page #login {
 	float: right;
 	padding: 5px;
+}
+
+#login-status {
+	margin-top: 100px;
 }
 
 /* Upload confirmation specific CSS */
