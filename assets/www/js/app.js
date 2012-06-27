@@ -144,10 +144,6 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		});
 	}
 
-	function onDeviceReady() {
-		l10n.initLanguages();
-		$("html").dprize();
-	}
 
 	function showPhotoConfirmation(fileUrl) {
 		var uploadConfirmTemplate = templates.getTemplate('upload-confirm-template');
@@ -197,8 +193,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		showPage("login-page");
 	}
 
-	onDeviceReady();
-	$(document).bind('mw-messages-ready', function() {
+	function init() {
 		var countriesListTemplate = templates.getTemplate('country-list-template');
 		$("#country-list").html(countriesListTemplate({countries: countries}));
 		$("#country-list .country-search").click(function() {
@@ -280,7 +275,9 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			});
 		});
 
+		$(document).localize().dprize();
 		showPage('welcome-page');
-		$(document).localize();
-	});
+	}
+
+	l10n.init().done( init );
 });
