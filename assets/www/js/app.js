@@ -19,8 +19,8 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.localize', 'jquery.dpr'],
-	function($, l10n, geo, Api, templates, MonumentsApi) {
+require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preferences', 'jquery.localize', 'jquery.dpr' ],
+	function( $, l10n, geo, Api, templates, MonumentsApi, prefs ) {
 
 	var api = new Api("https://test.wikipedia.org/w/api.php");
 	var commonsApi = new Api('https://commons.wikimedia.org/w/api.php');
@@ -279,5 +279,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		showPage('welcome-page');
 	}
 
-	l10n.init().done( init );
+	l10n.init().done( function() {
+		prefs.init().done( init );
+	});
 });
