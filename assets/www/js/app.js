@@ -291,11 +291,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				var val = $( "#filter-campaign" ).val().toLowerCase();
 				$( ".country-search" ).each( function() {
 					var country = $(this).text().toLowerCase();
-					console.log(country + ' === ' + val);
-					if( country.substring( 0, val.length ) === val ) {
-						$(this).show();
+					if( country.indexOf( val ) !== -1 ) {
+						$(this).parent().show();
 					} else {
-						$(this).hide();
+						$(this).parent().hide();
 					}
 				});
 			}, 400);
