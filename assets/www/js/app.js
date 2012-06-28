@@ -244,16 +244,29 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			});
 		});
 
+		var monumentSearchTimeout = null;
+		var monumentSearchReq = null;
 		$( '#filter-monuments' ).keyup( function() {
 			var value = this.value;
-			if( timeout ) {
+			if( monumentSearchTimeout ) {
 				window.clearTimeout( timeout );
+				console.log( 'clearing timeout' );
 			}
-			timeout = window.setTimeout( function() {
-				monuments.filterByNameForCountry( countryCode, value ).done( function( monuments ) {
+
+			if( monumentSearchReq ) {
+				monumentSearchReq.abort();
+				monumentSearchReq = null;
+				console.log( 'clearing req' );
+			}
+
+			monumentSearchTimeout = window.setTimeout( function() {
+				monumentSearchReq = monuments.filterByNameForCountry( countryCode, value ).done( function( monuments ) {
 					showMonumentsList( monuments );
-				} );
-			}, 200 );
+				} ).always( function() {
+					monumentSearchReq = null;
+				});
+				monumentSearchTimeout = null;
+			}, 500 );
 		});
 
 		$(".page-link").click(function() {
