@@ -218,6 +218,18 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		showPage("login-page");
 	}
 
+	function showSearchBar( pageName ) {
+		var $page = $( "#" + pageName );
+		var $searchBar = $page.find( '.searchbar' );
+		var $curActionBar = $page.find( '.actionbar:not(".searchbar")' );
+		$searchBar.removeClass( 'hidden' );
+		$curActionBar.hide();
+		$searchBar.find( '.cancel-search' ).unbind( 'click' ).click( function() {
+			$searchBar.addClass( 'hidden' );
+			$curActionBar.show();
+		});
+	}
+
 	function init() {
 		var timeout, name, countryCode;
 		var countriesListTemplate = templates.getTemplate('country-list-template');
@@ -232,7 +244,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			});
 		});
 
-		$( '#filter-results' ).keyup( function() {
+		$( '#filter-monuments' ).keyup( function() {
 			var value = this.value;
 			if( timeout ) {
 				window.clearTimeout( timeout );
@@ -263,6 +275,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 
 		$('#countries').click(function() {
 			showPage('country-page');
+		});
+
+		$( '.show-search' ).click( function() {
+			var page = $( this ).parents( '.page' ).attr( 'id' );
+			showSearchBar( page );
 		});
 
 		var campaignSearchTimeout = null;
