@@ -36,6 +36,11 @@ input {
 }
 
 .hidden {
+	display: none;
+}
+
+header.actionbar.hidden {
+	/* Because actionbars have display: box which seems to override this none */
 	display: none !important;
 }
 
