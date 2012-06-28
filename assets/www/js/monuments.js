@@ -25,7 +25,6 @@ define(['jquery'], function($) {
 				// Pick up only the last line of the response
 				// This ignores all the PHP errors and warnings spouted by the API
 				// FIXME: Fix the errors and warnings in the server of the API
-				console.log(text);
 				var split = text.split("\n");
 				var data = JSON.parse(split[split.length -1]);
 				var monuments = [];
