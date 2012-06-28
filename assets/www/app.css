@@ -86,6 +86,11 @@ header.actionbar.hidden {
 	-webkit-box-flex: 1;
 }
 
+.page header h2 select {
+	border-bottom: 2px #D1D1D1 solid;
+	border-right: 2px #d1d1d1 solid;
+}
+
 .page .content {
 	position: absolute;
 	top: 48px;
