@@ -24,6 +24,11 @@ a {
 	color: inherit;
 }
 
+input {
+	/* see: http://stackoverflow.com/questions/9005550/input-elements-on-android-4-x-can-not-be-styled-when-focused */
+	-webkit-user-modify: read-write-plaintext-only;
+}
+
 /* General utility styles */
 
 .center {
