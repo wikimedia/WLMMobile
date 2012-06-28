@@ -50,7 +50,7 @@ define(['jquery'], function($) {
 		return this.request( {
 			action: 'search',
 			srcountry: country,
-			srname: str + '%'
+			srname: '~' + str + '*'
 		} );
 	};
 
