@@ -113,19 +113,19 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			var mapVisible = $("#toggle-result-view").val() !== "map-view";
 			if(mapVisible) {
 				$("#monuments-list").show();
-				$("#map").hide();
+				geo.hideMap();
 			} else {
 				if(!mapPopulated) {
 					showMonumentsMap(monuments);
 					mapPopulated = true;
 				} 
-				$("#map").show();
+				geo.showMap();
 				$("#monuments-list").hide();
 			}
 		});
 		showPage('results-page');
 		$("#monuments-list").show();
-		$("#map").hide();
+		geo.hideMap();
 	}
 
 

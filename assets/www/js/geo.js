@@ -110,11 +110,21 @@ define(['jquery', '../leaflet/leaflet-src'], function() {
 			});
 
 			markerGroup = new L.LayerGroup();
-			this.map.addLayer(markerGroup);
+			map.addLayer(markerGroup);
 			setupPinchToZoom('map');
 		}
 	}
-	
+
+	function showMap() {
+		$("#map").show();
+		// Makes leaflet aware of its' position - avoids 'wrong center' problem
+		map.invalidateSize();
+	}
+
+	function hideMap() {
+		$("#map").hide();
+	}
+
 	function clear() {
 		markerGroup.clearLayers();
 	}
@@ -138,7 +148,9 @@ define(['jquery', '../leaflet/leaflet-src'], function() {
 		clear: clear,
 		addMonument: addMonument,
 		calculateCenterAndZoom: calculateCenterAndZoom,
-		setCenterAndZoom: setCenterAndZoom
+		setCenterAndZoom: setCenterAndZoom,
+		showMap: showMap,
+		hideMap: hideMap
 	};
 
 });
