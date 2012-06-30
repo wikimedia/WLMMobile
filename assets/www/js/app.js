@@ -362,6 +362,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 
 		$(document).localize().dprize();
 		showPage('welcome-page');
+
+		// Everything has been initialized, so let's show them the UI!
+		$( 'body' ).removeClass( 'hidden' );
 	}
 
 	l10n.init().done( function() {
