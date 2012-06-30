@@ -338,8 +338,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				state.fileUri = data;
 				showPhotoConfirmation(data);
 			}, function(msg) {
-				// error
-				alert('fail: ' + msg);
+				console.log( "TakePhoto cancelled because of " + msg );
+				// Do nothing.
 			}, {
 				// options
 				destinationType: Camera.DestinationType.FILE_URI
@@ -351,8 +351,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				state.fileUri = data;
 				showPhotoConfirmation(data);
 			}, function(msg) {
-				// error
-				alert('fail: ' + msg);
+				console.log( "SelectPhoto cancelled because of " + msg );
+				// Do nothing.
 			}, {
 				// options
 				destinationType: Camera.DestinationType.FILE_URI,
