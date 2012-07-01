@@ -79,11 +79,11 @@ define(['jquery', '../leaflet/leaflet-src'], function() {
 	}
 
 	function init() {
-		if (!this.map) {
+		if (!map) {
 			// Disable webkit 3d CSS transformations for tile positioning
 			// Causes lots of flicker in PhoneGap for some reason...
 			L.Browser.webkit3d = false;
-			this.map = new L.Map('map', {
+			map = new L.Map('map', {
 				touchZoom: true, // force on for Android 3/4
 				zoomControl: false // disable in favor of pinch-zoom
 			});
@@ -91,13 +91,13 @@ define(['jquery', '../leaflet/leaflet-src'], function() {
 				maxZoom: 18,
 				subdomains: '1234'
 			});
-			this.map.addLayer(tiles);
+			map.addLayer(tiles);
 
-			this.map.attributionControl.setPrefix("");
-			this.map.attributionControl.addAttribution(
+			map.attributionControl.setPrefix("");
+			map.attributionControl.addAttribution(
 				'<span class=".map-attribution">' + mw.message("attribution-mapquest") + '</span>'
 				);
-			this.map.attributionControl.addAttribution(
+			map.attributionControl.addAttribution(
 				'<br /><span class=".map-attribution">' + mw.message("attribution-osm") + '</span>'
 				);
 
@@ -110,11 +110,21 @@ define(['jquery', '../leaflet/leaflet-src'], function() {
 			});
 
 			markerGroup = new L.LayerGroup();
-			this.map.addLayer(markerGroup);
+			map.addLayer(markerGroup);
 			setupPinchToZoom('map');
 		}
 	}
-	
+
+	function showMap() {
+		$("#map").show();
+		// Makes leaflet aware of its' position - avoids 'wrong center' problem
+		map.invalidateSize();
+	}
+
+	function hideMap() {
+		$("#map").hide();
+	}
+
 	function clear() {
 		markerGroup.clearLayers();
 	}
@@ -130,7 +140,7 @@ define(['jquery', '../leaflet/leaflet-src'], function() {
 	}
 
 	function setCenterAndZoom(center, zoom) {
-		this.map.setView(new L.LatLng(center.lat, center.lon), zoom);
+		map.setView(new L.LatLng(center.lat, center.lon), zoom);
 	}
 
 	return {
@@ -138,7 +148,9 @@ define(['jquery', '../leaflet/leaflet-src'], function() {
 		clear: clear,
 		addMonument: addMonument,
 		calculateCenterAndZoom: calculateCenterAndZoom,
-		setCenterAndZoom: setCenterAndZoom
+		setCenterAndZoom: setCenterAndZoom,
+		showMap: showMap,
+		hideMap: hideMap
 	};
 
 });

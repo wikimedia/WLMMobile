@@ -19,8 +19,8 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.localize'],
-	function($, l10n, geo, Api, templates, MonumentsApi) {
+require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preferences', 'jquery.localize', 'jquery.dpr' ],
+	function( $, l10n, geo, Api, templates, MonumentsApi, prefs ) {
 
 	var api = new Api("https://test.wikipedia.org/w/api.php");
 	var commonsApi = new Api('https://commons.wikimedia.org/w/api.php');
@@ -94,6 +94,7 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 	}
 
 	function showMonumentsList(monuments) {
+		$("#results").empty();
 		var monumentTemplate = templates.getTemplate('monument-list-item-template');	
 		var listThumbFetcher = commonsApi.getImageFetcher(64, 64);
 		$.each(monuments, function(i, monument) {
@@ -108,23 +109,23 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		listThumbFetcher.send();
 
 		var mapPopulated = false;
-		$("#toggle-result-view").unbind("click").click(function() {
-			var mapVisible = $("#map").is(":visible");
+		$("#toggle-result-view").unbind("change").change(function() {
+			var mapVisible = $("#toggle-result-view").val() !== "map-view";
 			if(mapVisible) {
 				$("#monuments-list").show();
-				$("#map").hide();
+				geo.hideMap();
 			} else {
 				if(!mapPopulated) {
 					showMonumentsMap(monuments);
 					mapPopulated = true;
 				} 
-				$("#map").show();
+				geo.showMap();
 				$("#monuments-list").hide();
 			}
 		});
 		showPage('results-page');
 		$("#monuments-list").show();
-		$("#map").hide();
+		geo.hideMap();
 	}
 
 
@@ -144,9 +145,6 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		});
 	}
 
-	function onDeviceReady() {
-		l10n.initLanguages();
-	}
 
 	function showPhotoConfirmation(fileUrl) {
 		var uploadConfirmTemplate = templates.getTemplate('upload-confirm-template');
@@ -176,19 +174,43 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 	// Would have to add a 'cancel' callback in the future
 	function doLogin(success, fail) {
 		var prevPage = curPageName;
-		$("#login").unbind('click').click(function() {
-			var username = $("#login-user").val().trim();
-			var password = $("#login-pass").val();
-			api.login(username, password).done(function(status) {
-				if(status === "Success")  {
-					showPage(prevPage);
-					success();
+
+		function authenticate( username, password ) {
+			$( "#login-status" ).show();
+			$( "#login-page input" ).attr( 'disabled', true );
+			$( "#login-status-message" ).text( mw.msg( 'login-in-progress' ) );
+			api.login( username, password ).done( function( status ) {
+				if( status === "Success" )  {
+					showPage( prevPage );
+					prefs.set( 'username', username );
+					prefs.set( 'password', password );
+					$( "#login-status-message" ).html( mw.msg( 'login-success' ) );
+					setTimeout( function() {
+						$( "#login-status" ).hide();
+						success();
+					}, 3 * 1000 );
 				} else {
-					fail(status);
+					$( "#login-status-message" ).html( mw.msg( 'login-failed', status ) );
+					fail( status );
 				}
-			}).fail(function(err, textStatus) {
-				fail(textStatus);
+			}).fail( function( err, textStatus ) {
+				$( "#login-status-message" ).html( mw.msg( 'login-failed', textStatus ) );
+				fail( textStatus );
+			}).always( function() {
+				$( "#login-status-spinner" ).hide();
+				$( "#login-page input" ).attr( 'disabled', false );
 			});
+		}
+
+		if( prefs.get( 'username' ) && prefs.get( 'password' ) ) {
+			$( "#login-user" ).val( prefs.get( 'username' ) );
+			$( "#login-pass" ).val( prefs.get( 'password' ) );
+			authenticate( prefs.get( 'username' ), prefs.get( 'password' ) );
+		}
+		$("#login").unbind('click').click(function() {
+			var username = $( "#login-user" ).val().trim();
+			var password = $( "#login-pass" ).val();
+			authenticate( username, password );
 		});
 		$("#login-page .back").unbind('click').click(function() {
 			showPage(prevPage);
@@ -196,18 +218,55 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 		showPage("login-page");
 	}
 
-	onDeviceReady();
-	$(document).bind('mw-messages-ready', function() {
+	function showSearchBar( pageName ) {
+		var $page = $( "#" + pageName );
+		var $searchBar = $page.find( '.searchbar' );
+		var $curActionBar = $page.find( '.actionbar:not(".searchbar")' );
+		$searchBar.removeClass( 'hidden' );
+		$curActionBar.hide();
+		$searchBar.find( '.cancel-search' ).unbind( 'click' ).click( function() {
+			$searchBar.addClass( 'hidden' );
+			$curActionBar.show();
+		});
+	}
+
+	function init() {
+		var timeout, name, countryCode;
 		var countriesListTemplate = templates.getTemplate('country-list-template');
 		$("#country-list").html(countriesListTemplate({countries: countries}));
 		$("#country-list .country-search").click(function() {
-			$('#results').empty();
+			countryCode = $(this).data('campaign');
 			var params = {
 				limit: 200
 			};
-			monuments.getForCountry($(this).data('campaign'), params).done(function(monuments) {
+			monuments.getForCountry( countryCode, params ).done( function( monuments ) {
 				showMonumentsList(monuments);
 			});
+		});
+
+		var monumentSearchTimeout = null;
+		var monumentSearchReq = null;
+		$( '#filter-monuments' ).keyup( function() {
+			var value = this.value;
+			if( monumentSearchTimeout ) {
+				window.clearTimeout( timeout );
+				console.log( 'clearing timeout' );
+			}
+
+			if( monumentSearchReq ) {
+				monumentSearchReq.abort();
+				monumentSearchReq = null;
+				console.log( 'clearing req' );
+			}
+
+			monumentSearchTimeout = window.setTimeout( function() {
+				monumentSearchReq = monuments.filterByNameForCountry( countryCode, value ).done( function( monuments ) {
+					showMonumentsList( monuments );
+				} ).always( function() {
+					monumentSearchReq = null;
+				});
+				monumentSearchTimeout = null;
+			}, 500 );
 		});
 
 		$(".page-link").click(function() {
@@ -219,7 +278,6 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 					doLogin(function() {
 						showPage(toPage);
 					}, function(err) {
-						alert(err);
 					});
 				}
 			} else {
@@ -230,6 +288,29 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 
 		$('#countries').click(function() {
 			showPage('country-page');
+		});
+
+		$( '.show-search' ).click( function() {
+			var page = $( this ).parents( '.page' ).attr( 'id' );
+			showSearchBar( page );
+		});
+
+		var campaignSearchTimeout = null;
+		$( "#filter-campaign" ).keyup( function() {
+			if( campaignSearchTimeout ) {
+				window.clearTimeout( campaignSearchTimeout );
+			}
+			campaignSearchTimeout = window.setTimeout( function() {
+				var val = $( "#filter-campaign" ).val().toLowerCase();
+				$( ".country-search" ).each( function() {
+					var country = $(this).text().toLowerCase();
+					if( country.indexOf( val ) !== -1 ) {
+						$(this).parent().show();
+					} else {
+						$(this).parent().hide();
+					}
+				});
+			}, 400);
 		});
 
 		$('#nearby').click(function() {
@@ -257,8 +338,8 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 				state.fileUri = data;
 				showPhotoConfirmation(data);
 			}, function(msg) {
-				// error
-				alert('fail: ' + msg);
+				console.log( "TakePhoto cancelled because of " + msg );
+				// Do nothing.
 			}, {
 				// options
 				destinationType: Camera.DestinationType.FILE_URI
@@ -270,8 +351,8 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 				state.fileUri = data;
 				showPhotoConfirmation(data);
 			}, function(msg) {
-				// error
-				alert('fail: ' + msg);
+				console.log( "SelectPhoto cancelled because of " + msg );
+				// Do nothing.
 			}, {
 				// options
 				destinationType: Camera.DestinationType.FILE_URI,
@@ -279,7 +360,14 @@ require(['jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'jquery.local
 			});
 		});
 
+		$(document).localize().dprize();
 		showPage('welcome-page');
-		$(document).localize();
+
+		// Everything has been initialized, so let's show them the UI!
+		$( 'body' ).removeClass( 'hidden' );
+	}
+
+	l10n.init().done( function() {
+		prefs.init().done( init );
 	});
 });

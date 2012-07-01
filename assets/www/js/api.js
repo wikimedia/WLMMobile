@@ -1,6 +1,8 @@
 /*global define, FileTransfer, FileUploadOptions, console, $*/
 /*jslint sloppy: true, white:true, maxerr: 50, indent: 4, plusplus: true, vars:true */
 define(['jquery'], function() {
+	var TIMEOUT = 15 * 1000; // Default timeout value
+
 	function Api(url) {
 		this.url = url;
 	}
@@ -12,7 +14,8 @@ define(['jquery'], function() {
 			url: this.url,
 			data: params,
 			dataType: 'json',
-			type: method
+			type: method,
+			timeout: TIMEOUT
 		});
 	};
 

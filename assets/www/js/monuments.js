@@ -2,6 +2,7 @@ define(['jquery'], function($) {
 	function stripWikiText(str) {
 		str = str.replace(/\[\[[^\|]+\|([^\]]+)\]\]/g, '$1');
 		str = str.replace(/\[\[([^\]]+)\]\]/g, '$1');
+		str = str.replace(/\{\{([^\]]+)\}\}/g, '');
 		return str;
 	}
 
@@ -24,11 +25,10 @@ define(['jquery'], function($) {
 				// Pick up only the last line of the response
 				// This ignores all the PHP errors and warnings spouted by the API
 				// FIXME: Fix the errors and warnings in the server of the API
-				console.log(text);
 				var split = text.split("\n");
 				var data = JSON.parse(split[split.length -1]);
 				var monuments = [];
-				$.each(data.monuments, function(i, monument) {
+				$.each(data.monuments || [], function(i, monument) {
 					monuments.push(new Monument(monument, that.mwApi));
 				});
 				return monuments;
@@ -42,6 +42,15 @@ define(['jquery'], function($) {
 			action: 'search',
 			srcountry: country
 		});
+	};
+
+	MonumentsApi.prototype.filterByNameForCountry = function( country, str ) {
+		var d = $.Deferred();
+		return this.request( {
+			action: 'search',
+			srcountry: country,
+			srname: '~' + str + '*'
+		} );
 	};
 
 	MonumentsApi.prototype.getInBoundingBox = function(minLon, minLat, maxLon, maxLat) {

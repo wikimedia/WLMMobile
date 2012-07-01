@@ -1,13 +1,27 @@
 /* Resets */
+/* apply a natural box layout model to all elements */
+* {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
 body {
 	font-family: "Roboto", "Droid Sans", "Helvetica";
 	padding: 0;
 	margin: 0;
+	background-color: #F2F2F2;
+	color: #222;
 }
 
 a {
 	text-decoration: none;
 	color: inherit;
+}
+
+input {
+	/* see: http://stackoverflow.com/questions/9005550/input-elements-on-android-4-x-can-not-be-styled-when-focused */
+	-webkit-user-modify: read-write-plaintext-only;
 }
 
 /* General utility styles */
@@ -20,41 +34,50 @@ a {
 	display: none;
 }
 
+header.actionbar.hidden {
+	/* Because actionbars have display: box which seems to override this none */
+	display: none !important;
+}
+
 /* Generic page layout styles */
 
 .page header.actionbar {
 	position: fixed;
 	height: 48px;
 	width: 100%;
-	background-color: #eee;
+	background-color: #fff;
 	display: -webkit-box;
 	-webkit-box-align: center;
 	z-index: 200;
-	padding: 2px 5px;
+	padding: 4px 5px;
 }
 
 .page header.tabbar {
 	position: fixed;
-	height: 16px;
-	top: 52px;
+	height: 48px;
+	top: 48px;
 	width: 100%;
-	background-color: #ccc;
+	background-color: #E0E0E0;
 	display: -webkit-box;
 	-webkit-box-align: center;
 	z-index: 200;
 	text-transform: uppercase;
+	font-variant: Bold;
 }
 
 .page header.tabbar a {
 	font-size: 12px;
+	height: 48px;
+	line-height: 48px;
 	text-align: center;
 	display: block;
 	padding: 2px 0px;
 	-webkit-box-flex: 1;
+	border-right: #D1D1D1 1px solid;
 }
 
 .page header.tabbar a.active {
-	background-color: #eee;
+	border-bottom: #8F0000 4px solid;
 }
 
 .page header h2 {
@@ -63,25 +86,34 @@ a {
 	-webkit-box-flex: 1;
 }
 
-.page .content {
-	position: absolute;
-	top: 68px;
-	bottom: 0px;
-	left: 0px;
-	right: 0px;
-	font-size: 14px;
-	padding: 5px 10px;
+.page header h2 select {
+	border-bottom: 2px #D1D1D1 solid;
+	border-right: 2px #d1d1d1 solid;
 }
 
+.page .content {
+	position: absolute;
+	top: 48px;
+	left: 0px;
+	right: 0px;
+	font-size: 18px;
+	padding: 5px 10px;
+	background-color: #F2F2F2;
+}
+
+.page.has-tabbar .content {
+	top: 96px;
+}
 
 /* Generic look and feel styles */
 
 .content h3 {
-	color: #888;
-	border-bottom: 4px #eee solid;
-	padding-left: 5px;
+	color: #8F0000;
+	border-bottom: 1px #8F0000 solid;
 	text-align: left;
-	font-size: 16px;
+	font-size: 14px;
+	font-weight: bold;
+	text-transform: uppercase;
 }
 
 ul {
@@ -90,7 +122,7 @@ ul {
 }
 
 li {
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid #d1d1d1;
 	width: 100%;
 	list-style: none;
 }
@@ -98,6 +130,34 @@ li {
 li a {
 	display: block;
 	padding: 10px 5px;
+}
+
+button {
+	background-color: #8F0000;
+	color: #fff;
+	padding: 10px;
+	width: 100%;
+	font-size: 18px;
+	border: 0px;
+}
+
+input[type='text'] {
+	-webkit-appearance: none;
+	appearance: none;
+	border: 0px;
+	border-bottom: 1px solid #ccc;
+}
+
+select {
+	-webkit-appearance: none;
+	appearance: none;
+	border: 0px;
+}
+
+/* Search styles */
+
+header h2 input[type='text'] {
+	width: 100%;
 }
 
 /* Popup dialogs styles */
@@ -152,7 +212,7 @@ header .back {
 	min-height: 64px;
 	position: relative;
 	padding: 5px;
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid #d1d1d1;
 	display: -webkit-box;
 	width: 100%;
 }
@@ -175,6 +235,10 @@ header .back {
 
 /* Maps styles */
 
+#map {
+	bottom: 0px;
+}
+
 .leaflet-marker-pane,
 .leaflet-shadow-pane,
 .leaflet-overlay-pane {
@@ -189,7 +253,7 @@ header .back {
 }
 
 #monument-detail .monument-sub-details {
-	border-top: 1px solid #eee;
+	border-top: 1px solid #d1d1d1;
 	margin-top: 5px;
 	padding-top: 10px;
 	font-size: 12px;
@@ -220,18 +284,18 @@ header .back {
 
 #login-page input[type='text'], 
 #login-page input[type='password'] {
-	width: 90%;
+	width: 100%;
 	padding: 10px;
 	margin: 5px;
-	font-size: 14px;
-	-webkit-appearance: none;
-	border: 0px;
-	border-bottom: 1px solid #ccc;
 }
 
 #login-page #login {
 	float: right;
 	padding: 5px;
+}
+
+#login-status {
+	margin-top: 100px;
 }
 
 /* Upload confirmation specific CSS */

@@ -81,7 +81,8 @@ define(['jquery', 'propertiesFileReader'], function($, propertiesFileReader) {
 		success(lang);
 	}
 
-	function initLanguages() {
+	function init() {
+		var d = $.Deferred();
 		// Always load english as a fallback
 		var langs = ['en'],
 			lang = 'en'; // may be eg "en-us" or "zh-tw" // @fixme de-hardcode
@@ -109,11 +110,11 @@ define(['jquery', 'propertiesFileReader'], function($, propertiesFileReader) {
 					step();
 				});
 			} else {
-				console.log('triggering mw-messages-ready');
-				$(document).trigger('mw-messages-ready');
+				d.resolve();
 			}
 		};
 		step();
+		return d.promise();
 	}
 
 	function isLangRTL(lang) {
@@ -121,7 +122,7 @@ define(['jquery', 'propertiesFileReader'], function($, propertiesFileReader) {
 		return $.inArray(lang, rtl_langs) !== -1;
 	}
 	return {
-		initLanguages: initLanguages,
+		init: init,
 		navigatorLang: navigatorLang,
 		normalizeLanguageCode: normalizeLanguageCode,
 		isLangRTL: isLangRTL

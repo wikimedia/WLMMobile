@@ -14,7 +14,7 @@
 	<link rel="stylesheet" href="app.css" type="text/css" />
 	<link rel="stylesheet" href="leaflet/leaflet.css" type="text/css" />
   </head>
-  <body>
+  <body class='hidden'>
 	<script type="text/html" id="country-list-template">
 		<% _.each(countries, function(name, code) { %>
 			<li>
@@ -69,11 +69,11 @@
 
 	<div class="page" id="welcome-page">
 		<header class='actionbar'>
-			<img src="images/icon-small.png" />
+			<img src="images/{{DPR}}/wlm-logo-cropped.png" />
 			<h2><msg key="welcome-title"></msg></h2>
 		</header>
 		<div class="content">
-			<div class='center'><img src="images/pin.png" /></div>
+			<div class='center'><img src="images/{{DPR}}/intro-location-icon.png" /></div>
 			<h3><msg key="welcome-intro"></msg></h3>
 			<p><msg key="welcome-start"></msg></p>
 			<div class='center'>
@@ -87,20 +87,31 @@
 	<div class="page" id="country-page">
 		<header class='actionbar'>
 			<a class='back page-link' data-page="welcome-page" href="#"> </a>
-			<h2><msg key="placeholder">Placeholder</msg></h2>
+			<h2><input type="text" id="filter-campaign" placeholde="Search" /></h2>
 		</header>
 		<div class="content">
+			<h3><msg key='choose-campaign' /></h3>
 			<ul id="country-list"></ul>
 		</div>
 	</div>
 
-	<div class="page" id="results-page">
+	<div class="page has-tabbar" id="results-page">
 		<header class='actionbar'>
 			<a class='back page-link' data-page="country-page" href="#"> </a>
-			<h2><msg key="choose-country"></msg></h2>
-			<a id='toggle-result-view'><img src='images/placeholder-32x32.png' /></a>
-			<a class='page-link' data-page='country-page'><img src='images/placeholder-32x32.png' /></a>
-			<a class='page-link' data-page='settings-page'><img src='images/placeholder-32x32.png' /></a>
+			<h2>
+				<select id="toggle-result-view">
+					<!-- FIXME: Find why jquery.localize doesn't seem to hit <option> tags -->
+					<option value="list-view">List View</option>
+					<option value="map-view">Map View</option>
+				</select>
+			</h2>
+			<a class="show-search"><img src='images/{{DPR}}/2-action-search.png' /></a>
+			<a class='page-link' data-page='country-page'><img src='images/{{DPR}}/7-location-place.png' /></a>
+			<a class='page-link' data-page='settings-page'><img src='images/{{DPR}}/2-action-settings.png' /></a>
+		</header>
+		<header class='actionbar hidden searchbar'>
+			<a class='cancel-search back'  href="#"> </a>
+			<h2><input type="text" id="filter-monuments" placeholde="Search" /></h2>
 		</header>
 		<header class="tabbar">
 			<a href="#" class='active'><msg key='tabbar-monuments' /></a>
@@ -113,12 +124,12 @@
 		</div>
 	</div>
 
-	<div class="page" id="uploads-page">
+	<div class="page has-tabbar" id="uploads-page">
 		<header class='actionbar'>
 			<a class='back page-link' data-page="country-page" href="#"></a>
 			<h2><msg key="tabbar-uploads"></msg></h2>
-			<a class='page-link' data-page='country-page'><img src='images/placeholder-32x32.png' /></a>
-			<a class='page-link' data-page='settings-page'><img src='images/placeholder-32x32.png' /></a>
+			<a class='page-link' data-page='country-page'><img src='images/{{DPR}}/7-location-place.png' /></a>
+			<a class='page-link' data-page='settings-page'><img src='images/{{DPR}}/2-action-settings.png' /></a>
 		</header>
 		<header class="tabbar">
 			<a href="#" class='page-link' data-page='results-page'><msg key='tabbar-monuments' /></a>
@@ -133,7 +144,9 @@
 		<header class="actionbar">
 			<a class='back page-link' data-page="results-page" href="#"> </a>
 			<h2><msg key="detail-title"></msg></h2>
-			<a class='page-link' data-login='required' data-page="upload-page"><img src='images/placeholder-32x32.png' /></a>
+			<a class='page-link' data-login='required' data-page="upload-page">
+				<img src='images/{{DPR}}/5-content-new-picture.png' />
+			</a>
 		</header>
 		<div class='content' id="monument-detail">
 		</div>
@@ -155,7 +168,13 @@
 				<li>
 					<input type='submit' id="login" value="Login" />
 				</li>
-			</li>
+			</ul>
+			<div class="center hidden" id="login-status">
+				<img id="login-status-spinner" src="images/{{DPR}}/loader.gif" />
+				<div id="login-status-message">
+				</div>
+			</div>
+
 		</div>
 	</div>
 
@@ -180,7 +199,7 @@
 					<h2><msg key='upload-progress-title' /></h2>
 				</header>
 				<div id="upload-progress-state" class="center">
-
+					<msg key="upload-progress-starting" />
 				</div>
 			</div>
 		</div>
