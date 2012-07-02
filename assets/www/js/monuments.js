@@ -82,11 +82,13 @@ define(['jquery'], function($) {
 
 	Monument.prototype.requestThumbnail = function(imageFetcher) {
 		var d = $.Deferred();
-		imageFetcher.request(this.image).done(function(imageinfo) {
-			d.resolve(imageinfo);
-		}).fail(function(err) {
-			d.reject.apply(d, arguments);
-		});
+		if( this.image ) {
+			imageFetcher.request( this.image ).done( function( imageinfo ) {
+				d.resolve( imageinfo );
+			} ).fail( function( err ) {
+				d.reject.apply( d, arguments );
+			} );
+		}
 		return d.promise();
 	};
 

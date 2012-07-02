@@ -157,11 +157,19 @@ define(['jquery'], function() {
 		this.height = height;
 	}
 
+	ImageFetcher.prototype.addDeferred = function( title, deferred ) {
+		this.deferreds[ title.replace(/ /g, '_') ] = deferred;
+	};
+
+	ImageFetcher.prototype.getDeferred = function( title ) {
+		return this.deferreds[ title.replace(/ /g, '_') ];
+	};
+
 	ImageFetcher.prototype.request = function(filename) {
 		var d = $.Deferred();
 		var title = 'File:' + filename;
 		this.titles.push(title);
-		this.deferreds[title] = d;
+		this.addDeferred( title, d );
 		return d.promise();
 	};
 
@@ -200,7 +208,12 @@ define(['jquery'], function() {
 				}
 				if(page.imageinfo) {
 					var imageinfo = page.imageinfo[0];
-					that.deferreds[title].resolve(imageinfo);
+					deferred = that.getDeferred( title );
+					if( deferred ) {
+						deferred.resolve( imageinfo );
+					} else {
+						console.log( 'Failed to locate deferred image with title ' + title );
+					}
 				}
 			});
 		});
