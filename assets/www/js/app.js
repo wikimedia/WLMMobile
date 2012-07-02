@@ -231,9 +231,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			var password = $( "#login-pass" ).val();
 			authenticate( username, password );
 		});
-		$("#login-page .back").unbind('click').click(function() {
-			showPage(prevPage);
-		});
 		showPage("login-page");
 	}
 
@@ -305,7 +302,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			return false;
 		});
 		
-		$( '.popup-container-container .back' ).click( function() {
+		$( 'button.back' ).click( function() {
 			goBack();
 		} );
 
