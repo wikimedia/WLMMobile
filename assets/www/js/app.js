@@ -153,6 +153,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		$("#upload-confirm").html(uploadConfirmTemplate({monument: curMonument, fileUrl: fileUrl})).localize();
 		$("#confirm-license-text").html(mw.msg('confirm-license-text', api.userName));
 		$("#continue-upload").click(function() {
+			// reset status message for any previous uploads
+			$( '#upload-progress-state' ).html(mw.msg( 'upload-progress-starting' ));
 			showPage("upload-progress-page");
 			api.startUpload(fileUrl, fileName, 'Uploaded via WLM Mobile App', 'Testing WLM').done(function(fileKey) {
 				$("#upload-progress-state").html(mw.msg("upload-progress-in-progress"));
