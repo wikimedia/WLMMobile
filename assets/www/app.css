@@ -191,6 +191,13 @@ header h2 input[type='text'] {
 	text-transform: Uppercase;
 	color: #999;
 }
+
+.popup button.close {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
 /* Generic interaction items styles */
 
 header .back {
