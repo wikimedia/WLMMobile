@@ -95,18 +95,24 @@ define(['jquery'], function() {
 				token: token,
 				format: 'json'
 			};
+			options.params.progress = true;
 
 			var ft = new FileTransfer();
 			ft.upload(sourceUri, that.url, function(r) {
-				// success
-				console.log("Code = " + r.responseCode);
-				console.log("Response = " + r.response);
-				console.log("Sent = " + r.bytesSent);
-				var data = JSON.parse(r.response);
-				if (data.upload.result === 'Success') {
-					d.resolve(data.upload.filekey);
+				if (r.responseCode > 0) {
+					// success
+					console.log("Code = " + r.responseCode);
+					console.log("Response = " + r.response);
+					console.log("Sent = " + r.bytesSent);
+					var data = JSON.parse(r.response);
+					if (data.upload.result === 'Success') {
+						d.resolve(data.upload.filekey);
+					} else {
+						d.reject(data);
+					}
 				} else {
-					d.reject(data);
+					// progress
+					console.log("Sent so far = " + r.bytesSent);
 				}
 			}, function(error) {
 				console.log("upload error source " + error.source);
