@@ -10,13 +10,21 @@ define(['jquery'], function() {
 	Api.prototype.request = function(method, params) {
 		// Force JSON
 		params.format = 'json';
-		return $.ajax({
+		this.lastRequest = $.ajax({
 			url: this.url,
 			data: params,
 			dataType: 'json',
 			type: method,
 			timeout: TIMEOUT
 		});
+		return this.lastRequest;
+	};
+	
+	Api.prototype.cancel = function() {
+		if( this.lastRequest ) {
+			console.log( 'cancelling the last request' );
+			this.lastRequest.abort();
+		}
 	};
 
 	Api.prototype.login = function(username, password) {

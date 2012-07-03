@@ -369,6 +369,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		$(document).localize().dprize();
 		showPage('welcome-page');
 
+		// allow cancellation of current api upload request
+		$( '#upload-progress-page .back' ).click( function() {
+			console.log( 'request to cancel upload' );
+			api.cancel();
+		});
+		
 		// Everything has been initialized, so let's show them the UI!
 		$( 'body' ).removeClass( 'hidden' );
 	}
