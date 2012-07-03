@@ -14,6 +14,13 @@ body {
 	color: #222;
 }
 
+.loading .content {
+	background-image: url(images/2/loader.gif); /* TODO: respect DPR */
+	background-position: center center;
+	background-repeat: no-repeat;
+	min-height: 50px;
+}
+
 a {
 	text-decoration: none;
 	color: inherit;
