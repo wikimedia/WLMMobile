@@ -70,7 +70,26 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 	var curPageName = null;
 	var curMonument = null; // Used to store state for take photo, etc
 
+	var pageHistory = []; // TODO: retain history
+	function addToHistory( page ) {
+		if( pageHistory[ pageHistory.length - 1 ] !== page ) { // avoid adding the same page twice
+			pageHistory.push( page );
+		}
+	}
+	
+	function goBack() {
+		var pageName;
+		if( pageHistory.length > 1 ) {
+			pageName = pageHistory.pop(); // this is the current page
+			pageName = pageHistory.pop(); // this is the previous page
+			showPage( pageName );
+		} else {
+			console.log( 'app.js / goBack: nothing to go back to' );
+		}
+	}
+
 	function showPage(pageName) {
+		addToHistory( pageName );
 		var $page = $("#" + pageName); 
 		if(!$page.hasClass('popup-container-container')) {
 			$('.page, .popup-container-container').hide();
@@ -218,9 +237,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			var password = $( "#login-pass" ).val();
 			authenticate( username, password );
 		});
-		$("#login-page .back").unbind('click').click(function() {
-			showPage(prevPage);
-		});
 		showPage("login-page");
 	}
 
@@ -291,6 +307,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			}
 			return false;
 		});
+		
+		$( 'button.back' ).click( function() {
+			goBack();
+		} );
 
 		$('#countries').click(function() {
 			showPage('country-page');
