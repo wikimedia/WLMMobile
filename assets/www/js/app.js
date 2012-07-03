@@ -91,8 +91,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 	function showPage(pageName) {
 		addToHistory( pageName );
 		var $page = $("#" + pageName); 
+		$('.page, .popup-container-container').hide(); // hide existing popups
 		if(!$page.hasClass('popup-container-container')) {
-			$('.page, .popup-container-container').hide();
 			curPageName = pageName;
 		}
 		$page.show();
@@ -168,6 +168,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		});
 	}
 
+	function displayError( heading, text ) {
+		showPage( 'error-page' );
+		$( '#error-page textarea' ).val( heading + ':\n' + text );
+	}
 
 	function showPhotoConfirmation(fileUrl) {
 		var uploadConfirmTemplate = templates.getTemplate('upload-confirm-template');
@@ -188,7 +192,16 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 						showPage('detail-page');
 					}, 2 * 1000);
 				});
-			});
+			}).fail( function( data ) {
+				var code, info;
+				if( data.error ) {
+					code = data.error.code;
+					info = data.error.info;
+				}
+				$( '#upload-progress-state' ).html( mw.msg( 'upload-progress-failed' ) );
+				displayError( code, info );
+				console.log( 'Upload failed: ' + code );
+			} );
 		});
 		showPage('upload-confirm-page');
 	}
