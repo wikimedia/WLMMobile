@@ -206,6 +206,13 @@ header .back {
 #welcome-page .content {
 }
 
+/* Spinner styles */
+#spinner-page .popup {
+	background-image: url(images/2/loader.gif); /* TODO: respect DPR */
+	background-position: right center;
+	background-repeat: no-repeat;
+}
+
 /* Monuments list styles */
 
 .monuments-list li {
