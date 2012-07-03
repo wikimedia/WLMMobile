@@ -97,6 +97,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		$("#results").empty();
 		var monumentTemplate = templates.getTemplate('monument-list-item-template');	
 		var listThumbFetcher = commonsApi.getImageFetcher(64, 64);
+		if( monuments.length === 0 ) {
+			$( templates.getTemplate( 'monument-list-empty-template' )() ).
+				localize().appendTo( '#results' );
+		}
 		$.each(monuments, function(i, monument) {
 			var $monumentItem = $(monumentTemplate({monument: monument}));
 			monument.requestThumbnail(listThumbFetcher).done(function(imageinfo) {
