@@ -33,6 +33,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		fileSize: null,
 		title: null
 	};
+	var currentSortMethod = 'name';
 	var userLocation; // for keeping track of the user
 	var countries = {
 		'ad': 'Andorra',
@@ -146,20 +147,39 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		if( monuments.length === 0 ) {
 			$( templates.getTemplate( 'monument-list-empty-template' )() ).
 				localize().appendTo( '#results' );
+		} else {
+			$( templates.getTemplate( 'monument-list-heading' )() ).localize().appendTo( '#results' );
+			$( '#results button' ).click( function() {
+				currentSortMethod = $( this ).data( 'sortby' );
+				showMonumentsList( monuments );
+			});
 		}
-		$.each(monuments, function(i, monument) {
+
+		// update distances
+		if( userLocation ) {
+			// TODO: only do this if location has changed recently
+			$.each( monuments, function() {
+				this.distance = calculateDistance( 
+					userLocation.coords,
+					{ latitude: this.lat, longitude: this.lon }
+				).toFixed( 1 ); // distance fixed to 1 decimal place
+			} );
+		}
+
+		function sortAlgorithm( m1, m2 ) {
+			return m1[ currentSortMethod ] < m2[ currentSortMethod ] ? -1 : 1;
+		}
+
+		$.each( monuments.sort( sortAlgorithm ), function( i, monument ) {
 			var distance, msg;
 			var $monumentItem = $(monumentTemplate({monument: monument}));
 			monument.requestThumbnail(listThumbFetcher).done(function(imageinfo) {
 				$monumentItem.find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
 			});
-			if( userLocation ) {
-				distance = calculateDistance( 
-					userLocation.coords,
-					{ latitude: monument.lat, longitude: monument.lon }
-				).toFixed( 1 ); // distance fixed to 1 decimal place
+			
+			if( monument.distance ) {
 				$( '<div class="distance" />' ).
-					text( mw.msg( 'monument-distance-km', distance ) ).appendTo( $( 'a', $monumentItem ) );
+					text( mw.msg( 'monument-distance-km', this.distance ) ).appendTo( $( 'a', $monumentItem ) );
 			}
 			$monumentItem.appendTo('#results').click(function() {
 				showMonumentDetail(monument);
@@ -391,6 +411,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		$('#nearby').click(function() {
 			navigator.geolocation.getCurrentPosition(function(pos) {
 				userLocation = pos;
+				$( 'html' ).addClass( 'locationAvailable' );
 				monuments.getInBoundingBox(pos.coords.longitude - nearbyDeg,
 					pos.coords.latitude - nearbyDeg,
 					pos.coords.longitude + nearbyDeg,
