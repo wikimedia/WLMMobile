@@ -33,6 +33,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		fileSize: null,
 		title: null
 	};
+	var userLocation; // for keeping track of the user
 	var countries = {
 		'ad': 'Andorra',
 		'at': 'Austria',
@@ -354,6 +355,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 
 		$('#nearby').click(function() {
 			navigator.geolocation.getCurrentPosition(function(pos) {
+				userLocation = pos;
 				monuments.getInBoundingBox(pos.coords.longitude - nearbyDeg,
 					pos.coords.latitude - nearbyDeg,
 					pos.coords.longitude + nearbyDeg,
