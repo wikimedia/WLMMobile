@@ -240,6 +240,12 @@ header .back {
 	color: #999;
 }
 
+.monuments-list .distance {
+	color: #B0B0B0;
+	font-size: 0.7em;
+	font-weight: bold;
+}
+
 /* Maps styles */
 
 #map {

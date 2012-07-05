@@ -113,6 +113,32 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		showPage('detail-page');
 	}
 
+	// haversine formula ( http://en.wikipedia.org/wiki/Haversine_formula )
+	function calculateDistance( from, to ) {
+		var distance, a,
+			toRadians = Math.PI / 180,
+			deltaLat, deltaLng,
+			startLat, endLat,
+			haversinLat, haversinLng,
+			radius = 6378; // radius of Earth in km
+
+		if( from.latitude === to.latitude && from.longitude === to.longitude ) {
+			distance = 0;
+		} else {
+			deltaLat = ( to.longitude - from.longitude ) * toRadians;
+			deltaLng = ( to.latitude - from.latitude ) * toRadians;
+			startLat = from.latitude * toRadians;
+			endLat = to.latitude * toRadians;
+
+			haversinLat = Math.sin( deltaLat / 2 ) * Math.sin( deltaLat / 2 );
+			haversinLng = Math.sin( deltaLng / 2 ) * Math.sin( deltaLng / 2 );
+
+			a = haversinLat + Math.cos( startLat ) * Math.cos( endLat ) * haversinLng;
+			return 2 * radius * Math.asin( Math.sqrt( a ) );
+		}
+		return distance;
+	}
+
 	function showMonumentsList(monuments) {
 		$("#results").empty();
 		var monumentTemplate = templates.getTemplate('monument-list-item-template');	
@@ -122,10 +148,19 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				localize().appendTo( '#results' );
 		}
 		$.each(monuments, function(i, monument) {
+			var distance, msg;
 			var $monumentItem = $(monumentTemplate({monument: monument}));
 			monument.requestThumbnail(listThumbFetcher).done(function(imageinfo) {
 				$monumentItem.find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
 			});
+			if( userLocation ) {
+				distance = calculateDistance( 
+					userLocation.coords,
+					{ latitude: monument.lat, longitude: monument.lon }
+				).toFixed( 1 ); // distance fixed to 1 decimal place
+				$( '<div class="distance" />' ).
+					text( mw.msg( 'monument-distance-km', distance ) ).appendTo( $( 'a', $monumentItem ) );
+			}
 			$monumentItem.appendTo('#results').click(function() {
 				showMonumentDetail(monument);
 			});
