@@ -224,6 +224,19 @@ header .back {
 	width: 100%;
 }
 
+.monuments-list li button {
+	width: auto;
+	font-size: 0.7em;
+}
+
+button.requires-location {
+	display: none;
+}
+
+.locationAvailable button.requires-location {
+	display: inline-block;
+}
+
 .monuments-list .monument-detail {
 	-webkit-box-flex: 1;
 	display: box;
@@ -238,6 +251,12 @@ header .back {
 
 .monuments-list .monument-address {
 	color: #999;
+}
+
+.monuments-list .distance {
+	color: #B0B0B0;
+	font-size: 0.7em;
+	font-weight: bold;
 }
 
 /* Maps styles */

@@ -33,6 +33,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		fileSize: null,
 		title: null
 	};
+	var currentSortMethod = 'name';
+	var userLocation; // for keeping track of the user
 	var countries = {
 		'ad': 'Andorra',
 		'at': 'Austria',
@@ -112,6 +114,32 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		showPage('detail-page');
 	}
 
+	// haversine formula ( http://en.wikipedia.org/wiki/Haversine_formula )
+	function calculateDistance( from, to ) {
+		var distance, a,
+			toRadians = Math.PI / 180,
+			deltaLat, deltaLng,
+			startLat, endLat,
+			haversinLat, haversinLng,
+			radius = 6378; // radius of Earth in km
+
+		if( from.latitude === to.latitude && from.longitude === to.longitude ) {
+			distance = 0;
+		} else {
+			deltaLat = ( to.longitude - from.longitude ) * toRadians;
+			deltaLng = ( to.latitude - from.latitude ) * toRadians;
+			startLat = from.latitude * toRadians;
+			endLat = to.latitude * toRadians;
+
+			haversinLat = Math.sin( deltaLat / 2 ) * Math.sin( deltaLat / 2 );
+			haversinLng = Math.sin( deltaLng / 2 ) * Math.sin( deltaLng / 2 );
+
+			a = haversinLat + Math.cos( startLat ) * Math.cos( endLat ) * haversinLng;
+			return 2 * radius * Math.asin( Math.sqrt( a ) );
+		}
+		return distance;
+	}
+
 	function showMonumentsList(monuments) {
 		$("#results").empty();
 		var monumentTemplate = templates.getTemplate('monument-list-item-template');	
@@ -119,12 +147,40 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		if( monuments.length === 0 ) {
 			$( templates.getTemplate( 'monument-list-empty-template' )() ).
 				localize().appendTo( '#results' );
+		} else {
+			$( templates.getTemplate( 'monument-list-heading' )() ).localize().appendTo( '#results' );
+			$( '#results button' ).click( function() {
+				currentSortMethod = $( this ).data( 'sortby' );
+				showMonumentsList( monuments );
+			});
 		}
-		$.each(monuments, function(i, monument) {
+
+		// update distances
+		if( userLocation ) {
+			// TODO: only do this if location has changed recently
+			$.each( monuments, function() {
+				this.distance = calculateDistance( 
+					userLocation.coords,
+					{ latitude: this.lat, longitude: this.lon }
+				).toFixed( 1 ); // distance fixed to 1 decimal place
+			} );
+		}
+
+		function sortAlgorithm( m1, m2 ) {
+			return m1[ currentSortMethod ] < m2[ currentSortMethod ] ? -1 : 1;
+		}
+
+		$.each( monuments.sort( sortAlgorithm ), function( i, monument ) {
+			var distance, msg;
 			var $monumentItem = $(monumentTemplate({monument: monument}));
 			monument.requestThumbnail(listThumbFetcher).done(function(imageinfo) {
 				$monumentItem.find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
 			});
+			
+			if( monument.distance ) {
+				$( '<div class="distance" />' ).
+					text( mw.msg( 'monument-distance-km', this.distance ) ).appendTo( $( 'a', $monumentItem ) );
+			}
 			$monumentItem.appendTo('#results').click(function() {
 				showMonumentDetail(monument);
 			});
@@ -353,7 +409,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		});
 
 		$('#nearby').click(function() {
+			showPage( 'locationlookup-page' );
 			navigator.geolocation.getCurrentPosition(function(pos) {
+				userLocation = pos;
+				$( 'html' ).addClass( 'locationAvailable' );
 				monuments.getInBoundingBox(pos.coords.longitude - nearbyDeg,
 					pos.coords.latitude - nearbyDeg,
 					pos.coords.longitude + nearbyDeg,
