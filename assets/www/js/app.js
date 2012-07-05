@@ -409,6 +409,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		});
 
 		$('#nearby').click(function() {
+			showPage( 'locationlookup-page' );
 			navigator.geolocation.getCurrentPosition(function(pos) {
 				userLocation = pos;
 				$( 'html' ).addClass( 'locationAvailable' );
