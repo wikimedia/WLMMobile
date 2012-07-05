@@ -70,10 +70,29 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 	var curPageName = null;
 	var curMonument = null; // Used to store state for take photo, etc
 
+	var pageHistory = []; // TODO: retain history
+	function addToHistory( page ) {
+		if( pageHistory[ pageHistory.length - 1 ] !== page ) { // avoid adding the same page twice
+			pageHistory.push( page );
+		}
+	}
+	
+	function goBack() {
+		var pageName;
+		if( pageHistory.length > 1 ) {
+			pageName = pageHistory.pop(); // this is the current page
+			pageName = pageHistory.pop(); // this is the previous page
+			showPage( pageName );
+		} else {
+			console.log( 'Nothing in pageHistory to go back to' );
+		}
+	}
+
 	function showPage( pageName, deferred ) {
+		addToHistory( pageName );
 		var $page = $("#" + pageName); 
+		$('.page, .popup-container-container').hide(); // hide existing popups
 		if(!$page.hasClass('popup-container-container')) {
-			$('.page, .popup-container-container').hide();
 			curPageName = pageName;
 		}
 		$page.show();
@@ -154,6 +173,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		});
 	}
 
+	function displayError( heading, text ) {
+		showPage( 'error-page' );
+		$( '#error-page textarea' ).val( heading + ':\n' + text );
+	}
 
 	function showPhotoConfirmation(fileUrl) {
 		var uploadConfirmTemplate = templates.getTemplate('upload-confirm-template');
@@ -174,7 +197,16 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 						showPage('detail-page');
 					}, 2 * 1000);
 				});
-			});
+			}).fail( function( data ) {
+				var code, info;
+				if( data.error ) {
+					code = data.error.code;
+					info = data.error.info;
+				}
+				$( '#upload-progress-state' ).html( mw.msg( 'upload-progress-failed' ) );
+				displayError( code, info );
+				console.log( 'Upload failed: ' + code );
+			} );
 		});
 		showPage('upload-confirm-page');
 	}
@@ -222,9 +254,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			var username = $( "#login-user" ).val().trim();
 			var password = $( "#login-pass" ).val();
 			authenticate( username, password );
-		});
-		$("#login-page .back").unbind('click').click(function() {
-			showPage(prevPage);
 		});
 		showPage("login-page");
 	}
@@ -300,6 +329,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			}
 			return false;
 		});
+		
+		$( 'button.back' ).click( function() {
+			goBack();
+		} );
 
 		$('#countries').click(function() {
 			showPage('country-page');
