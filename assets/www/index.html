@@ -22,6 +22,14 @@
 			</li>
 		<% }); %>
 	</script>
+	<script type="text/html" id="monument-list-heading">
+		<li class="header">
+			<msg key="monument-sortby-heading"></msg>
+			<button data-sortby="distance" class="requires-location"><msg key="monument-sortby-distance"></msg></button>
+			<button data-sortby="name"><msg key="monument-sortby-name"></msg></button>
+			<button data-sortby="address"><msg key="monument-sortby-address"></msg></button>
+		</li>
+	</script>
 	<script type="text/html" id="monument-list-item-template">
 		<li>
 			<a class='monument-detail' href="#">
@@ -97,6 +105,15 @@
 		<div class="content">
 			<h3><msg key='choose-campaign' /></h3>
 			<ul id="country-list"></ul>
+		</div>
+	</div>
+
+	<div class="page" id="locationlookup-page">
+		<header class='actionbar'>
+			<h2><msg key="geolocating-heading"></msg></h2>
+		</header>
+		<div class="content">
+			<msg key="geolocating-text"></msg>
 		</div>
 	</div>
 
