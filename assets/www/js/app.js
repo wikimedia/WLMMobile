@@ -233,7 +233,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 
 	function displayError( heading, text ) {
 		showPage( 'error-page' );
-		$( '#error-page textarea' ).val( heading + ':\n' + text );
+		$( '#error-msg' ).html( heading + ':<br>' + text );
 	}
 
 	function showPhotoConfirmation(fileUrl) {
@@ -328,8 +328,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 					fail( status );
 				}
 			}).fail( function( err, textStatus ) {
-				displayError( ms.msg( 'login-failed' ), textStatus );
 				$( "#login-status-message" ).html( '' );
+				displayError( mw.msg( 'login-failed' ), textStatus );
 				fail( textStatus );
 			}).always( function() {
 				$( "#login-status-spinner" ).hide();
