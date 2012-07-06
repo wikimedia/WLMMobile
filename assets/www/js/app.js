@@ -158,6 +158,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		} else {
 			$( templates.getTemplate( 'monument-list-heading' )() ).localize().appendTo( '#results' );
 			$( '#results button' ).click( function() {
+				$( '#results' ).empty();
 				currentSortMethod = $( this ).data( 'sortby' );
 				showMonumentsList( monuments );
 			});
