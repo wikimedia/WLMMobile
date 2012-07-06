@@ -277,6 +277,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		var prevPage = curPageName;
 
 		function authenticate( username, password ) {
+			$( "#login-user, #login-pass" ).attr( 'state', '' );
 			$( "#login-status" ).show();
 			$( "#login-page input" ).attr( 'disabled', true );
 			$( "#login-status-message" ).text( mw.msg( 'login-in-progress' ) );
@@ -298,34 +299,37 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 						case 'NoName': // lgname param not set
 						case 'Illegal': // an illegal username was provided
 						case 'NotExists': // username does not exist
-							errMsg = "There was something wrong with the username you entered. Please try again.";
+							errMsg = mw.msg( 'login-failed-username' );
+							$( "#login-user" ).attr( 'state', 'error' );
 							break;
 						case 'EmptyPass': // didn't set the lgpass param
 						case 'WrongPass': // password is incorrect
 						case 'WrongPluginPass': // auth plugin (not MW) rejected pw
-							errMsg = "There was something wrong with the password you provided. Please try again.";
+							errMsg = mw.msg( 'login-failed-password' );
+							$( "#login-pass" ).attr( 'state', 'error' );
 							break;
 						case 'CreateBlocked': // IP address blocked from account creation
 						case 'Blocked': // User is blocked
-							errMsg = "The user account you are attempting to use has been blocked. Please view http://en.wikipedia.org/wiki/Wikipedia:Blocking_policy for more info.";
+							errMsg = mw.msg( 'login-failed-blocked' );
 							break;
 						case 'Throttled': // Attempting to login too many times in a short time
-							errMsg = "You have attempted to log in too many times in a short period of time. Please wait a litlte while and try again.";
+							errMsg = mw.msg( 'login-failed-throttled' );
 							break;
 						case 'mustbeposted': // login module requires a 'post' request
 						case 'NeedToken': // login token/session cookie missing
-							errMsg = "There was an internal error. Please try again in a little while. If the problem persists, please contact us.";
+							errMsg = mw.msg( 'login-failed-internal' );
 							break;
 						default:
-							errMsg = "There was an error during your login attempt. Please try again.";
+							errMsg = mw.msg( 'login-failed-default' );
 							break;
 					}
-					//$( "#login-status-message" ).html( mw.msg( 'login-failed', status ) );
-					displayError( mw.msg( 'login-failed' ), errMsg );
+					$( "#login-status-message" ).html( '' );
+					displayError( mw.msg( 'login-failed'), errMsg );
 					fail( status );
 				}
 			}).fail( function( err, textStatus ) {
-				$( "#login-status-message" ).html( mw.msg( 'login-failed', textStatus ) );
+				displayError( ms.msg( 'login-failed' ), textStatus );
+				$( "#login-status-message" ).html( '' );
 				fail( textStatus );
 			}).always( function() {
 				$( "#login-status-spinner" ).hide();

@@ -331,6 +331,11 @@ button.requires-location {
 	margin-top: 100px;
 }
 
+#login-page input[state='error'] {
+	background-color: #FFFFE1;
+	border: 1px solid red;
+}
+
 /* Upload confirmation specific CSS */
 
 #upload-confirm-page img.preview-image {
