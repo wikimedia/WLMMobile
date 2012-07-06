@@ -389,7 +389,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			return false;
 		});
 		
-		$( 'button.back' ).click( function() {
+		$( 'button.back, a.back' ).click( function() {
 			goBack();
 		} );
 
