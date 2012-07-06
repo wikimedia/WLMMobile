@@ -234,7 +234,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 
 	function displayError( heading, text ) {
 		showPage( 'error-page' );
-		$( '#error-page textarea' ).val( heading + ':\n' + text );
+		var info = $( '.error-information' ).empty()[ 0 ];
+		$( '<h3 />' ).text( heading ).appendTo( info );
+		$( '<p />' ).text( text ).appendTo( info );
 	}
 
 	function showPhotoConfirmation(fileUrl) {
