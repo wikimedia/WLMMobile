@@ -425,6 +425,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			navigator.geolocation.getCurrentPosition(function(pos) {
 				$("#results").empty();
 				userLocation = pos;
+				currentSortMethod = 'distance';
 				$( 'html' ).addClass( 'locationAvailable' );
 				var d = monuments.getInBoundingBox(pos.coords.longitude - nearbyDeg,
 					pos.coords.latitude - nearbyDeg,
