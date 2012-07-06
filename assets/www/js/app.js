@@ -92,7 +92,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		}
 	}
 
-	function showPage(pageName) {
+	function showPage( pageName, deferred ) {
 		addToHistory( pageName );
 		var $page = $("#" + pageName); 
 		$('.page, .popup-container-container').hide(); // hide existing popups
@@ -100,6 +100,13 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			curPageName = pageName;
 		}
 		$page.show();
+		if( deferred ) {
+			$page.addClass( 'loading' );
+			// TODO: add fail e.g. warning triangle
+			deferred.done( function() {
+				$page.removeClass( 'loading' );
+			} );
+		}
 	}
 
 	function showMonumentDetail(monument) {
@@ -143,7 +150,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 	}
 
 	function showMonumentsList(monuments) {
-		$("#results").empty();
 		var monumentTemplate = templates.getTemplate('monument-list-item-template');	
 		var listThumbFetcher = commonsApi.getImageFetcher(64, 64);
 		if( monuments.length === 0 ) {
@@ -204,7 +210,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				$("#monuments-list").hide();
 			}
 		});
-		showPage('results-page');
 		$("#monuments-list").show();
 		geo.hideMap();
 	}
@@ -332,9 +337,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			var params = {
 				limit: 200
 			};
-			monuments.getForCountry( countryCode, params ).done( function( monuments ) {
+			$("#results").empty();
+			var d = monuments.getForCountry( countryCode, params ).done( function( monuments ) {
 				showMonumentsList(monuments);
 			});
+			showPage( 'results-page', d );
 		});
 
 		var monumentSearchTimeout = null;
@@ -353,11 +360,13 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			}
 
 			monumentSearchTimeout = window.setTimeout( function() {
+				$("#results").empty();
 				monumentSearchReq = monuments.filterByNameForCountry( countryCode, value ).done( function( monuments ) {
 					showMonumentsList( monuments );
 				} ).always( function() {
 					monumentSearchReq = null;
 				});
+				showPage( 'results-page', monumentSearchReq );
 				monumentSearchTimeout = null;
 			}, 500 );
 		});
@@ -413,9 +422,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		$('#nearby').click(function() {
 			showPage( 'locationlookup-page' );
 			navigator.geolocation.getCurrentPosition(function(pos) {
+				$("#results").empty();
 				userLocation = pos;
 				$( 'html' ).addClass( 'locationAvailable' );
-				monuments.getInBoundingBox(pos.coords.longitude - nearbyDeg,
+				var d = monuments.getInBoundingBox(pos.coords.longitude - nearbyDeg,
 					pos.coords.latitude - nearbyDeg,
 					pos.coords.longitude + nearbyDeg,
 					pos.coords.latitude + nearbyDeg
@@ -426,6 +436,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 						lon: pos.coords.longitude
 					}, 10);
 				});
+				showPage( 'results-page', d );
 			}, function(err) {
 				alert('Error in geolocation');
 			});
