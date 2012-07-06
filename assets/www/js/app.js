@@ -474,7 +474,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				});
 				showPage( 'results-page', d );
 			}, function(err) {
-				alert('Error in geolocation');
+				displayError( mw.msg( 'geolocating-failed-heading') , mw.msg( 'geolocating-failed-text' ) );
 			});
 		});
 
