@@ -233,7 +233,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 
 	function displayError( heading, text ) {
 		showPage( 'error-page' );
-		$( '#error-msg' ).html( heading + ':<br>' + text );
+		$( '#error-page textarea' ).val( heading + ':\n' + text );
 	}
 
 	function showPhotoConfirmation(fileUrl) {
@@ -277,7 +277,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		var prevPage = curPageName;
 
 		function authenticate( username, password ) {
-			$( "#login-user, #login-pass" ).attr( 'state', '' );
+			$( "#login-user, #login-pass" ).removeClass( 'error-input-field' );
 			$( "#login-status" ).show();
 			$( "#login-page input" ).attr( 'disabled', true );
 			$( "#login-status-message" ).text( mw.msg( 'login-in-progress' ) );
@@ -300,13 +300,13 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 						case 'Illegal': // an illegal username was provided
 						case 'NotExists': // username does not exist
 							errMsg = mw.msg( 'login-failed-username' );
-							$( "#login-user" ).attr( 'state', 'error' );
+							$( "#login-user" ).addClass( 'error-input-field' );
 							break;
 						case 'EmptyPass': // didn't set the lgpass param
 						case 'WrongPass': // password is incorrect
 						case 'WrongPluginPass': // auth plugin (not MW) rejected pw
 							errMsg = mw.msg( 'login-failed-password' );
-							$( "#login-pass" ).attr( 'state', 'error' );
+							$( "#login-pass" ).addClass( 'error-input-field' );
 							break;
 						case 'CreateBlocked': // IP address blocked from account creation
 						case 'Blocked': // User is blocked
@@ -323,12 +323,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 							errMsg = mw.msg( 'login-failed-default' );
 							break;
 					}
-					$( "#login-status-message" ).html( '' );
+					$( "#login-status-message" ).empty();
 					displayError( mw.msg( 'login-failed'), errMsg );
 					fail( status );
 				}
 			}).fail( function( err, textStatus ) {
-				$( "#login-status-message" ).html( '' );
+				$( "#login-status-message" ).empty();
 				displayError( mw.msg( 'login-failed' ), textStatus );
 				fail( textStatus );
 			}).always( function() {

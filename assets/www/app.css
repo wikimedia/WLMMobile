@@ -331,7 +331,7 @@ button.requires-location {
 	margin-top: 100px;
 }
 
-#login-page input[state='error'] {
+#login-page input.error-input-field {
 	background-color: #FFFFE1;
 	border: 1px solid red;
 }
