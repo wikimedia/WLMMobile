@@ -158,6 +158,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		} else {
 			$( templates.getTemplate( 'monument-list-heading' )() ).localize().appendTo( '#results' );
 			$( '#results button' ).click( function() {
+				$( '#results' ).empty();
 				currentSortMethod = $( this ).data( 'sortby' );
 				showMonumentsList( monuments );
 			});
@@ -422,7 +423,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			return false;
 		});
 		
-		$( 'button.back' ).click( function() {
+		$( 'button.back, a.back' ).click( function() {
 			goBack();
 		} );
 
@@ -458,6 +459,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			navigator.geolocation.getCurrentPosition(function(pos) {
 				$("#results").empty();
 				userLocation = pos;
+				currentSortMethod = 'distance';
 				$( 'html' ).addClass( 'locationAvailable' );
 				var d = monuments.getInBoundingBox(pos.coords.longitude - nearbyDeg,
 					pos.coords.latitude - nearbyDeg,
