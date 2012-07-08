@@ -88,7 +88,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			pageName = pageHistory.pop(); // this is the previous page
 			showPage( pageName );
 		} else {
-			console.log( 'Nothing in pageHistory to go back to' );
+			console.log( 'Nothing in pageHistory to go back to. Quitting :(' );
+			navigator.app.exitApp();
 		}
 	}
 
