@@ -19,7 +19,7 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preferences', 'jquery.localize', 'jquery.dpr' ],
+require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preferences', 'jquery.localize' ],
 	function( $, l10n, geo, Api, templates, MonumentsApi, prefs ) {
 
 	var api = new Api("https://test.wikipedia.org/w/api.php");
@@ -507,7 +507,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			});
 		});
 
-		$(document).localize().dprize();
+		$(document).localize();
 		showPage('welcome-page');
 
 		// allow cancellation of current api upload request
