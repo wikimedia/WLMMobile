@@ -423,6 +423,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			return false;
 		});
 		
+		// FIXME: Have a proper platform specific overrides file that
+		// does not have scope issues.
+		document.addEventListener("backbutton", goBack, false);
+
 		$( 'button.back, a.back' ).click( function() {
 			goBack();
 		} );
