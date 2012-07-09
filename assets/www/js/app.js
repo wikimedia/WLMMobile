@@ -76,7 +76,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 
 	var pageHistory = []; // TODO: retain history
 	function addToHistory( page ) {
-		if( pageHistory[ pageHistory.length - 1 ] !== page ) { // avoid adding the same page twice
+		var blacklist = [ 'locationlookup-page' ];
+		var blacklisted = blacklist.indexOf( page ) > -1;
+		if( !blacklisted &&
+			pageHistory[ pageHistory.length - 1 ] !== page ) { // avoid adding the same page twice
 			pageHistory.push( page );
 		}
 	}
@@ -234,7 +237,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 
 	function displayError( heading, text ) {
 		showPage( 'error-page' );
-		$( '#error-page textarea' ).val( heading + ':\n' + text );
+		var info = $( '.error-information' ).empty()[ 0 ];
+		$( '<h3 />' ).text( heading ).appendTo( info );
+		$( '<p />' ).text( text ).appendTo( info );
 	}
 
 	function showPhotoConfirmation(fileUrl) {
@@ -474,7 +479,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				});
 				showPage( 'results-page', d );
 			}, function(err) {
-				alert('Error in geolocation');
+				displayError( mw.msg( 'geolocating-failed-heading') , mw.msg( 'geolocating-failed-text' ) );
+			},{
+				timeout: 20000 // give up looking up location.. maybe they are in airplane mode
 			});
 		});
 
