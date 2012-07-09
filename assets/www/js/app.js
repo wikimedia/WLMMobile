@@ -19,7 +19,7 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preferences', 'jquery.localize', 'jquery.dpr' ],
+require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preferences', 'jquery.localize', 'jquery.dpr', 'campaigns-data' ],
 	function( $, l10n, geo, Api, templates, MonumentsApi, prefs ) {
 
 	var api = new Api("https://test.wikipedia.org/w/api.php");
@@ -35,41 +35,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 	};
 	var currentSortMethod = 'name';
 	var userLocation; // for keeping track of the user
-	var countries = [
-		{ code: 'ad', name: 'Andorra' },
-		{ code: 'at', name: 'Austria' },
-		{ code: 'be-bru', name: 'Belgium (Brussels)' },
-		{ code: 'be-vlg', name: 'Belgium (Flanders)' },
-		{ code: 'be-wal', name: 'Belgium (Wallonia)' },
-		{ code: 'by', name: 'Belarus' },
-		{ code: 'ch', name: 'Switzerland' },
-		{ code: 'de-by', name: 'Germany (Bavaria)' },
-		{ code: 'de-he', name: 'Germany (Hesse)' },
-		{ code: 'de-nrw-bm', name: 'Germany (nrw-bm)' },
-		{ code: 'de-nrw-k', name: 'Germany (nrw-k)' },
-		{ code: 'dk-bygning', name: 'Denmark (bygning)' },
-		{ code: 'dk-fortids', name: 'Denmark (fortids)' },
-		{ code: 'ee', name: 'Estonia' },
-		{ code: 'es', name: 'Spain' },
-		{ code: 'es-ct', name: 'Spain (Catalonia)' },
-		{ code: 'es-vc', name: 'Spain (Valencia)' },
-		{ code: 'fr', name: 'France' },
-		{ code: 'ie', name: 'Ireland' },
-		{ code: 'it-88', name: 'Italy (88)' },
-		{ code: 'it-bz', name: 'Italy (bz)' },
-		{ code: 'lu', name: 'Luxemburg' },
-		{ code: 'mt', name: 'Malta' },
-		{ code: 'nl', name: 'Netherlands' },
-		{ code: 'no', name: 'Norway' },
-		{ code: 'pl', name: 'Poland' },
-		{ code: 'pt', name: 'Portugal' },
-		{ code: 'ro', name: 'Romania' },
-		{ code: 'se', name: 'Sweden' },
-		{ code: 'sk', name: 'Slovakia' },
-		{ code: 'us', name: 'United States' }
-	].sort( function( a, b ) {
-		return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
-	} );
 
 	var curPageName = null;
 	var curMonument = null; // Used to store state for take photo, etc
@@ -371,7 +336,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 	function init() {
 		var timeout, name, countryCode;
 		var countriesListTemplate = templates.getTemplate('country-list-template');
-		$("#country-list").html(countriesListTemplate({countries: countries}));
+		$("#country-list").html(countriesListTemplate({countries: CAMPAIGNS}));
 		$("#country-list .country-search").click(function() {
 			countryCode = $(this).data('campaign');
 			var params = {
