@@ -15,7 +15,7 @@ body {
 }
 
 .loading .content {
-	background-image: url(images/2/loader.gif); /* TODO: respect DPR */
+	background-image: url(images/loader.gif);
 	background-position: center center;
 	background-repeat: no-repeat;
 	min-height: 50px;
@@ -57,6 +57,12 @@ header.actionbar.hidden {
 	-webkit-box-align: center;
 	z-index: 200;
 	padding: 4px 5px;
+}
+
+.page header.actionbar img {
+	height: 100%;
+	width: auto;
+	padding: 4px;
 }
 
 .page header.tabbar {
