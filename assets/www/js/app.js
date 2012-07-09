@@ -91,7 +91,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			pageName = pageHistory.pop(); // this is the previous page
 			showPage( pageName );
 		} else {
-			console.log( 'Nothing in pageHistory to go back to' );
+			console.log( 'Nothing in pageHistory to go back to. Quitting :(' );
+			navigator.app.exitApp();
 		}
 	}
 
@@ -428,6 +429,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			return false;
 		});
 		
+		// FIXME: Have a proper platform specific overrides file that
+		// does not have scope issues.
+		document.addEventListener("backbutton", goBack, false);
+
 		$( 'button.back, a.back' ).click( function() {
 			goBack();
 		} );
