@@ -1,9 +1,9 @@
 /*global define, L, mw, $, chrome*/
 /*jslint sloppy: true, white:true, maxerr: 50, indent: 4, plusplus: true, vars:true */
-define(['jquery', '../leaflet/leaflet-src'], function() {
+define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 
 	var map = null;
-	var markerGroup = null;
+	var clusterer = null;
 
 	function calculateCenterAndZoom(monuments) {
 		var center = {lat: 0, lon: 0},
@@ -109,8 +109,9 @@ define(['jquery', '../leaflet/leaflet-src'], function() {
 				event.preventDefault();
 			});
 
-			markerGroup = new L.LayerGroup();
-			map.addLayer(markerGroup);
+			// Since clusterer needs to have a default view setup
+			map.setView( new L.LatLng( 0, 0 ), 3 );
+			clusterer = new LeafClusterer(map);
 			setupPinchToZoom('map');
 		}
 	}
@@ -126,7 +127,7 @@ define(['jquery', '../leaflet/leaflet-src'], function() {
 	}
 
 	function clear() {
-		markerGroup.clearLayers();
+		clusterer.clearMarkers();
 	}
 
 	function addMonument(monument, onClick) {
@@ -136,7 +137,7 @@ define(['jquery', '../leaflet/leaflet-src'], function() {
 			onClick(monument);
 		})[0];
 		marker.bindPopup(popupDOM, {closeButton: false});
-		markerGroup.addLayer(marker);
+		clusterer.addMarker( marker );
 	}
 
 	function setCenterAndZoom(center, zoom) {
