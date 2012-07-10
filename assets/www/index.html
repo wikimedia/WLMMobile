@@ -16,11 +16,19 @@
   </head>
   <body class='hidden'>
 	<script type="text/html" id="country-list-template">
-		<% _.each(countries, function(name, code) { %>
+		<% _.each(countries, function( country ) { %>
 			<li>
-				<a class='country-search' data-campaign='<%= code %>' href="#"><%= name %></a>
+				<a class='country-search' data-campaign='<%= country.name %>' href="#"><%= country.desc %></a>
 			</li>
 		<% }); %>
+	</script>
+	<script type="text/html" id="monument-list-heading">
+		<li class="header">
+			<msg key="monument-sortby-heading"></msg>
+			<button data-sortby="distance" class="requires-location"><msg key="monument-sortby-distance"></msg></button>
+			<button data-sortby="name"><msg key="monument-sortby-name"></msg></button>
+			<button data-sortby="address"><msg key="monument-sortby-address"></msg></button>
+		</li>
 	</script>
 	<script type="text/html" id="monument-list-item-template">
 		<li>
@@ -74,11 +82,11 @@
 
 	<div class="page" id="welcome-page">
 		<header class='actionbar'>
-			<img src="images/{{DPR}}/wlm-logo-cropped.png" />
+			<img src="images/wlm-logo-cropped.png" />
 			<h2><msg key="welcome-title"></msg></h2>
 		</header>
 		<div class="content">
-			<div class='center'><img src="images/{{DPR}}/intro-location-icon.png" /></div>
+			<div class='center'><img src="images/intro-location-icon.png" height="128" /></div>
 			<h3><msg key="welcome-intro"></msg></h3>
 			<p><msg key="welcome-start"></msg></p>
 			<div class='center'>
@@ -91,7 +99,7 @@
 
 	<div class="page" id="country-page">
 		<header class='actionbar'>
-			<a class='back page-link' data-page="welcome-page" href="#"> </a>
+			<a class='back' data-page="welcome-page" href="#"> </a>
 			<h2><input type="text" id="filter-campaign" placeholde="Search" /></h2>
 		</header>
 		<div class="content">
@@ -100,9 +108,18 @@
 		</div>
 	</div>
 
+	<div class="page" id="locationlookup-page">
+		<header class='actionbar'>
+			<h2><msg key="geolocating-heading"></msg></h2>
+		</header>
+		<div class="content">
+			<msg key="geolocating-text"></msg>
+		</div>
+	</div>
+
 	<div class="page has-tabbar" id="results-page">
 		<header class='actionbar'>
-			<a class='back page-link' data-page="country-page" href="#"> </a>
+			<a class='back' href="#"> </a>
 			<h2>
 				<select id="toggle-result-view">
 					<!-- FIXME: Find why jquery.localize doesn't seem to hit <option> tags -->
@@ -110,9 +127,9 @@
 					<option value="map-view">Map View</option>
 				</select>
 			</h2>
-			<a class="show-search"><img src='images/{{DPR}}/2-action-search.png' /></a>
-			<a class='page-link' data-page='country-page'><img src='images/{{DPR}}/7-location-place.png' /></a>
-			<a class='page-link' data-page='settings-page'><img src='images/{{DPR}}/2-action-settings.png' /></a>
+			<a class="show-search"><img src='images/2-action-search.png' /></a>
+			<a class='page-link' data-page='country-page'><img src='images/7-location-place.png' /></a>
+			<a class='page-link' data-page='settings-page'><img src='images/2-action-settings.png' /></a>
 		</header>
 		<header class='actionbar hidden searchbar'>
 			<a class='cancel-search back'  href="#"> </a>
@@ -131,10 +148,10 @@
 
 	<div class="page has-tabbar" id="uploads-page">
 		<header class='actionbar'>
-			<a class='back page-link' data-page="country-page" href="#"></a>
+			<a class='back' href="#"></a>
 			<h2><msg key="tabbar-uploads"></msg></h2>
-			<a class='page-link' data-page='country-page'><img src='images/{{DPR}}/7-location-place.png' /></a>
-			<a class='page-link' data-page='settings-page'><img src='images/{{DPR}}/2-action-settings.png' /></a>
+			<a class='page-link' data-page='country-page'><img src='images/7-location-place.png' /></a>
+			<a class='page-link' data-page='settings-page'><img src='images/2-action-settings.png' /></a>
 		</header>
 		<header class="tabbar">
 			<a href="#" class='page-link' data-page='results-page'><msg key='tabbar-monuments' /></a>
@@ -147,10 +164,10 @@
 
 	<div class="page" id="detail-page">
 		<header class="actionbar">
-			<a class='back page-link' data-page="results-page" href="#"> </a>
+			<a class='back' href="#"> </a>
 			<h2><msg key="detail-title"></msg></h2>
 			<a class='page-link' data-login='required' data-page="upload-page">
-				<img src='images/{{DPR}}/5-content-new-picture.png' />
+				<img src='images/5-content-new-picture.png' />
 			</a>
 		</header>
 		<div class='content' id="monument-detail">
@@ -174,8 +191,9 @@
 					<input type='submit' id="login" value="Login" />
 				</li>
 			</ul>
+			<div id="login-create-account-msg"></div>
 			<div class="center hidden" id="login-status">
-				<img id="login-status-spinner" src="images/{{DPR}}/loader.gif" />
+				<img id="login-status-spinner" src="images/loader.gif" />
 				<div id="login-status-message">
 				</div>
 			</div>
@@ -198,6 +216,25 @@
 		</div>
 	</div>
 
+	<div class="popup-container-container" id="error-page">
+		<div class="popup-container">
+			<div class="popup">
+				<header>
+					<h2><msg key="failure-heading" /></h2>
+				</header>
+				<div class="content">
+					<p>
+						<msg key="failure-details">
+					</p>
+					<div class="error-information"></div>
+					<button class="back">
+						<msg key="popup-cancel"></msg>
+					</button>
+					</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="popup-container-container" id="upload-progress-page">
 		<div class="popup-container">
 			<div class="popup">
@@ -207,6 +244,7 @@
 				<div id="upload-progress-state" class="center">
 					<msg key="upload-progress-starting" />
 				</div>
+				<button class="back"><msg key="cancel-upload"></msg></button>
 			</div>
 		</div>
 	</div>

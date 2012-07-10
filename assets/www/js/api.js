@@ -10,13 +10,21 @@ define(['jquery'], function() {
 	Api.prototype.request = function(method, params) {
 		// Force JSON
 		params.format = 'json';
-		return $.ajax({
+		this.lastRequest = $.ajax({
 			url: this.url,
 			data: params,
 			dataType: 'json',
 			type: method,
 			timeout: TIMEOUT
 		});
+		return this.lastRequest;
+	};
+	
+	Api.prototype.cancel = function() {
+		if( this.lastRequest ) {
+			console.log( 'cancelling the last request' );
+			this.lastRequest.abort();
+		}
 	};
 
 	Api.prototype.login = function(username, password) {
@@ -110,7 +118,9 @@ define(['jquery'], function() {
 							console.log("Response = " + r.response);
 							console.log("Sent = " + r.bytesSent);
 							var data = JSON.parse(r.response);
-							if (data.upload.result === 'Success') {
+							if( data.error ) {
+								d.reject( data );
+							} else if ( data && data.upload && data.upload.result === 'Success' ) {
 								d.resolve(data.upload.filekey);
 							} else {
 								d.reject(data);
@@ -127,6 +137,7 @@ define(['jquery'], function() {
 					}, options);
 				}, function() {
 					// file lookup failure
+					alert("Couldn't look up file");
 				});
 			}, function() {
 				// fileEntry lookup fail
