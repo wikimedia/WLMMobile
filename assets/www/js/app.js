@@ -54,11 +54,15 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		if( pageHistory.length > 1 ) {
 			pageName = pageHistory.pop(); // this is the current page
 			pageName = pageHistory.pop(); // this is the previous page
+			if( pageName === 'login-page' && api.loggedIn ) {
+				pageName = pageHistory.pop(); // skip the login screen as user is logged in
+			}
 			showPage( pageName );
 		} else {
 			console.log( 'Nothing in pageHistory to go back to. Quitting :(' );
 			navigator.app.exitApp();
 		}
+		return pageName;
 	}
 
 	function showPage( pageName, deferred ) {
@@ -516,4 +520,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 	l10n.init().done( function() {
 		prefs.init().done( init );
 	});
+	window.WLMMobile = {
+		api : api,
+		app: {
+			goBack: goBack,
+			showPage: showPage
+		}
+	};
 });
