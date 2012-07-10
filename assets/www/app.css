@@ -242,6 +242,10 @@ header .back {
 	font-size: 0.7em;
 }
 
+.monuments-sorter li button.selected {
+	opacity: 0.4;
+}
+
 button.requires-location {
 	display: none;
 }

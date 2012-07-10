@@ -134,7 +134,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				window.setTimeout( function() { // use timeout for smoother experience
 					showMonumentsList( monuments );
 				}, 0 );
-			});
+			}).each( function() {
+				if( $( this ).data( 'sortby' ) === currentSortMethod ) {
+					$( this ).addClass( 'selected' );
+				}
+			} );
 		}
 
 		// update distances
