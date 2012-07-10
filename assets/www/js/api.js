@@ -42,11 +42,13 @@ define(['jquery'], function() {
 				lgpassword: password,
 				lgtoken: token
 			}).done(function(resultData) {
+				if( resultData && resultData.login && resultData.login.result === 'Success' ) {
+					that.loggedIn = true;
+				}
 				d.resolve(resultData.login.result);
 			}).fail(function(err) {
 				d.reject(err);
 			});
-			that.loggedIn = true;
 			that.userName = username;
 		}).fail(function(err) {
 			d.reject(err);
