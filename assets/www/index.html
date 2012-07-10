@@ -149,7 +149,13 @@
 	<div class="page has-tabbar" id="uploads-page">
 		<header class='actionbar'>
 			<a class='back' href="#"></a>
-			<h2><msg key="tabbar-uploads"></msg></h2>
+			<h2>
+				<select id="toggle-uploads-view">
+					<!-- FIXME: Find why jquery.localize doesn't seem to hit <option> tags -->
+					<option value="complete-view" selected>Completed</option>
+					<option value="incomplete-view">Incomplete</option>
+				</select>
+			</h2>
 			<a class='page-link' data-page='country-page'><img src='images/7-location-place.png' /></a>
 			<a class='page-link' data-page='settings-page'><img src='images/2-action-settings.png' /></a>
 		</header>
@@ -158,7 +164,8 @@
 			<a href="#" class='active'><msg key='tabbar-uploads' /></a>
 		</header>
 		<div class="content">
-			Placeholder for upload interface
+			<ul id="upload-list">
+			</ul>
 		</div>
 	</div>
 

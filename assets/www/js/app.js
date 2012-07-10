@@ -68,7 +68,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		if(!$page.hasClass('popup-container-container')) {
 			curPageName = pageName;
 		}
-		$page.show();
+		$page.show().trigger('showpage'); // call any on-showpage event handlers
 		if( deferred ) {
 			$page.addClass( 'loading' );
 			// TODO: add fail e.g. warning triangle
@@ -335,6 +335,23 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		});
 	}
 
+	function updateUploadsView() {
+		var view = $( '#toggle-uploads-view' ).val(),
+			$list = $( '#upload-list' ).empty();
+		
+		if( view == 'complete-view' ) {
+			$( '<li>' )
+				.text( mw.message( 'complete-none' ).plain() )
+				.appendTo( $list );
+		} else if( view == 'incomplete-view' ) {
+			$( '<li>' )
+				.text( mw.message( 'incomplete-none' ).plain() )
+				.appendTo( $list );
+		} else {
+			throw new Error('this should never happen. no view.')
+		}
+	}
+
 	function init() {
 		var timeout, name, countryCode;
 		var countriesListTemplate = templates.getTemplate('country-list-template');
@@ -483,6 +500,13 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				destinationType: Camera.DestinationType.FILE_URI,
 				sourceType: Camera.PictureSourceType.PHOTOLIBRARY
 			});
+		});
+
+		$('#uploads-page').bind('showpage', function() {
+			updateUploadsView();
+		});
+		$('#toggle-uploads-view').change(function() {
+			updateUploadsView();
 		});
 
 		$(document).localize();
