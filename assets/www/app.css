@@ -336,6 +336,11 @@ button.requires-location {
 	border: 1px solid red;
 }
 
+#login-page #login-create-account-msg a {
+	color: #666;
+	text-decoration: underline;
+}
+
 /* Upload confirmation specific CSS */
 
 #upload-confirm-page img.preview-image {

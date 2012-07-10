@@ -522,7 +522,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			console.log( 'request to cancel upload' );
 			api.cancel();
 		});
-		
+
+		// Display the translated account creation message this way since the
+		// HTML in the message can't be rendered via jquery.localize.js
+		$('#login-create-account-msg').html( mw.msg( 'login-create-account' ) );
+
 		// Everything has been initialized, so let's show them the UI!
 		$( 'body' ).removeClass( 'hidden' );
 	}
