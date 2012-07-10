@@ -125,12 +125,20 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			$( templates.getTemplate( 'monument-list-empty-template' )() ).
 				localize().appendTo( '#results' );
 		} else {
-			$( templates.getTemplate( 'monument-list-heading' )() ).localize().appendTo( '#results' );
-			$( '#results button' ).click( function() {
+			$( '#monuments-sort' ).html(
+				templates.getTemplate( 'monument-list-heading' )()
+			).localize();
+			$( '#monuments-sort button' ).click( function() {
 				$( '#results' ).empty();
 				currentSortMethod = $( this ).data( 'sortby' );
-				showMonumentsList( monuments );
-			});
+				window.setTimeout( function() { // use timeout for smoother experience
+					showMonumentsList( monuments );
+				}, 0 );
+			}).each( function() {
+				if( $( this ).data( 'sortby' ) === currentSortMethod ) {
+					$( this ).addClass( 'selected' );
+				}
+			} );
 		}
 
 		// update distances
