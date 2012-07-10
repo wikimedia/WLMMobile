@@ -97,29 +97,41 @@ define(['jquery'], function() {
 			};
 			options.params.progress = true;
 
-			var ft = new FileTransfer();
-			ft.upload(sourceUri, that.url, function(r) {
-				if (r.responseCode > 0) {
-					// success
-					console.log("Code = " + r.responseCode);
-					console.log("Response = " + r.response);
-					console.log("Sent = " + r.bytesSent);
-					var data = JSON.parse(r.response);
-					if (data.upload.result === 'Success') {
-						d.resolve(data.upload.filekey);
-					} else {
-						d.reject(data);
-					}
-				} else {
-					// progress
-					console.log("Sent so far = " + r.bytesSent);
-				}
-			}, function(error) {
-				console.log("upload error source " + error.source);
-				console.log("upload error target " + error.target);
-				console.log(JSON.stringify(error));
-				d.reject("HTTP error");
-			}, options);
+			window.resolveLocalFileSystemURI(sourceUri, function(fileEntry) {
+				// fileEntry lookup success
+				fileEntry.file(function(file) {
+					// file lookup success
+					var fileSize = file.size;
+					var ft = new FileTransfer();
+					ft.upload(sourceUri, that.url, function(r) {
+						if (r.responseCode > 0) {
+							// success
+							console.log("Code = " + r.responseCode);
+							console.log("Response = " + r.response);
+							console.log("Sent = " + r.bytesSent);
+							var data = JSON.parse(r.response);
+							if (data.upload.result === 'Success') {
+								d.resolve(data.upload.filekey);
+							} else {
+								d.reject(data);
+							}
+						} else {
+							// progress
+							console.log("Sent so far = " + r.bytesSent / fileSize * 100 + "%");
+						}
+					}, function(error) {
+						console.log("upload error source " + error.source);
+						console.log("upload error target " + error.target);
+						console.log(JSON.stringify(error));
+						d.reject("HTTP error");
+					}, options);
+				}, function() {
+					// file lookup failure
+				});
+			}, function() {
+				// fileEntry lookup fail
+				alert("Couldn't look up file size");
+			});
 		});
 		return d.promise();
 	};
