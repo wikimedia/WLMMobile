@@ -199,5 +199,15 @@ window.CAMPAIGNS = [
             "Cultural properties of national significance in Switzerland"
         ], 
         "desc": "Switzerland"
+    }, 
+    {
+        "licenses": [
+            "cc-by-sa-3.0"
+        ], 
+        "name": "us", 
+        "categories": [
+            "National Register of Historic Places"
+        ], 
+        "desc": "United States"
     }
 ]
