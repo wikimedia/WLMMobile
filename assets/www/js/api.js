@@ -83,10 +83,18 @@ define(['jquery'], function() {
 		return d.promise();
 	};
 
+	Api.prototype.reportProgress = function( percentage ) {
+		$( '#upload-progress-bar' ).empty();
+		$( '<div>' ).css( 'width', percentage + '%').
+			appendTo( '#upload-progress-bar' );
+	};
+
 	Api.prototype.startUpload = function(sourceUri, filename, comment, text) {
 		var d = $.Deferred();
 		var that = this;
+		that.reportProgress( 0 );
 		that.requestEditToken().done(function(token) {
+			that.reportProgress( 10 );
 			var options = new FileUploadOptions();
 			options.fileKey = 'file';
 			options.fileName = filename;
@@ -100,12 +108,13 @@ define(['jquery'], function() {
 				text: text,
 				ignorewarnings: 1,
 				stash: 1,
+				progress: true,
 				token: token,
 				format: 'json'
 			};
 
 			var ft = new FileTransfer();
-			ft.upload(sourceUri, that.url, function(r) {
+			function uploadSuccess( r ) {
 				// success
 				console.log("Code = " + r.responseCode);
 				console.log("Response = " + r.response);
@@ -118,12 +127,28 @@ define(['jquery'], function() {
 				} else {
 					d.reject(data);
 				}
-			}, function(error) {
+			}
+			function uploadFail( error ) {
 				console.log("upload error source " + error.source);
 				console.log("upload error target " + error.target);
 				console.log(JSON.stringify(error));
 				d.reject("HTTP error");
-			}, options);
+			}
+			
+			window.resolveLocalFileSystemURI( sourceUri, function( fileEntry ) {
+				fileEntry.file( function( file ) {
+					ft.upload( sourceUri, that.url, function( r ) {
+						var percentageSent, sent;
+						if( r && r.responseCode === -1 ) {
+							sent = r.bytesSent || 0;
+							percentageSent = sent / file.size * 100;
+							that.reportProgress( Math.round( percentageSent / 2 ) + 10 );
+						} else {
+							uploadSuccess( r );
+						}
+					}, uploadFail, options );
+				} );
+			});
 		});
 		return d.promise();
 	};
@@ -133,7 +158,13 @@ define(['jquery'], function() {
 		console.log('upload completing... getting token...');
 		var that = this;
 		this.requestEditToken().done(function(token) {
+			var progress = 70;
+			that.reportProgress( progress );
 			console.log('.... got token');
+			var progressTimeout = window.setInterval( function() {
+				progress = progress < 100 ? progress + 1 : progress;
+				that.reportProgress( progress );
+			}, 500 );
 			console.log('starting ajax upload completion...');
 			that.request('POST', {
 				action: 'upload',
@@ -144,6 +175,8 @@ define(['jquery'], function() {
 				token: token,
 				ignorewarnings: 1
 			}).done(function(data) {
+				that.reportProgress( 100 );
+				window.clearTimeout( progressTimeout );
 				console.log(JSON.stringify(data));
 				if (data.upload.result === 'Success') {
 					d.resolve(data.upload.imageinfo);
@@ -151,6 +184,7 @@ define(['jquery'], function() {
 					d.reject("Upload did not succeed");
 				}
 			}).fail(function(xhr, error) {
+				window.clearTimeout( progressTimeout );
 				console.log("upload error source " + error.source);
 				console.log("upload error target " + error.target);
 				d.reject("HTTP error");

@@ -353,3 +353,25 @@ button.requires-location {
 	width: 80%;
 	height: auto;
 }
+
+#upload-progress-bar {
+	width: 100%;
+	height: 30px;
+	border: solid 1px black;
+}
+
+#upload-progress-bar div {
+	background-color: red;
+	background-color: #008F00;
+	height: 28px; /* height - border top and bottom */
+}
+
+/* Recent upload page */
+#upload-latest-page img {
+	max-width: 100%;
+	height: auto;
+}
+
+#upload-latest-page .share a {
+	text-decoration: underline;
+}
