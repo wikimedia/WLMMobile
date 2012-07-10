@@ -396,7 +396,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		
 		// FIXME: Have a proper platform specific overrides file that
 		// does not have scope issues.
-		document.addEventListener("backbutton", goBack, false);
+		document.addEventListener( 'backbutton', goBack, false );
 
 		$( 'button.back, a.back' ).click( function() {
 			goBack();
