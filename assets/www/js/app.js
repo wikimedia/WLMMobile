@@ -41,7 +41,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 
 	var pageHistory = []; // TODO: retain history
 	function addToHistory( page ) {
-		var blacklist = [ 'locationlookup-page' ];
+		var blacklist = [ 'locationlookup-page', 'login-progress-page' ];
 		var blacklisted = blacklist.indexOf( page ) > -1;
 		if( !blacklisted &&
 			pageHistory[ pageHistory.length - 1 ] !== page ) { // avoid adding the same page twice
@@ -255,23 +255,17 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 	// For example, when the user tries to login but can not
 	// Would have to add a 'cancel' callback in the future
 	function doLogin(success, fail) {
-		var prevPage = curPageName;
 
 		function authenticate( username, password ) {
+			showPage( 'login-progress-page' );
 			$( "#login-user, #login-pass" ).removeClass( 'error-input-field' );
-			$( "#login-status" ).show();
 			$( "#login-page input" ).attr( 'disabled', true );
-			$( "#login-status-message" ).text( mw.msg( 'login-in-progress' ) );
 			api.login( username, password ).done( function( status ) {
 				if( status === "Success" )  {
-					showPage( prevPage );
 					prefs.set( 'username', username );
 					prefs.set( 'password', password );
-					$( "#login-status-message" ).html( mw.msg( 'login-success' ) );
-					setTimeout( function() {
-						$( "#login-status" ).hide();
-						success();
-					}, 3 * 1000 );
+
+					success();
 				} else {
 					var errMsg;
 					// handle login API errors
@@ -317,18 +311,27 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				$( "#login-page input" ).attr( 'disabled', false );
 			});
 		}
+		
+		function displayLogin() {
+			console.log('display login');
+			function attemptLogin() {
+				console.log('attempt login');
+				var username = $( "#login-user" ).val().trim();
+				var password = $( "#login-pass" ).val();
+				authenticate( username, password );
+			}
 
-		if( prefs.get( 'username' ) && prefs.get( 'password' ) ) {
-			$( "#login-user" ).val( prefs.get( 'username' ) );
-			$( "#login-pass" ).val( prefs.get( 'password' ) );
-			authenticate( prefs.get( 'username' ), prefs.get( 'password' ) );
+			$( '#login' ).click( attemptLogin );
+			
+			if( prefs.get( 'username' ) && prefs.get( 'password' ) ) {
+				$( "#login-user" ).val( prefs.get( 'username' ) );
+				$( "#login-pass" ).val( prefs.get( 'password' ) );
+				attemptLogin();
+			} else {
+				showPage( 'login-page' );
+			}
 		}
-		$("#login").unbind('click').click(function() {
-			var username = $( "#login-user" ).val().trim();
-			var password = $( "#login-pass" ).val();
-			authenticate( username, password );
-		});
-		showPage("login-page");
+		displayLogin();
 	}
 
 	function showSearchBar( pageName ) {
