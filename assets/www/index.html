@@ -79,6 +79,15 @@
 			<button id="continue-upload"><msg key="confirm-license-upload" /></button>
 		</div>
 	</script>
+	<script type="text/html" id="completed-upload-template">
+		<li>
+			<a class='monument-detail' href="#">
+				<div class='monument-name'> <%= upload.monument.name %> </div>
+				<small class='monument-address'> <%= upload.monument.address %> </small>
+			</a>
+			<img class='monument-thumbnail' src="images/placeholder-64x64.png"/>
+		</li>
+	</script>
 
 	<div class="page" id="welcome-page">
 		<header class='actionbar'>

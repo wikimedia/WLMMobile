@@ -227,6 +227,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 					goBack(); // undo back button to skip upload progress page
 					goBack(); // undo back button to skip upload form
 					showPage( 'upload-latest-page' );
+					recordCompletedUpload({
+						monument: curMonument,
+						url: imageinfo.descriptionurl
+					});
 				});
 			}).fail( function( data ) {
 				var code, info;
@@ -340,9 +344,31 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			$list = $( '#upload-list' ).empty();
 		
 		if( view == 'complete-view' ) {
-			$( '<li>' )
+			console.log("QQQQQ");
+			var data = localStorage.getItem( 'completed-uploads' );
+			console.log("WWWWW");
+			if (data) {
+				console.log("AAAAAA: " + data);
+				data = JSON.parse(data);
+				console.log("BBBBB");
+				var completedTemplate = templates.getTemplate('completed-upload-template');
+				$.each(data, function(i, entry) {
+					console.log("CCCCCCC");
+					console.log(JSON.stringify(entry));
+					$("<li>")
+						.html(completedTemplate({upload: entry}))
+						.localize()
+						.click(function() {
+							console.log(JSON.stringify(entry));
+							window.open(entry.url);
+						})
+						.appendTo($list);
+				});
+			} else {
+				$( '<li>' )
 				.text( mw.message( 'complete-none' ).plain() )
 				.appendTo( $list );
+			}
 		} else if( view == 'incomplete-view' ) {
 			$( '<li>' )
 				.text( mw.message( 'incomplete-none' ).plain() )
@@ -350,6 +376,17 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		} else {
 			throw new Error('this should never happen. no view.')
 		}
+	}
+
+	function recordCompletedUpload(upload) {
+		var data = localStorage.getItem( 'completed-uploads' );
+		if( !data ) {
+			data = [upload];
+		} else {
+			data = JSON.parse(data);
+			data.push(upload);
+		}
+		localStorage.setItem( 'completed-uploads', JSON.stringify( data ) );
 	}
 
 	function init() {
