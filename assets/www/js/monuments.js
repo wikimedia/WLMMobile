@@ -95,6 +95,8 @@ define(['jquery'], function($) {
 	Monument.prototype.generateFilename = function() {
 		return this.name + " " + (new Date()).getTime();
 	};
+	
+	MonumentsApi.Monument = Monument; // hack
 
 	return MonumentsApi;
 });

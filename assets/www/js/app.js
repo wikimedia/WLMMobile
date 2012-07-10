@@ -243,6 +243,14 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				console.log( 'Upload failed: ' + code );
 			} );
 		});
+		$("#upload-later").click(function() {
+			// @fixme save a thumbnail?
+			recordIncompleteUpload({
+				monument: curMonument,
+				fileUrl: fileUrl
+			});
+			showPage( 'monuments-list' );
+		});
 		showPage('upload-confirm-page');
 	}
 
@@ -344,17 +352,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			$list = $( '#upload-list' ).empty();
 		
 		if( view == 'complete-view' ) {
-			console.log("QQQQQ");
 			var data = localStorage.getItem( 'completed-uploads' );
-			console.log("WWWWW");
 			if (data) {
-				console.log("AAAAAA: " + data);
 				data = JSON.parse(data);
-				console.log("BBBBB");
 				var completedTemplate = templates.getTemplate('completed-upload-template');
 				$.each(data, function(i, entry) {
-					console.log("CCCCCCC");
-					console.log(JSON.stringify(entry));
 					$("<li>")
 						.html(completedTemplate({upload: entry}))
 						.localize()
@@ -370,9 +372,29 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				.appendTo( $list );
 			}
 		} else if( view == 'incomplete-view' ) {
-			$( '<li>' )
-				.text( mw.message( 'incomplete-none' ).plain() )
-				.appendTo( $list );
+			var data = localStorage.getItem( 'incomplete-uploads' );
+			if (data) {
+				data = JSON.parse(data);
+				var incompleteTemplate = templates.getTemplate('incomplete-upload-template');
+				$.each(data, function(i, entry) {
+					$("<li>")
+						.html(incompleteTemplate({upload: entry}))
+						.localize()
+						.click(function() {
+							console.log(JSON.stringify(entry));
+							//curMonument = entry.monument;
+							// hack hack reconstituting a Monument object
+							var mon = new MonumentsApi.Monument(entry.monument, monuments);
+							curMonument = mon;
+							showPhotoConfirmation(entry.fileUrl);
+						})
+						.appendTo($list);
+				});
+			} else {
+				$( '<li>' )
+					.text( mw.message( 'incomplete-none' ).plain() )
+					.appendTo( $list );
+			}
 		} else {
 			throw new Error('this should never happen. no view.')
 		}
@@ -387,6 +409,17 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			data.push(upload);
 		}
 		localStorage.setItem( 'completed-uploads', JSON.stringify( data ) );
+	}
+
+	function recordIncompleteUpload(upload) {
+		var data = localStorage.getItem( 'incomplete-uploads' );
+		if( !data ) {
+			data = [upload];
+		} else {
+			data = JSON.parse(data);
+			data.push(upload);
+		}
+		localStorage.setItem( 'incomplete-uploads', JSON.stringify( data ) );
 	}
 
 	function init() {

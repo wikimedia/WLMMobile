@@ -78,6 +78,9 @@
 		<div class="center">
 			<button id="continue-upload"><msg key="confirm-license-upload" /></button>
 		</div>
+		<div class="center">
+			<button id="upload-later"><msg key="confirm-license-later" /></button>
+		</div>
 	</script>
 	<script type="text/html" id="completed-upload-template">
 		<li>
@@ -86,6 +89,15 @@
 				<small class='monument-address'> <%= upload.monument.address %> </small>
 			</a>
 			<img class='monument-thumbnail' src="images/placeholder-64x64.png"/>
+		</li>
+	</script>
+	<script type="text/html" id="incomplete-upload-template">
+		<li>
+			<a class='monument-detail' href="#">
+				<div class='monument-name'> <%= upload.monument.name %> </div>
+				<small class='monument-address'> <%= upload.monument.address %> </small>
+			</a>
+			<img class='monument-thumbnail' src="<%= upload.fileUrl %>" width=48 height=48 />
 		</li>
 	</script>
 
