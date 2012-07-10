@@ -244,15 +244,38 @@
 				<div id="upload-progress-state" class="center">
 					<msg key="upload-progress-starting" />
 				</div>
+				<div id="upload-progress-bar"></div>
 				<button class="back"><msg key="cancel-upload"></msg></button>
 			</div>
+		</div>
+	</div>
+
+	<div class="page"  id="upload-latest-page">
+		<header class="actionbar">
+			<a class='back' href="#"></a>
+			<h2>
+				<msg key="upload-latest-title"></msg>
+			</h2>
+		</header>
+		<div class="content">
+			<p>
+				<msg key="upload-progress-done"></msg>
+			</p>
+			<p class="share">
+				<msg key="upload-latest-view"></msg>
+			</p>
+			<p>
+				<img src='loader.gif'>
+			</p>
 		</div>
 	</div>
 
 	<div class="page"  id="upload-confirm-page">
 		<header class="actionbar">
 			<a class='back' href="#"> </a>
-			<h2><msg key="upload-confirm-title"></msg></h2>
+			<h2>
+				<msg key="confirm-upload-title"></msg>
+			</h2>
 		</header>
 		<div class="content" id="upload-confirm">
 			<msg key='upload-progress-starting' />
