@@ -72,7 +72,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		if(!$page.hasClass('popup-container-container')) {
 			curPageName = pageName;
 		}
-		$page.show();
+		$page.show().trigger('showpage'); // call any on-showpage event handlers
 		if( deferred ) {
 			$page.addClass( 'loading' );
 			// TODO: add fail e.g. warning triangle
@@ -241,6 +241,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 					goBack(); // undo back button to skip upload progress page
 					goBack(); // undo back button to skip upload form
 					showPage( 'upload-latest-page' );
+					recordCompletedUpload({
+						monument: curMonument,
+						url: imageinfo.descriptionurl
+					});
 				});
 			}).fail( function( data ) {
 				var code, info;
@@ -252,6 +256,14 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				displayError( code, info );
 				console.log( 'Upload failed: ' + code );
 			} );
+		});
+		$("#upload-later").click(function() {
+			// @fixme save a thumbnail?
+			recordIncompleteUpload({
+				monument: curMonument,
+				fileUrl: fileUrl
+			});
+			showPage( 'monuments-list' );
 		});
 		showPage('upload-confirm-page');
 	}
@@ -350,6 +362,81 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			$searchBar.addClass( 'hidden' );
 			$curActionBar.show();
 		});
+	}
+
+	function updateUploadsView() {
+		var view = $( '#toggle-uploads-view' ).val(),
+			$list = $( '#upload-list' ).empty();
+		
+		if( view == 'complete-view' ) {
+			var data = localStorage.getItem( 'completed-uploads' );
+			if (data) {
+				data = JSON.parse(data);
+				var completedTemplate = templates.getTemplate('completed-upload-template');
+				$.each(data, function(i, entry) {
+					$("<li>")
+						.html(completedTemplate({upload: entry}))
+						.localize()
+						.click(function() {
+							console.log(JSON.stringify(entry));
+							window.open(entry.url);
+						})
+						.appendTo($list);
+				});
+			} else {
+				$( '<li>' )
+				.text( mw.message( 'complete-none' ).plain() )
+				.appendTo( $list );
+			}
+		} else if( view == 'incomplete-view' ) {
+			var data = localStorage.getItem( 'incomplete-uploads' );
+			if (data) {
+				data = JSON.parse(data);
+				var incompleteTemplate = templates.getTemplate('incomplete-upload-template');
+				$.each(data, function(i, entry) {
+					$("<li>")
+						.html(incompleteTemplate({upload: entry}))
+						.localize()
+						.click(function() {
+							console.log(JSON.stringify(entry));
+							//curMonument = entry.monument;
+							// hack hack reconstituting a Monument object
+							var mon = new MonumentsApi.Monument(entry.monument, monuments);
+							curMonument = mon;
+							showPhotoConfirmation(entry.fileUrl);
+						})
+						.appendTo($list);
+				});
+			} else {
+				$( '<li>' )
+					.text( mw.message( 'incomplete-none' ).plain() )
+					.appendTo( $list );
+			}
+		} else {
+			throw new Error('this should never happen. no view.')
+		}
+	}
+
+	function recordCompletedUpload(upload) {
+		var data = localStorage.getItem( 'completed-uploads' );
+		if( !data ) {
+			data = [upload];
+		} else {
+			data = JSON.parse(data);
+			data.push(upload);
+		}
+		localStorage.setItem( 'completed-uploads', JSON.stringify( data ) );
+	}
+
+	function recordIncompleteUpload(upload) {
+		var data = localStorage.getItem( 'incomplete-uploads' );
+		if( !data ) {
+			data = [upload];
+		} else {
+			data = JSON.parse(data);
+			data.push(upload);
+		}
+		localStorage.setItem( 'incomplete-uploads', JSON.stringify( data ) );
 	}
 
 	function init() {
@@ -500,6 +587,13 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				destinationType: Camera.DestinationType.FILE_URI,
 				sourceType: Camera.PictureSourceType.PHOTOLIBRARY
 			});
+		});
+
+		$('#uploads-page').bind('showpage', function() {
+			updateUploadsView();
+		});
+		$('#toggle-uploads-view').change(function() {
+			updateUploadsView();
 		});
 
 		$(document).localize();
