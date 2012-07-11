@@ -125,6 +125,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 	function showMonumentsList(monuments) {
 		var monumentTemplate = templates.getTemplate('monument-list-item-template');	
 		var listThumbFetcher = commonsApi.getImageFetcher(64, 64);
+		$( '#results' ).data( 'monuments', monuments );
 		if( monuments.length === 0 ) {
 			$( templates.getTemplate( 'monument-list-empty-template' )() ).
 				localize().appendTo( '#results' );
@@ -132,18 +133,18 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			$( '#monuments-sort' ).html(
 				templates.getTemplate( 'monument-list-heading' )()
 			).localize();
-			$( '#monuments-sort button' ).click( function() {
-				$( '#results' ).empty();
-				currentSortMethod = $( this ).data( 'sortby' );
-				window.setTimeout( function() { // use timeout for smoother experience
-					showMonumentsList( monuments );
-				}, 0 );
-			}).each( function() {
-				if( $( this ).data( 'sortby' ) === currentSortMethod ) {
-					$( this ).addClass( 'selected' );
-				}
-			} );
 		}
+		$( '#monuments-sort button' ).click( function() {
+			$( '#results' ).empty();
+			currentSortMethod = $( this ).data( 'sortby' );
+			window.setTimeout( function() { // use timeout for smoother experience
+				showMonumentsList( $( '#results' ).data( 'monuments' ) );
+			}, 0 );
+		}).each( function() {
+			if( $( this ).data( 'sortby' ) === currentSortMethod ) {
+				$( this ).addClass( 'selected' );
+			}
+		} );
 
 		// update distances
 		if( userLocation ) {
