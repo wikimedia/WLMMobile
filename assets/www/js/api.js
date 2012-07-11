@@ -56,6 +56,21 @@ define(['jquery'], function() {
 		return d.promise();
 	};
 
+	Api.prototype.logout = function() {
+		var d = $.Deferred();
+		var that = this;
+		that.request( 'POST', {
+			action: 'logout'
+		}).done( function( data ) {
+			that.loggedIn = false;
+			delete that.userName;
+			d.resolve( data );
+		}).fail( function( err ) {
+			d.reject( err );
+		});
+		return d.promise();
+	};
+
 	Api.prototype.requestEditToken = function() {
 		var d = $.Deferred();
 		if(this.token) {

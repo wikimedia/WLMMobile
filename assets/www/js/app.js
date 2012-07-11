@@ -256,6 +256,20 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		showPage('upload-confirm-page');
 	}
 
+	$( '#settings-login' ).click( function() {
+		if(api.loggedIn) {
+			api.logout().done( function() {
+				$( "#settings-login" ).text( mw.msg( 'settings-login' ) );
+				$( "#settings-user-name" ).empty();
+			});
+		} else {
+			doLogin(function() {
+				showPage( "settings-page" );
+			}, function(err) {
+			});
+		}
+	});
+
 	// Need to use callbacks instead of deferreds
 	// since callbacks need to be called multiple times
 	// For example, when the user tries to login but can not
@@ -270,6 +284,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				if( status === "Success" )  {
 					prefs.set( 'username', username );
 					prefs.set( 'password', password );
+
+					$( "#settings-login" ).text( mw.msg( 'settings-logout' ) );
+					$( "#settings-user-name" ).html( mw.msg( 'settings-user-name', username ) );
 
 					success();
 				} else {
