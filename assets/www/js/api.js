@@ -67,7 +67,8 @@ define(['jquery'], function() {
 			action: 'query',
 			prop: 'info',
 			intoken: 'edit',
-			titles: 'Bohemian Rhapsody'
+			// HACK: for Samsung Galaxy S
+			titles: 'Bohemian Rhapsody' + Math.random()
 		}).done(function(data) {
 			var token;
 			$.each(data.query.pages, function(i, item) {
@@ -91,11 +92,12 @@ define(['jquery'], function() {
 			appendTo( '#upload-progress-bar' );
 	};
 
-	Api.prototype.startUpload = function(sourceUri, filename, comment, text) {
+	Api.prototype.startUpload = function( sourceUri, filename ) {
 		var d = $.Deferred();
 		var that = this;
 		that.reportProgress( 0 );
 		that.requestEditToken().done(function(token) {
+			console.log( 'got token', token );
 			that.reportProgress( 10 );
 			var options = new FileUploadOptions();
 			options.fileKey = 'file';
@@ -106,8 +108,6 @@ define(['jquery'], function() {
 			options.params = {
 				action: 'upload',
 				filename: filename,
-				comment: comment,
-				text: text,
 				ignorewarnings: 1,
 				stash: 1,
 				progress: true,
@@ -125,7 +125,7 @@ define(['jquery'], function() {
 				if( data.error ) {
 					d.reject( data );
 				} else if ( data && data.upload && data.upload.result === 'Success' ) {
-					d.resolve(data.upload.filekey);
+					d.resolve( data.upload.filekey, token );
 				} else {
 					d.reject(data);
 				}
@@ -155,11 +155,11 @@ define(['jquery'], function() {
 		return d.promise();
 	};
 
-	Api.prototype.finishUpload = function(fileKey, filename, comment, text) {
+	Api.prototype.finishUpload = function( fileKey, filename, comment, text, token ) {
 		var d = $.Deferred();
 		console.log('upload completing... getting token...');
 		var that = this;
-		this.requestEditToken().done(function(token) {
+		function sendImage( token ) {
 			var progress = 70;
 			that.reportProgress( progress );
 			console.log('.... got token');
@@ -191,7 +191,12 @@ define(['jquery'], function() {
 				console.log("upload error target " + error.target);
 				d.reject("HTTP error");
 			});
-		});
+		}
+		if( token ) {
+			sendImage( token );
+		} else {
+			this.requestEditToken().done( sendImage );
+		}
 		return d.promise();
 	};
 
