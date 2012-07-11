@@ -161,6 +161,10 @@ input[type='text'] {
 	border-bottom: 1px solid #ccc;
 }
 
+.searchbar input[type='text'] {
+	font-size: 0.9em;
+}
+
 select {
 	-webkit-appearance: none;
 	appearance: none;
