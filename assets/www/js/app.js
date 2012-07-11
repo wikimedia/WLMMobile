@@ -412,19 +412,19 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			}, 500 );
 		});
 
-		$(".page-link").click(function() {
-			var toPage = $(this).data('page');
-			if($(this).data('login') === 'required') {
-				if(api.loggedIn) {
-					showPage(toPage);
+		$( ".page-link" ).click( function() {
+			var toPage = $( this ).data('page');
+			if( $( this ).data( 'login' ) === 'required' ) {
+				if( api.loggedIn ) {
+					showPage( toPage );
 				} else {
-					doLogin(function() {
-						showPage(toPage);
-					}, function(err) {
-					});
+					doLogin( function() {
+						showPage( toPage );
+					}, function( err ) {
+					} );
 				}
 			} else {
-				showPage(toPage);
+				showPage( toPage );
 			}
 			return false;
 		});
