@@ -67,7 +67,8 @@ define(['jquery'], function() {
 			action: 'query',
 			prop: 'info',
 			intoken: 'edit',
-			titles: 'Bohemian Rhapsody'
+			// HACK: for Samsung Galaxy S
+			titles: 'Bohemian Rhapsody' + Math.random()
 		}).done(function(data) {
 			var token;
 			$.each(data.query.pages, function(i, item) {
