@@ -23,7 +23,7 @@ body {
 	min-height: 50px;
 }
 
-.loading #results-page .content {
+.loading#results-page .content {
 	background: none;
 }
 
