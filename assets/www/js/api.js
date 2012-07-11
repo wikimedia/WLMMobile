@@ -67,7 +67,9 @@ define(['jquery'], function() {
 			action: 'query',
 			prop: 'info',
 			intoken: 'edit',
-			titles: 'Bohemian Rhapsody'
+			// HACK: requesting the same article name seems to sometimes result in a
+			// "error":{"code":"badtoken","info":"Invalid token"}
+			titles: 'Bohemian Rhapsody' + Math.random()
 		}).done(function(data) {
 			var token;
 			$.each(data.query.pages, function(i, item) {
