@@ -123,6 +123,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 	}
 
 	function showMonumentsList(monuments) {
+		$( '#results' ).empty();
 		var monumentTemplate = templates.getTemplate('monument-list-item-template');	
 		var listThumbFetcher = commonsApi.getImageFetcher(64, 64);
 		if( monuments.length === 0 ) {
@@ -543,6 +544,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		api : api,
 		app: {
 			goBack: goBack,
+			showMonumentsList: showMonumentsList,
 			showPage: showPage
 		}
 	};
