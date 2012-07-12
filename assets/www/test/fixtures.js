@@ -9,7 +9,9 @@ var L = {
 
 // SETUP TEMPLATES
 var DUMMY_TEMPLATES = {
-	'country-list-template': '<div></div>'
+	'country-list-template': '<div></div>',
+	'monument-list-item-template': '<li>foo</li>',
+	'monument-list-empty-template': '<div>empty</div>'
 };
 for( var id in DUMMY_TEMPLATES ) {
 	if( DUMMY_TEMPLATES.hasOwnProperty( id ) ) {
@@ -31,7 +33,10 @@ $.ajax = function( options ) {
 	var data;
 	var d = $.Deferred();
 	console.log( 'dummy ajax request', options );
-	if( options.url === 'messages/messages-en.properties' ) {
+	if( options && options.data && options.data.prop === 'imageinfo' ) {
+		data = { query: '' };
+		return d.resolve( data );
+	} else if( options.url === 'messages/messages-en.properties' ) {
 		if( options.success ) {
 			options.success( 'foo=bar\nx=bar' );
 		}
