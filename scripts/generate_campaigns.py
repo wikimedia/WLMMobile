@@ -14,20 +14,23 @@ nametext = urlopen(NAMES_URL).read()
 namesdata = dict([(s.split('=')[0].strip(), s.split('=')[1].strip()) for s in nametext.split("\n")])
 
 campaigns = []
+campaigndict = {}
 
 for camp in campdata:
 	if camp['name'].startswith('wlm'):
-		campaign = {
-				'name': camp['name'].replace('wlm-', ''),
-				'categories': camp['config']['defaultCategories'],
-				'licenses': camp['config']['licensesOwnWork']
-				}
-		if campaign['name'] in namesdata:
+		camp['name'] = camp['name'].replace('wlm-','')
+		if camp['name'] in namesdata:
+			campaign = camp
 			campaign['desc'] = namesdata[campaign['name']]
-			# Only pickup campaings that have a description set
-			campaigns.append(campaign)
+			campaigns.append( campaign )
 			print campaign['name'], campaign['desc']
 
-campaigns = sorted(campaigns,  key=lambda k: k['desc'])
-
-open("campaigns-data.js", "w").write('window.CAMPAIGNS = ' + json.dumps(campaigns, indent=4))
+print len(campaigns)
+for campaign in campaigns:
+	# we could remove 'name' from each campaign, since it is now a dict key
+	# and preserving it might be redundant, but i opted to leave it in for 
+	# increased flexibility. because this is now a dict rather than a list, 
+	# we can't sort it in python, so leaving the structure in tact makes life 
+	# easier in js.
+	campaigndict[campaign['name']] = campaign
+open("campaigns-data-test.js", "w").write('window.CAMPAIGNS = ' + json.dumps(campaigndict, indent=4))
