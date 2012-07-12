@@ -64,6 +64,11 @@ define( [ 'jquery', 'l10n' ], function( $, l10n ) {
 			fun( pref, value );
 		});
 	}
+
+	function clear( pref ) {
+		localStorage.removeItem( pref );
+	}
+
 	//add an event executed when set method is executed. They must take to params, the id of the preference and his value.
 	function addOnSet( fun ) {
 		onSet.push( fun );
@@ -73,6 +78,7 @@ define( [ 'jquery', 'l10n' ], function( $, l10n ) {
 		init: init,
 		get: get,
 		set: set,
+		clear: clear,
 		addOnSet: addOnSet
 	};
 });
