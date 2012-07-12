@@ -50,9 +50,16 @@ function formatUploadDescription( monument, campaignConfig, username ) {
 	var idTemplate = campaignConfig.idField,
 		idField = idTemplate.replace( '$1', monument.id ),
 		license = campaignConfig.defaultOwnWorkLicence, // note the typo in the API field
-		cats = campaignConfig.defaultCategories.concat( campaignConfig.autoCategories ),
+		ourCategories = [ 
+			'Mobile upload', 
+			'Uploaded with Android WLM App',
+			navigator.userAgent 
+		],
+		cats = campaignConfig.defaultCategories
+			.concat( campaignConfig.autoCategories )
+			.concat( ourCategories ),
 		autoWikiText = campaignConfig.autoWikiText;
-		
+
 	var desc = '';
 	desc += '=={{int:filedesc}}==\n';
 	desc += '{{Information\n';
