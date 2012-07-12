@@ -262,6 +262,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			api.logout().done( function() {
 				$( "#settings-login" ).text( mw.msg( 'settings-login' ) );
 				$( "#settings-user-name" ).empty();
+				// Clear out user name and password
+				prefs.clear( 'username' );
+				prefs.clear( 'password' );
+				$( "#login-user" ).val( '' );
+				$( "#login-pass" ).val( '' );
 			});
 		} else {
 			doLogin(function() {
