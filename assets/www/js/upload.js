@@ -74,6 +74,7 @@ function formatUploadDescription( monument, campaignConfig, username ) {
 	desc += '|permission=\n';
 	desc += '|other_versions=\n';
 	desc += '|other_fields=\n';
+	desc += '}}\n';
 
 	desc += '\n';
 
