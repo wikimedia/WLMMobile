@@ -19,7 +19,7 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preferences', 'jquery.localize', 'campaigns-data' ],
+require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preferences', 'jquery.localize', 'campaigns-data', 'upload' ],
 	function( $, l10n, geo, Api, templates, MonumentsApi, prefs ) {
 
 	var api = new Api("https://test.wikipedia.org/w/api.php");
@@ -223,10 +223,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 
 	function showPhotoConfirmation(fileUrl) {
 		var comment = 'Uploaded via WLM Mobile App';
-		var text = 'Testing WLM';
 		var uploadConfirmTemplate = templates.getTemplate('upload-confirm-template');
 		var fileName = curMonument.generateFilename();
 		console.log("Filename is " + fileName);
+		var text = formatUploadDescription( curMonument, CAMPAIGNS[ curMonument.country ].config, api.userName );
+		console.log( "Page text is " + text );
+
 		$("#upload-confirm").html(uploadConfirmTemplate({monument: curMonument, fileUrl: fileUrl})).localize();
 		$("#confirm-license-text").html(mw.msg('confirm-license-text', api.userName));
 		$("#continue-upload").click(function() {
