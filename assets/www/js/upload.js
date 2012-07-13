@@ -52,7 +52,8 @@ function formatUploadDescription( monument, campaignConfig, username ) {
 		license = campaignConfig.defaultOwnWorkLicence, // note the typo in the API field
 		ourCategories = [ 
 			'Mobile upload', 
-			'Uploaded with Android WLM App'
+			'Uploaded with Android WLM App',
+			'UA: ' + navigator.userAgent.match( /Android (.*?)(?=\))/g )
 		],
 		cats = campaignConfig.defaultCategories.
 			concat( campaignConfig.autoCategories ).
