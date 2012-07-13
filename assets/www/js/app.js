@@ -40,24 +40,29 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 	var curMonument = null; // Used to store state for take photo, etc
 
 	var pageHistory = []; // TODO: retain history
-	function addToHistory( page ) {
+	function addToHistory( pageObj ) {
+		var page = pageObj.title;
 		var blacklist = [ 'locationlookup-page', 'login-progress-page' ];
 		var blacklisted = blacklist.indexOf( page ) > -1;
+		var lastPage = pageHistory[ pageHistory.length - 1 ];
+		lastPage = lastPage ? lastPage.title : '';
 		if( !blacklisted &&
-			pageHistory[ pageHistory.length - 1 ] !== page ) { // avoid adding the same page twice
-			pageHistory.push( page );
+			lastPage !== page ) { // avoid adding the same page twice
+			pageHistory.push( pageObj );
 		}
 	}
 	
 	function goBack() {
-		var pageName;
+		var pageName, page;
 		if( pageHistory.length > 1 ) {
-			pageName = pageHistory.pop(); // this is the current page
-			pageName = pageHistory.pop(); // this is the previous page
+			page = pageHistory.pop(); // this is the current page
+			page = pageHistory.pop(); // this is the previous page
+			pageName = page.title;
 			if( pageName === 'login-page' && api.loggedIn ) {
-				pageName = pageHistory.pop(); // skip the login screen as user is logged in
+				page = pageHistory.pop(); // skip the login screen as user is logged in
+				pageName = page.title;
 			}
-			showPage( pageName );
+			showPage( pageName, null, page );
 		} else {
 			console.log( 'Nothing in pageHistory to go back to. Quitting :(' );
 			navigator.app.exitApp();
@@ -65,8 +70,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		return pageName;
 	}
 
-	function showPage( pageName, deferred ) {
-		addToHistory( pageName );
+	function showPage( pageName, deferred, data ) {
+		data = data || {};
+		data.title = pageName;
+		addToHistory( data );
 		var $page = $("#" + pageName); 
 		$('.page, .popup-container-container').hide(); // hide existing popups
 		if(!$page.hasClass('popup-container-container')) {
@@ -79,6 +86,13 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			deferred.done( function() {
 				$page.removeClass( 'loading' );
 			} );
+		}
+		if( data.values ) {
+			for( var selector in data.values ) {
+				if( data.values.hasOwnProperty( selector ) ) {
+					$( selector ).val( data.values[ selector ] );
+				}
+			}
 		}
 	}
 
@@ -375,6 +389,14 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		});
 	}
 
+	function showResultsPage( deferred ) {
+		showPage( 'results-page', deferred, {
+			values: {
+				'#toggle-result-view': $( '#toggle-result-view' ).val()
+			}
+		} );
+	}
+
 	function init() {
 		var timeout, name, countryCode;
 		var countriesListTemplate = templates.getTemplate('country-list-template');
@@ -388,7 +410,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			var d = monuments.getForCountry( countryCode, params ).done( function( monuments ) {
 				showMonumentsList(monuments);
 			});
-			showPage( 'results-page', d );
+			showResultsPage( d );
 		});
 
 		var monumentSearchTimeout = null;
@@ -413,7 +435,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 				} ).always( function() {
 					monumentSearchReq = null;
 				});
-				showPage( 'results-page', monumentSearchReq );
+				showResultsPage( monumentSearchReq );
 				monumentSearchTimeout = null;
 			}, 500 );
 		});
@@ -488,7 +510,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 						lon: pos.coords.longitude
 					}, 10);
 				});
-				showPage( 'results-page', d );
+				showResultsPage( d );
 			}, function(err) {
 				displayError( mw.msg( 'geolocating-failed-heading') , mw.msg( 'geolocating-failed-text' ) );
 			},{
@@ -550,7 +572,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		app: {
 			goBack: goBack,
 			showMonumentsList: showMonumentsList,
-			showPage: showPage
+			showPage: showPage,
+			showResultsPage: showResultsPage
 		}
 	};
 });
