@@ -79,11 +79,12 @@
 			<button id="continue-upload"><msg key="confirm-license-upload" /></button>
 		</div>
 	</script>
-
+	
 	<div class="page" id="welcome-page">
 		<header class='actionbar'>
 			<img src="images/wlm-logo-cropped.png" />
 			<h2><msg key="welcome-title"></msg></h2>
+			<button id="about" title-msg="welcome-about"><msg key="welcome-about"></msg></button>
 		</header>
 		<div class="content">
 			<div class='center'><img src="images/intro-location-icon.png" height="128" /></div>
@@ -94,6 +95,19 @@
 				<br />
 				<button id="nearby"><msg key="welcome-nearby"></msg></button>
 			</div>
+		</div>
+	</div>
+	
+	<div class="page" id="about-page">
+		<header class='actionbar'>
+			<a class='back' data-page="welcome-page" href="#" title-msg="back"> </a>
+			<h2 data-localize-msg="about"></h2>
+		</header>
+		<div class="content">
+			<h3 data-localize-msg="welcome-title"></h3>
+			<p data-localize-msg="about-wlm-p1"></p>
+			<h3 data-localize-msg="about-rules-heading"></h3>
+			<p data-localize-msg="about-rules-p1"></p>
 		</div>
 	</div>
 
@@ -124,9 +138,8 @@
 			<a class='back' href="#"> </a>
 			<h2>
 				<select id="toggle-result-view">
-					<!-- FIXME: Find why jquery.localize doesn't seem to hit <option> tags -->
-					<option value="list-view">List View</option>
-					<option value="map-view">Map View</option>
+					<option value="list-view" data-option-msg="dropdown-list-view"></option>
+					<option value="map-view" data-option-msg="dropdown-map-view"></option>
 				</select>
 			</h2>
 			<a class="show-search"><img src='images/2-action-search.png' /></a>
@@ -282,7 +295,7 @@
 		</div>
 	</div>
 
-	<div class="page"  id="upload-latest-page">
+	<div class="page" id="upload-latest-page">
 		<header class="actionbar">
 			<a class='back' href="#"></a>
 			<h2>
@@ -297,7 +310,7 @@
 				<msg key="upload-latest-view"></msg>
 			</p>
 			<p>
-				<img src='loader.gif'>
+				<img id="upload-latest-status-spinner" src="images/loader.gif" />
 			</p>
 		</div>
 	</div>

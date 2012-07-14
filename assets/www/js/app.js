@@ -446,7 +446,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		$('#countries').click(function() {
 			showPage('country-page');
 		});
-
+		
+		$('#about').click(function() {
+			showPage('about-page');
+		});
+		
 		$( '.show-search' ).click( function() {
 			var page = $( this ).parents( '.page' ).attr( 'id' );
 			showSearchBar( page );

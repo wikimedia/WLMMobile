@@ -17,6 +17,15 @@
  *			My Message
  *			<img src="something.jpg" title="My Title Message" alt="My Alt Message" />
  *		</p>
+ *
+ *	Available elements and attributes
+ *	<html:msg key="message-key" />
+ *	<msg key="message-key" />
+ *	title-msg="message-key"
+ *	alt-msg="message-key"
+ *	placeholder-msg="message-key"
+ *	data-localize-msg="message-key"
+ *	data-option-msg="message-key"
  */
 ( function( $ ) {
 /**
@@ -72,6 +81,20 @@ $.fn.localize = function( options ) {
 				$el
 					.attr( 'placeholder', msg( $el.attr( 'placeholder-msg' ) ) )
 					.removeAttr( 'placeholder-msg' );
+			} )
+			.end()
+		.find( '[data-localize-msg]' )
+			.each( function() {
+				var $el = $(this);
+				$el
+					.html( msg( $el.attr( 'data-localize-msg' ) ) );
+			} )
+			.end()
+		.find( 'option[data-option-msg]' )
+			.each( function() {
+				var $el = $(this);
+				$el
+					.html( msg( $el.attr( 'data-option-msg' ) ) );
 			} )
 			.end();
 };
