@@ -28,4 +28,15 @@ test( 'empty monuments list', function() {
 	app.showMonumentsList( [] );
 	strictEqual( $( '#results' ).text(), 'empty' );
 } )
+
+test( 'toggling view type', function() {
+	var app = WLMMobile.app;
+	app.showResultsPage();
+	$( '#toggle-result-view' ).val( 'map-view' );
+	app.showPage( 'geo-stub' );
+	app.goBack();
+	app.showResultsPage();
+	strictEqual( $( '#toggle-result-view' ).val(), 'list-view', 'check map view remains selected' );
+} );
+
 }());
