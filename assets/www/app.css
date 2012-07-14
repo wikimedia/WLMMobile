@@ -37,6 +37,10 @@ input {
 	-webkit-user-modify: read-write-plaintext-only;
 }
 
+select {
+	font-size: 100%;
+}
+
 /* General utility styles */
 
 .center {
@@ -106,6 +110,9 @@ header.actionbar.hidden {
 }
 
 .page header h2 select {
+	position: relative;
+	top: -3px;
+	left: 0;
 	border-bottom: 2px #D1D1D1 solid;
 	border-right: 2px #d1d1d1 solid;
 }
@@ -158,6 +165,7 @@ button {
 	width: 100%;
 	font-size: 18px;
 	border: 0px;
+	cursor: pointer;
 }
 
 input[type='text'] {
@@ -229,6 +237,16 @@ header .back {
 	width: 24px;
 	height: 48px;
 	margin-left: 5px;
+}
+
+#about {
+	background: url('images/2-action-about.png') no-repeat;
+	background-position: top center;
+	width: 78px;
+	height: 78px;
+	padding-top:50px;
+	color: #000;
+	text-indent: -9999px;
 }
 
 /* Welcome page Styles */
