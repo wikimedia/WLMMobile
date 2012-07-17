@@ -13,6 +13,7 @@ var DUMMY_TEMPLATES = {
 	'map-page-stub': '<div></div>',
 	'monument-list-item-template': '<li>foo</li>',
 	'monument-list-empty-template': '<div>empty</div>',
+	'monument-list-heading': '<div></div>',
 	'results-page': [ '<select class="toggle-page"><option value="results-page">list</option>',
 	 	'<option value="map-page-stub">map</option></select>' ].join( '' )
 };
