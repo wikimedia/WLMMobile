@@ -88,7 +88,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		// special casing for specific pages
 		var monuments = $( "#results" ).data( 'monuments' );
 		if( monuments && pageName === 'results-page' ) {
-				showMonumentsList( monuments );
+			showMonumentsList( monuments );
 		} else if( monuments && pageName === 'map-page' ) {
 			showMonumentsMap( monuments );
 		} else if( pageName === 'country-page' ) { // force a refresh of the map on visiting the country page
