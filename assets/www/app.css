@@ -37,6 +37,10 @@ input {
 	-webkit-user-modify: read-write-plaintext-only;
 }
 
+select {
+	font-size: 100%;
+}
+
 /* General utility styles */
 
 .center {
@@ -106,6 +110,8 @@ header.actionbar.hidden {
 }
 
 .page header h2 select {
+	position: relative;
+	margin-top: 0;
 	border-bottom: 2px #D1D1D1 solid;
 	border-right: 2px #d1d1d1 solid;
 }
@@ -158,6 +164,7 @@ button {
 	width: 100%;
 	font-size: 18px;
 	border: 0px;
+	cursor: pointer;
 }
 
 input[type='text'] {
