@@ -28,4 +28,41 @@ test( 'empty monuments list', function() {
 	app.showMonumentsList( [] );
 	strictEqual( $( '#results' ).text(), 'empty' );
 } )
+
+test( 'toggling view type', function() {
+	var app = WLMMobile.app;
+	app.showPage( 'results-page' );
+	$( '#results-page .toggle-page' ).val( 'map-page-stub' );
+	app.showPage( 'results-page' );
+	strictEqual( $( '#results-page .toggle-page' ).val(), 'results-page', 'check map view remains selected' );
+} );
+
+test( 'back button (select by campaign)', function() {
+	var app = WLMMobile.app;
+	app.showPage( 'welcome-page' );
+	app.showPage( 'country-page' );
+	app.showPage( 'results-page' );
+	app.showPage( 'map-page', null, true ); // switch to map via dropdown
+	app.showPage( 'results-page', null, true );
+	app.showPage( 'map-page', null, true );
+	app.showPage( 'results-page', null, true );
+	var prevPage = app.goBack();
+	//var prevprevPage = app.goBack();
+	strictEqual( prevPage, 'country-page', 'last page is country page (map not cached)' );
+	//strictEqual( prevprevPage, 'welcome-page', 'page before is welcome' );
+} );
+
+test( 'back behaviour (use my current location)', function() {
+	var app = WLMMobile.app;
+	app.showPage( 'welcome-page' );
+	app.showPage( 'map-page' );
+	app.showPage( 'results-page', null, true ); // switch to results via dropdown
+	app.showPage( 'map-page', null, true ); // switch back to map
+	app.showPage( 'detail-page' ); // click on marker to select detail
+	var prevPage = app.goBack();
+	//var prevprevPage = app.goBack();
+	strictEqual( prevPage, 'map-page', 'last page is the map as that is where we entered' );
+	//strictEqual( prevprevPage, 'welcome-page', 'page before is welcome' );
+} );
+
 }());
