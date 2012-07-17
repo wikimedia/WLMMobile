@@ -377,6 +377,53 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		});
 	}
 
+	function dateYMD() {
+		var now = new Date(),
+			year = now.getUTCFullYear(),
+			month = now.getUTCMonth() + 1, // 0-based
+			day = now.getUTCDate(),
+			out = '';
+
+		out += year;
+
+		out += '-';
+
+		if (month < 10) {
+			out += '0';
+		}
+		out += month;
+
+		out += '-';
+
+		if (day < 10) {
+			out += '0';
+		}
+		out += day;
+
+		return out;
+	}
+
+	function formatUploadDescription( monument, campaignConfig, username ) {
+		var ourCategories = [ 
+				'Mobile upload', 
+				'Uploaded with Android WLM App',
+				'UA: ' + navigator.userAgent.match( /Android (.*?)(?=\))/g )
+			],
+			descData = {
+				idField: campaignConfig.idField.replace( '$1', monument.id ),
+				license: campaignConfig.defaultOwnWorkLicence, // note the typo in the API field
+				username: username,
+				autoWikiText: campaignConfig.autoWikiText,
+				cats: campaignConfig.defaultCategories.
+					concat( campaignConfig.autoCategories ).
+					concat( ourCategories ),
+				date: dateYMD(),
+				monument: monument
+			};
+		var template = templates.getTemplate( 'upload-photo-description', true )( { descData: descData } );
+		return template;
+	}
+
 	function init() {
 		var timeout, name, countryCode;
 		var countriesListTemplate = templates.getTemplate('country-list-template');

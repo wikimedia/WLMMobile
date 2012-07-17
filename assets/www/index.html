@@ -80,6 +80,29 @@
 		</div>
 	</script>
 
+	<script type="text/html" id="upload-photo-description">
+		=={{int:filedesc}}==
+		{{Information
+		|description={{<%= descData.monument.lang %>|1=<%= descData.monument.name %>}}
+		<%= descData.idField %>
+		|date=<%= descData.date %>
+		|source={{own}}
+		|author=[[User:<%= descData.username %>]]
+		|permission=
+		|other_versions=
+		|other_fields=
+		}}
+
+		=={{int:license-header}}==
+		{{self|<%= descData.license %>}}
+
+		<%= descData.autoWikiText %>
+
+		<% _.each( descData.cats, function( cat ) { %>
+			[[Category:<%= cat %>]]
+		<% }); %>
+	</script>
+
 	<div class="page" id="welcome-page">
 		<header class='actionbar'>
 			<img src="images/wlm-logo-cropped.png" />
