@@ -158,6 +158,17 @@ button {
 	width: 100%;
 	font-size: 18px;
 	border: 0px;
+	cursor: pointer;
+}
+
+header button#about {
+	background: none;
+	background-image: url(images/2-action-about.png);
+	text-indent: -999px;
+	background-repeat: no-repeat;
+	margin: 0; /* remove default margins */
+	width: 40px;
+	background-position: center center;
 }
 
 input[type='text'] {
@@ -356,6 +367,7 @@ button.requires-location {
 	border: 1px solid red;
 }
 
+#about-page a,
 #login-page #login-create-account-msg a {
 	color: #666;
 	text-decoration: underline;

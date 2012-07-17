@@ -578,6 +578,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		});
 
 		$(document).localize();
+		$( '#about-page-text' ).html( mw.msg( 'about-wlm-p1' ) );
 		showPage('welcome-page');
 
 		// allow cancellation of current api upload request
