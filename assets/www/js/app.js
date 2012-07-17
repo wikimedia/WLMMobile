@@ -19,7 +19,7 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preferences', 'jquery.localize', 'campaigns-data' ],
+require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preferences', 'jquery.localize', 'campaigns-data', 'upload' ],
 	function( $, l10n, geo, Api, templates, MonumentsApi, prefs ) {
 
 	var api = new Api("https://test.wikipedia.org/w/api.php");
@@ -223,10 +223,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 
 	function showPhotoConfirmation(fileUrl) {
 		var comment = 'Uploaded via WLM Mobile App';
-		var text = 'Testing WLM';
 		var uploadConfirmTemplate = templates.getTemplate('upload-confirm-template');
 		var fileName = curMonument.generateFilename();
 		console.log("Filename is " + fileName);
+		var text = formatUploadDescription( curMonument, CAMPAIGNS[ curMonument.country ].config, api.userName );
+		console.log( "Page text is " + text );
+
 		$("#upload-confirm").html(uploadConfirmTemplate({monument: curMonument, fileUrl: fileUrl})).localize();
 		$("#confirm-license-text").html(mw.msg('confirm-license-text', api.userName));
 		$("#continue-upload").click(function() {
@@ -373,6 +375,53 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			$searchBar.addClass( 'hidden' );
 			$curActionBar.show();
 		});
+	}
+
+	function dateYMD() {
+		var now = new Date(),
+			year = now.getUTCFullYear(),
+			month = now.getUTCMonth() + 1, // 0-based
+			day = now.getUTCDate(),
+			out = '';
+
+		out += year;
+
+		out += '-';
+
+		if (month < 10) {
+			out += '0';
+		}
+		out += month;
+
+		out += '-';
+
+		if (day < 10) {
+			out += '0';
+		}
+		out += day;
+
+		return out;
+	}
+
+	function formatUploadDescription( monument, campaignConfig, username ) {
+		var ourCategories = [ 
+				'Mobile upload', 
+				'Uploaded with Android WLM App',
+				'UA: ' + navigator.userAgent.match( /Android (.*?)(?=\))/g )
+			],
+			descData = {
+				idField: campaignConfig.idField.replace( '$1', monument.id ),
+				license: campaignConfig.defaultOwnWorkLicence, // note the typo in the API field
+				username: username,
+				autoWikiText: campaignConfig.autoWikiText,
+				cats: campaignConfig.defaultCategories.
+					concat( campaignConfig.autoCategories ).
+					concat( ourCategories ),
+				date: dateYMD(),
+				monument: monument
+			};
+		var template = templates.getTemplate( 'upload-photo-description', true )( { descData: descData } );
+		return template;
 	}
 
 	function init() {

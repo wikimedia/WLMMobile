@@ -16,7 +16,7 @@
   </head>
   <body class='hidden'>
 	<script type="text/html" id="country-list-template">
-		<% _.each(countries, function( country ) { %>
+		<% _.each( _.sortBy( countries, function(country) { return country.desc } ), function( country ) { %>
 			<li>
 				<a class='country-search' data-campaign='<%= country.name %>' href="#"><%= country.desc %></a>
 			</li>
@@ -78,6 +78,29 @@
 		<div class="center">
 			<button id="continue-upload"><msg key="confirm-license-upload" /></button>
 		</div>
+	</script>
+
+	<script type="text/html" id="upload-photo-description">
+		=={{int:filedesc}}==
+		{{Information
+		|description={{<%= descData.monument.lang %>|1=<%= descData.monument.name %>}}
+		<%= descData.idField %>
+		|date=<%= descData.date %>
+		|source={{own}}
+		|author=[[User:<%= descData.username %>]]
+		|permission=
+		|other_versions=
+		|other_fields=
+		}}
+
+		=={{int:license-header}}==
+		{{self|<%= descData.license %>}}
+
+		<%= descData.autoWikiText %>
+
+		<% _.each( descData.cats, function( cat ) { %>
+			[[Category:<%= cat %>]]
+		<% }); %>
 	</script>
 
 	<div class="page" id="welcome-page">
