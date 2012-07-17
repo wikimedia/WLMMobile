@@ -123,10 +123,10 @@
 		<header class='actionbar'>
 			<a class='back' href="#"> </a>
 			<h2>
-				<select id="toggle-result-view">
+				<select class="toggle-page">
 					<!-- FIXME: Find why jquery.localize doesn't seem to hit <option> tags -->
-					<option value="list-view">List View</option>
-					<option value="map-view">Map View</option>
+					<option value="results-page" selected>List View</option>
+					<option value="map-page">Map View</option>
 				</select>
 			</h2>
 			<a class="show-search"><img src='images/2-action-search.png' /></a>
@@ -148,8 +148,23 @@
 			<ul class="monuments-sorter" id="monuments-sort"></ul>
 			<ul class="monuments-list" id="results"></ul>
 		</div>
-		<div class="content hidden" id="map">
-		</div>
+	</div>
+
+	<div class="page" id="map-page">
+		<header class='actionbar'>
+			<a class='back' href="#"> </a>
+			<h2>
+				<select class="toggle-page">
+					<!-- FIXME: Find why jquery.localize doesn't seem to hit <option> tags -->
+					<option value="map-page" selected>Map View</option>
+					<option value="results-page">List View</option>
+				</select>
+			</h2>
+			<a class="show-search"><img src='images/2-action-search.png' /></a>
+			<a class='page-link' data-page='country-page'><img src='images/7-location-place.png' /></a>
+			<a class='page-link' data-page='settings-page'><img src='images/2-action-settings.png' /></a>
+		</header>
+		<div class="content" id="map"></div>
 	</div>
 
 	<div class="page has-tabbar" id="uploads-page">

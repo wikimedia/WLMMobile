@@ -36,6 +36,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 	var currentSortMethod = 'name';
 	var userLocation; // for keeping track of the user
 
+	var mapFocusNeeded = true; // a global for keeping track of when to auto-focus the map
+
 	var curPageName = null;
 	var curMonument = null; // Used to store state for take photo, etc
 
@@ -73,12 +75,22 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			curPageName = pageName;
 		}
 		$page.show();
+		$( 'select', $page ).val( '' ); // reset to the top item in the list
 		if( deferred ) {
 			$page.addClass( 'loading' );
 			// TODO: add fail e.g. warning triangle
 			deferred.done( function() {
 				$page.removeClass( 'loading' );
 			} );
+		}
+		// special casing for specific pages
+		var monuments = $( "#results" ).data( 'monuments' );
+		if( monuments && pageName === 'results-page' ) {
+				showMonumentsList( monuments );
+		} else if( monuments && pageName === 'map-page' ) {
+			showMonumentsMap( monuments );
+		} else if( pageName === 'country-page' ) { // force a refresh of the map on visiting the country page
+			mapFocusNeeded = true;
 		}
 	}
 
@@ -178,35 +190,22 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		});
 		listThumbFetcher.send();
 
-		var mapPopulated = false;
-		$("#toggle-result-view").unbind("change").change(function() {
-			var mapVisible = $("#toggle-result-view").val() !== "map-view";
-			if(mapVisible) {
-				$("#monuments-list").show();
-				geo.hideMap();
-			} else {
-				if(!mapPopulated) {
-					showMonumentsMap(monuments);
-					mapPopulated = true;
-				} 
-				geo.showMap();
-				$("#monuments-list").hide();
-			}
-		});
+		$( "#results" ).data( 'monuments', monuments );
 		$("#monuments-list").show();
-		geo.hideMap();
 	}
-
 
 	function showMonumentsMap(monuments, center, zoom) {
 		geo.init();
 		geo.clear();
-		if(typeof center === "undefined" && typeof zoom === "undefined") {
+		if( mapFocusNeeded && typeof center === 'undefined' && typeof zoom === 'undefined' ) {
 			var centerAndZoom = geo.calculateCenterAndZoom(monuments);
 			center = centerAndZoom.center;
 			zoom = centerAndZoom.zoom;
+			mapFocusNeeded = false;
 		}
-		geo.setCenterAndZoom(center, zoom);
+		if( center && zoom ) {
+			geo.setCenterAndZoom( center, zoom );
+		}
 		$.each(monuments, function(i, monument) {
 			if(monument.lat && monument.lon) {
 				geo.addMonument(monument, showMonumentDetail);
@@ -482,13 +481,14 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 					pos.coords.longitude + nearbyDeg,
 					pos.coords.latitude + nearbyDeg
 				).done(function(monuments) {
-					showMonumentsList(monuments);
+					$( '#results' ).data( 'monuments', monuments );
+					mapFocusNeeded = true;
 					showMonumentsMap(monuments, {
 						lat: pos.coords.latitude,
 						lon: pos.coords.longitude
 					}, 10);
 				});
-				showPage( 'results-page', d );
+				showPage( 'map-page', d );
 			}, function(err) {
 				displayError( mw.msg( 'geolocating-failed-heading') , mw.msg( 'geolocating-failed-text' ) );
 			},{
@@ -532,6 +532,13 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		$( '#upload-progress-page .back' ).click( function() {
 			console.log( 'request to cancel upload' );
 			api.cancel();
+		});
+
+		// setup dropdowns that allow switching a page
+		$( 'select.toggle-page' ).mouseup(function( ev ) {
+			var page = $( this ).val();
+			showPage( page );
+			ev.preventDefault(); // stop the UI changing
 		});
 
 		// Display the translated account creation message this way since the
