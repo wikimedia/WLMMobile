@@ -377,6 +377,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		});
 	}
 
+	// TODO: make this use a template defined in index.html
 	function dateYMD() {
 		var now = new Date(),
 			year = now.getUTCFullYear(),
