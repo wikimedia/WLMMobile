@@ -127,6 +127,9 @@
 		<header class='actionbar'>
 			<img src="images/wlm-logo-cropped.png" />
 			<h2><msg key="welcome-title"></msg></h2>
+			<button id="about" class='page-link' data-page='about-page'>
+				<msg key="welcome-about"></msg>
+			</button>
 		</header>
 		<div class="content">
 			<div class='center'><img src="images/intro-location-icon.png" height="128" /></div>
@@ -140,6 +143,20 @@
 					<msg key='tabbar-uploads'></msg>
 				</button>
 			</div>
+		</div>
+	</div>
+
+	<div class="page" id="about-page">
+		<header class='actionbar'>
+			<a class='back' data-page="welcome-page" href="#">
+			</a>
+			<h2>
+				<msg key="about"></msg>
+			</h2>
+		</header>
+		<div class="content">
+			<h3><msg key="welcome-title"></msg></h3>
+			<p id="about-page-text"></p>
 		</div>
 	</div>
 
