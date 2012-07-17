@@ -10,8 +10,11 @@ var L = {
 // SETUP TEMPLATES
 var DUMMY_TEMPLATES = {
 	'country-list-template': '<div></div>',
+	'map-page-stub': '<div></div>',
 	'monument-list-item-template': '<li>foo</li>',
-	'monument-list-empty-template': '<div>empty</div>'
+	'monument-list-empty-template': '<div>empty</div>',
+	'results-page': [ '<select class="toggle-page"><option value="results-page">list</option>',
+	 	'<option value="map-page-stub">map</option></select>' ].join( '' )
 };
 for( var id in DUMMY_TEMPLATES ) {
 	if( DUMMY_TEMPLATES.hasOwnProperty( id ) ) {
