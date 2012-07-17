@@ -67,8 +67,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		return pageName;
 	}
 
-	function showPage( pageName, deferred ) {
-		addToHistory( pageName );
+	function showPage( pageName, deferred, cloaked ) {
+		if( !cloaked ) {
+			addToHistory( pageName );
+		}
 		var $page = $("#" + pageName); 
 		$('.page, .popup-container-container').hide(); // hide existing popups
 		if(!$page.hasClass('popup-container-container')) {
@@ -587,7 +589,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		// setup dropdowns that allow switching a page
 		$( 'select.toggle-page' ).change( function( ev ) {
 			var page = $( this ).val();
-			showPage( page );
+			showPage( page, null, true );
 			ev.preventDefault(); // stop the UI changing
 		} );
 
