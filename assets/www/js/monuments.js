@@ -93,7 +93,7 @@ define(['jquery'], function($) {
 	};
 
 	Monument.prototype.generateFilename = function() {
-		return this.name + " " + (new Date()).getTime();
+		return this.name.replace( /\./g, '-' ); + " " + (new Date()).getTime();
 	};
 
 	return MonumentsApi;
