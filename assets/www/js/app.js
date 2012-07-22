@@ -244,7 +244,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 					$( '#upload-latest-page .share' ).html( mw.msg( 'upload-latest-view' ) );
 					$( '#upload-latest-page .share a' ).attr( 'href', imageinfo.descriptionurl );
 
-					db.addUpload( curMonument, api.userName, fileUrl, imageinfo.url, true );
+					db.addUpload( curMonument, api.userName, fileUrl, imageinfo.url, fileName, true );
 					goBack(); // undo back button to skip upload progress page
 					goBack(); // undo back button to skip upload form
 					showPage( 'upload-latest-page' );
@@ -435,10 +435,14 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		db.requestUploadsForUser( username ).done( function( uploads ) {
 			$( '#uploads-list' ).empty();
 			var uploadsTemplate = templates.getTemplate('upload-list-item-template');
+			var uploadCompleteTemplate = templates.getTemplate('upload-completed-item-detail-template');
 			$.each( uploads, function( i, upload ) {
-				$uploadItem = $( uploadsTemplate( { upload: upload, monument: JSON.parse( upload.monument ) } ) );
+				var monument = JSON.parse( upload.monument );
+				$uploadItem = $( uploadsTemplate( { upload: upload, monument: monument } ) );
 				$uploadItem.click( function() {
-					window.open( upload.url );
+					$( '#completed-upload-detail' ).html( uploadCompleteTemplate( { upload: upload, monument: monument } ) );
+					$( '#completed-upload-detail-page .actionbar h2' ).text( monument.name );
+					showPage( 'completed-upload-detail-page' );
 				} );
 				$( '#uploads-list' ).append( $uploadItem );
 			} );

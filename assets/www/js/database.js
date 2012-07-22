@@ -7,7 +7,7 @@ define( [ 'jquery' ], function( $ ) {
 	var dbName = 'WLM.db';
 	var curVersion = '1.0';
 	var createScripts = [
-		"CREATE TABLE IF NOT EXISTS uploads (id, username, file, monument, url, timestamp, completed);"
+		"CREATE TABLE IF NOT EXISTS uploads (id, username, file, monument, url, title, timestamp, completed);"
 	];
 	var db = null;	
 	function init() {
@@ -51,9 +51,9 @@ define( [ 'jquery' ], function( $ ) {
 		return d.promise();
 	}
 
-	function addUpload( monument, username, fileUrl, url, completed ) {
-		var insertSQL = "INSERT INTO uploads ( username, file, monument, url, timestamp, completed ) VALUES ( ?, ?, ?, ?, ?, ? );";
-		execute( insertSQL, [ username, fileUrl, JSON.stringify( monument ), url, (new Date()).getTime() , completed ] );
+	function addUpload( monument, username, fileUrl, url, title, completed ) {
+		var insertSQL = "INSERT INTO uploads ( username, file, monument, url, title, timestamp, completed ) VALUES ( ?, ?, ?, ?, ?, ?, ? );";
+		execute( insertSQL, [ username, fileUrl, JSON.stringify( monument ), url, title, (new Date()).getTime() , completed ] );
 	}
 
 	function requestUploadsForUser( username ) {

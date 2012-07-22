@@ -396,3 +396,20 @@ button.requires-location {
 #upload-latest-page .share a {
 	text-decoration: underline;
 }
+
+/* My Uploads styles */
+
+#completed-upload-detail {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+}
+
+#completed-upload-detail img {
+	width: 100%;
+	text-align: center;
+	-webkit-box-flex: 1;
+}
+
+#completed-upload-detail div {
+	width: 100%;
+}
