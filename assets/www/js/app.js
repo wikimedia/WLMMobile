@@ -19,9 +19,9 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monument', 
-	'monuments', 'preferences', 'jquery.localize', 'campaigns-data' ],
-	function( $, l10n, geo, Api, templates, Monument, MonumentsApi, prefs ) {
+require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preferences', 'database', 
+		'jquery.localize', 'campaigns-data' ],
+	function( $, l10n, geo, Api, templates, MonumentsApi, prefs, db ) {
 
 	var api = new Api("https://test.wikipedia.org/w/api.php");
 	var commonsApi = new Api('https://commons.wikimedia.org/w/api.php');
@@ -266,6 +266,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monument',
 					$( '#upload-latest-page img' ).attr( 'src', imageinfo.url );
 					$( '#upload-latest-page .share' ).html( mw.msg( 'upload-latest-view' ) );
 					$( '#upload-latest-page .share a' ).attr( 'href', imageinfo.descriptionurl );
+
+					db.addUpload( curMonument, api.userName, fileUrl, imageinfo.url, true );
 					goBack(); // undo back button to skip upload progress page
 					goBack(); // undo back button to skip upload form
 					showPage( 'upload-latest-page' );
@@ -450,6 +452,22 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monument',
 		return template;
 	}
 
+	function showUploads() {
+		var username = api.userName;
+		db.requestUploadsForUser( username ).done( function( uploads ) {
+			$( '#uploads-list' ).empty();
+			var uploadsTemplate = templates.getTemplate('upload-list-item-template');
+			$.each( uploads, function( i, upload ) {
+				$uploadItem = $( uploadsTemplate( { upload: upload, monument: JSON.parse( upload.monument ) } ) );
+				$uploadItem.click( function() {
+					window.open( upload.url );
+				} );
+				$( '#uploads-list' ).append( $uploadItem );
+			} );
+			showPage( 'uploads-page' );
+		} );
+	}
+
 	function init() {
 		var timeout, name, countryCode;
 		var countriesListTemplate = templates.getTemplate('country-list-template');
@@ -545,6 +563,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monument',
 			}, 400);
 		});
 
+		$( '.page-link[data-page="uploads-page"]' ).click( function() {
+			showUploads();
+		} );
+
 		$('#nearby').click(function() {
 			showPage( 'locationlookup-page' );
 			navigator.geolocation.getCurrentPosition(function(pos) {
@@ -626,7 +648,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monument',
 	}
 
 	l10n.init().done( function() {
-		prefs.init().done( init );
+		prefs.init().done( function() { db.init().done( init ); } );
 	});
 	window.WLMMobile = {
 		api : api,

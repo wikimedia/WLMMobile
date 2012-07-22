@@ -30,6 +30,15 @@
 			<button data-sortby="address"><msg key="monument-sortby-address"></msg></button>
 		</li>
 	</script>
+	<script type="text/html" id="upload-list-item-template">
+		<li>
+			<a class='monument-detail' href="#">
+				<div class='monument-name'> <%= monument.name %> </div>
+				<small class='monument-address'> <%= monument.address %> </small>
+			</a>
+			<img class='monument-thumbnail' width="64" src="<%= upload.file %>"/>
+		</li>
+	</script>
 	<script type="text/html" id="monument-list-item-template">
 		<li>
 			<a class='monument-detail' href="#">
@@ -202,7 +211,7 @@
 			<a href="#" class='active'><msg key='tabbar-uploads' /></a>
 		</header>
 		<div class="content">
-			Placeholder for upload interface
+			<ul class="monuments-list" id="uploads-list"></ul>
 		</div>
 	</div>
 
