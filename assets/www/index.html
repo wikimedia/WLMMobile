@@ -39,6 +39,12 @@
 			<img class='monument-thumbnail' width="64" src="<%= upload.file %>"/>
 		</li>
 	</script>
+	<script type='text/html' id='upload-completed-item-detail-template'>
+		<img class='uploaded-image-full' src='<%= upload.file %>' />
+		<div class='uploaded-image-details'>
+			<a><%= upload.title %></a>
+		</div>
+	</script>
 	<script type="text/html" id="monument-list-item-template">
 		<li>
 			<a class='monument-detail' href="#">
@@ -212,6 +218,15 @@
 		</header>
 		<div class="content">
 			<ul class="monuments-list" id="uploads-list"></ul>
+		</div>
+	</div>
+
+	<div class="page" id="completed-upload-detail-page">
+		<header class="actionbar">
+			<a class='back' href="#"> </a>
+			<h2><msg key="upload-completeddetail-title"></msg></h2>
+		</header>
+		<div class='content' id="completed-upload-detail">
 		</div>
 	</div>
 
