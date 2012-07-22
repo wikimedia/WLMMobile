@@ -452,6 +452,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 		return template;
 	}
 
+	// Expects user to be logged in
 	function showUploads() {
 		var username = api.userName;
 		db.requestUploadsForUser( username ).done( function( uploads ) {
@@ -563,8 +564,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preference
 			}, 400);
 		});
 
-		$( '.page-link[data-page="uploads-page"]' ).click( function() {
-			showUploads();
+		$( '#show-uploads' ).click( function() {
+			if( api.loggedIn ) {
+				showUploads();
+			} else {
+				doLogin( showUploads );
+			}
 		} );
 
 		$('#nearby').click(function() {
