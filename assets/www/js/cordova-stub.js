@@ -35,7 +35,4 @@
 		window.CORDOVA_MODULE = '../' + os + '/' + cordova;
 		window.PLATFORM_MODULE = '../' + os + '/platform';
 	}
-	if (os == 'android') {
-		window.CORDOVA_PLUGINS = ['../android/plugins/PinchZoom'];
-	}
 })();

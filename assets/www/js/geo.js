@@ -53,31 +53,6 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 		return location;
 	}
 
-	function setupPinchToZoom(id) {
-		if (window.plugins !== undefined && window.plugins.pinchZoom !== undefined && navigator.userAgent.match(/Android 2/)) {
-			var origDistance;
-			window.plugins.pinchZoom.addEventListener('pinchzoom', function(event) {
-				if (map && $("#" + id).is(':visible')) {
-					if(event.type === "pinchzoomstart") {
-						origDistance = event.distance;
-					}
-					else if (event.type === "pinchzoommove" || event.type === "pinchzoomend") {
-						var ratio = event.distance / origDistance;
-						if (ratio < 0.67) {
-							// Zooming out
-							origDistance = event.distance;
-							map.zoomOut();
-						} else if (ratio > 1.5) {
-							// Zooming in
-							origDistance = event.distance;
-							map.zoomIn();
-						}
-					}
-				}
-			});
-		}
-	}
-
 	function init() {
 		if (!map) {
 			// Disable webkit 3d CSS transformations for tile positioning
@@ -112,7 +87,6 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 			// Since clusterer needs to have a default view setup
 			map.setView( new L.LatLng( 0, 0 ), 3 );
 			clusterer = new LeafClusterer(map);
-			setupPinchToZoom('map');
 		}
 	}
 
