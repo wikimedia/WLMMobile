@@ -60,7 +60,7 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 			L.Browser.webkit3d = false;
 			map = new L.Map('map', {
 				touchZoom: true, // force on for Android 3/4
-				zoomControl: false // disable in favor of pinch-zoom
+				zoomControl: $( 'html' ).hasClass( 'android-2' )
 			});
 			var tiles = new L.TileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {
 				maxZoom: 18,
