@@ -53,7 +53,7 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 		return location;
 	}
 
-	function init() {
+	function init( onmapchange ) {
 		if (!map) {
 			// Disable webkit 3d CSS transformations for tile positioning
 			// Causes lots of flicker in PhoneGap for some reason...
@@ -87,6 +87,10 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 			// Since clusterer needs to have a default view setup
 			map.setView( new L.LatLng( 0, 0 ), 3 );
 			clusterer = new LeafClusterer(map);
+
+			if ( onmapchange ) { 
+				map.on( 'moveend', onmapchange );
+			}
 		}
 	}
 
