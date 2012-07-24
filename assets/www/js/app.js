@@ -19,9 +19,9 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monument', 
-	'monuments', 'preferences', 'jquery.localize', 'campaigns-data' ],
-	function( $, l10n, geo, Api, templates, Monument, MonumentsApi, prefs ) {
+require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument', 'preferences', 'database', 
+		'jquery.localize', 'campaigns-data' ],
+	function( $, l10n, geo, Api, templates, MonumentsApi, Monument, prefs, db ) {
 
 	var api = new Api("https://test.wikipedia.org/w/api.php");
 	var commonsApi = new Api('https://commons.wikimedia.org/w/api.php');
@@ -266,6 +266,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monument',
 					$( '#upload-latest-page img' ).attr( 'src', imageinfo.url );
 					$( '#upload-latest-page .share' ).html( mw.msg( 'upload-latest-view' ) );
 					$( '#upload-latest-page .share a' ).attr( 'href', imageinfo.descriptionurl );
+
+					db.addUpload( curMonument, api.userName, fileUrl, imageinfo.url, fileName, true );
 					goBack(); // undo back button to skip upload progress page
 					goBack(); // undo back button to skip upload form
 					showPage( 'upload-latest-page' );
@@ -308,6 +310,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monument',
 	// For example, when the user tries to login but can not
 	// Would have to add a 'cancel' callback in the future
 	function doLogin(success, fail) {
+
+		if( typeof fail === 'undefined' ) {
+			fail = function() { };
+		}
 
 		function authenticate( username, password ) {
 			showPage( 'login-progress-page' );
@@ -450,6 +456,32 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monument',
 		return template;
 	}
 
+	// Expects user to be logged in
+	function showUploads() {
+		var username = api.userName;
+		db.requestUploadsForUser( username ).done( function( uploads ) {
+			$( '#uploads-list' ).empty();
+			if( uploads.length ) {
+				var uploadsTemplate = templates.getTemplate( 'upload-list-item-template' );
+				var uploadCompleteTemplate = templates.getTemplate( 'upload-completed-item-detail-template' );
+				$.each( uploads, function( i, upload ) {
+					var monument = JSON.parse( upload.monument );
+					$uploadItem = $( uploadsTemplate( { upload: upload, monument: monument } ) );
+					$uploadItem.click( function() {
+						$( '#completed-upload-detail' ).html( uploadCompleteTemplate( { upload: upload, monument: monument } ) );
+						$( '#completed-upload-detail-page .actionbar h2' ).text( monument.name );
+						showPage( 'completed-upload-detail-page' );
+					} );
+					$( '#uploads-list' ).append( $uploadItem );
+				} );
+			} else {
+				var emptyUploadTemplate = templates.getTemplate( 'upload-list-empty-template' );
+				$( '#uploads-list' ).html( emptyUploadTemplate() ).localize();
+			}
+			showPage( 'uploads-page' );
+		} );
+	}
+
 	function init() {
 		var timeout, name, countryCode;
 		var countriesListTemplate = templates.getTemplate('country-list-template');
@@ -545,6 +577,14 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monument',
 			}, 400);
 		});
 
+		$( '#show-uploads' ).click( function() {
+			if( api.loggedIn ) {
+				showUploads();
+			} else {
+				doLogin( showUploads );
+			}
+		} );
+
 		$('#nearby').click(function() {
 			showPage( 'locationlookup-page' );
 			navigator.geolocation.getCurrentPosition(function(pos) {
@@ -626,7 +666,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monument',
 	}
 
 	l10n.init().done( function() {
-		prefs.init().done( init );
+		prefs.init().done( function() { db.init().done( init ); } );
 	});
 	window.WLMMobile = {
 		api : api,

@@ -30,6 +30,26 @@
 			<button data-sortby="address"><msg key="monument-sortby-address"></msg></button>
 		</li>
 	</script>
+	<script type="text/html" id="upload-list-item-template">
+		<li>
+			<a class='monument-detail' href="#">
+				<div class='monument-name'> <%= monument.name %> </div>
+				<small class='monument-address'> <%= monument.address %> </small>
+			</a>
+			<img class='monument-thumbnail' width="64" src="<%= upload.file %>"/>
+		</li>
+	</script>
+	<script type="text/html" id="upload-list-empty-template">
+		<li>
+			<msg key="no-uploads" />
+		</li>
+	</script>
+	<script type='text/html' id='upload-completed-item-detail-template'>
+		<img class='uploaded-image-full' src='<%= upload.file %>' />
+		<div class='uploaded-image-details'>
+			<a><%= upload.title %></a>
+		</div>
+	</script>
 	<script type="text/html" id="monument-list-item-template">
 		<li>
 			<a class='monument-detail' href="#">
@@ -165,7 +185,7 @@
 		</header>
 		<header class="tabbar">
 			<a href="#" class='active'><msg key='tabbar-monuments' /></a>
-			<a href="#" class='page-link' data-page='uploads-page'><msg key='tabbar-uploads' /></a>
+			<a id='show-uploads' href="#"><msg key='tabbar-uploads' /></a>
 		</header>
 		<div class="content" id="monuments-list">
 			<ul class="monuments-sorter" id="monuments-sort"></ul>
@@ -202,7 +222,16 @@
 			<a href="#" class='active'><msg key='tabbar-uploads' /></a>
 		</header>
 		<div class="content">
-			Placeholder for upload interface
+			<ul class="monuments-list" id="uploads-list"></ul>
+		</div>
+	</div>
+
+	<div class="page" id="completed-upload-detail-page">
+		<header class="actionbar">
+			<a class='back' href="#"> </a>
+			<h2><msg key="upload-completeddetail-title"></msg></h2>
+		</header>
+		<div class='content' id="completed-upload-detail">
 		</div>
 	</div>
 
