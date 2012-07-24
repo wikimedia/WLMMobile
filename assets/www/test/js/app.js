@@ -29,7 +29,7 @@ test( 'empty monuments list', function() {
 	app.showMonumentsList( [] );
 	app.showMonumentsList( [] );
 	strictEqual( $( '#results' ).text(), 'empty' );
-} )
+} );
 
 test( 'toggling view type', function() {
 	var app = WLMMobile.app;
