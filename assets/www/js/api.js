@@ -144,11 +144,20 @@ define(['jquery'], function() {
 					d.reject(data);
 				}
 			}
+			that.lastRequest = d.promise();
+			that.lastRequest.abort = function() {
+				console.log('Aborting upload...');
+				ft.abort();
+			}
 			function uploadFail( error ) {
 				console.log("upload error source " + error.source);
 				console.log("upload error target " + error.target);
 				console.log(JSON.stringify(error));
-				d.reject("HTTP error");
+				if (error.code == FileTransferError.ABORT_ERR ) {
+					d.reject("Aborted");
+				} else {
+					d.reject("HTTP error");
+				}
 			}
 			
 			window.resolveLocalFileSystemURI( sourceUri, function( fileEntry ) {

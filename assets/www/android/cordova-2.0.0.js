@@ -1,6 +1,6 @@
-// commit bbefd81b82515c836fa07ecd0a2c8548c625e7b4
+// commit e0b6bfa7d32093b31ab089da6d57d1b5153a4aab
 
-// File generated at :: Tue Jul 24 2012 15:37:01 GMT-0700 (PDT)
+// File generated at :: Tue Jul 24 2012 16:24:58 GMT-0700 (PDT)
 
 /*
  Licensed to the Apache Software Foundation (ASF) under one
@@ -2684,6 +2684,7 @@ var FileTransferError = function(code, source, target, status) {
 FileTransferError.FILE_NOT_FOUND_ERR = 1;
 FileTransferError.INVALID_URL_ERR = 2;
 FileTransferError.CONNECTION_ERR = 3;
+FileTransferError.ABORT_ERR = 4;
 
 module.exports = FileTransferError;
 

@@ -273,14 +273,19 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					showPage( 'upload-latest-page' );
 				});
 			}).fail( function( data ) {
-				var code, info;
-				if( data.error ) {
-					code = data.error.code;
-					info = data.error.info;
+				if (data == "Aborted") {
+					// no-op
+					console.log( "Upload got aborted." );
+				} else {
+					var code, info;
+					if( data.error ) {
+						code = data.error.code;
+						info = data.error.info;
+					}
+					$( '#upload-progress-state' ).html( mw.msg( 'upload-progress-failed' ) );
+					displayError( code, info );
+					console.log( 'Upload failed: ' + code );
 				}
-				$( '#upload-progress-state' ).html( mw.msg( 'upload-progress-failed' ) );
-				displayError( code, info );
-				console.log( 'Upload failed: ' + code );
 			} );
 		});
 		showPage('upload-confirm-page');
