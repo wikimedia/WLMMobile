@@ -58,6 +58,13 @@ header.actionbar.hidden {
 
 /* Generic page layout styles */
 
+.page {
+	position: absolute;
+	right: 0;
+	left: 0;
+	top: 0;
+	bottom: 0;
+}
 .page header.actionbar {
 	position: fixed;
 	height: 48px;
