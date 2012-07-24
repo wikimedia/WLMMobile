@@ -438,18 +438,23 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		var username = api.userName;
 		db.requestUploadsForUser( username ).done( function( uploads ) {
 			$( '#uploads-list' ).empty();
-			var uploadsTemplate = templates.getTemplate('upload-list-item-template');
-			var uploadCompleteTemplate = templates.getTemplate('upload-completed-item-detail-template');
-			$.each( uploads, function( i, upload ) {
-				var monument = JSON.parse( upload.monument );
-				$uploadItem = $( uploadsTemplate( { upload: upload, monument: monument } ) );
-				$uploadItem.click( function() {
-					$( '#completed-upload-detail' ).html( uploadCompleteTemplate( { upload: upload, monument: monument } ) );
-					$( '#completed-upload-detail-page .actionbar h2' ).text( monument.name );
-					showPage( 'completed-upload-detail-page' );
+			if( uploads.length ) {
+				var uploadsTemplate = templates.getTemplate( 'upload-list-item-template' );
+				var uploadCompleteTemplate = templates.getTemplate( 'upload-completed-item-detail-template' );
+				$.each( uploads, function( i, upload ) {
+					var monument = JSON.parse( upload.monument );
+					$uploadItem = $( uploadsTemplate( { upload: upload, monument: monument } ) );
+					$uploadItem.click( function() {
+						$( '#completed-upload-detail' ).html( uploadCompleteTemplate( { upload: upload, monument: monument } ) );
+						$( '#completed-upload-detail-page .actionbar h2' ).text( monument.name );
+						showPage( 'completed-upload-detail-page' );
+					} );
+					$( '#uploads-list' ).append( $uploadItem );
 				} );
-				$( '#uploads-list' ).append( $uploadItem );
-			} );
+			} else {
+				var emptyUploadTemplate = templates.getTemplate( 'upload-list-empty-template' );
+				$( '#uploads-list' ).html( emptyUploadTemplate() ).localize();
+			}
 			showPage( 'uploads-page' );
 		} );
 	}

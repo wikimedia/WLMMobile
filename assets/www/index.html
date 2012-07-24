@@ -39,6 +39,11 @@
 			<img class='monument-thumbnail' width="64" src="<%= upload.file %>"/>
 		</li>
 	</script>
+	<script type="text/html" id="upload-list-empty-template">
+		<li>
+			<msg key="no-uploads" />
+		</li>
+	</script>
 	<script type='text/html' id='upload-completed-item-detail-template'>
 		<img class='uploaded-image-full' src='<%= upload.file %>' />
 		<div class='uploaded-image-details'>
