@@ -288,6 +288,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	// Would have to add a 'cancel' callback in the future
 	function doLogin(success, fail) {
 
+		if( typeof fail === 'undefined' ) {
+			fail = function() { };
+		}
+
 		function authenticate( username, password ) {
 			showPage( 'login-progress-page' );
 			$( "#login-user, #login-pass" ).removeClass( 'error-input-field' );
