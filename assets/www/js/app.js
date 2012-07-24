@@ -19,9 +19,9 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'preferences', 'database', 
+require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument', 'preferences', 'database', 
 		'jquery.localize', 'campaigns-data' ],
-	function( $, l10n, geo, Api, templates, MonumentsApi, prefs, db ) {
+	function( $, l10n, geo, Api, templates, MonumentsApi, Monument, prefs, db ) {
 
 	var api = new Api("https://test.wikipedia.org/w/api.php");
 	var commonsApi = new Api('https://commons.wikimedia.org/w/api.php');
