@@ -3,12 +3,14 @@
 var _loggedIn;
 module( 'app.js', {
 	setup: function() {
+		WLMMobile.app.clearHistory();
 		_loggedIn = WLMMobile.api.loggedIn;
 		$( '<div id="results" />' ).appendTo( document.body );
 	},
 	teardown: function() {
 		WLMMobile.api.loggedIn = _loggedIn;
 		$( '#results' ).remove();
+		WLMMobile.app.clearHistory();
 	}
 } );
 
@@ -42,27 +44,65 @@ test( 'back button (select by campaign)', function() {
 	app.showPage( 'welcome-page' );
 	app.showPage( 'country-page' );
 	app.showPage( 'results-page' );
-	app.showPage( 'map-page', null, true ); // switch to map via dropdown
-	app.showPage( 'results-page', null, true );
-	app.showPage( 'map-page', null, true );
-	app.showPage( 'results-page', null, true );
+	app.showPage( 'map-page' ); // switch to map via dropdown
+	app.showPage( 'results-page' );
+	app.showPage( 'map-page' );
+	app.showPage( 'results-page' );
 	var prevPage = app.goBack();
-	//var prevprevPage = app.goBack();
-	strictEqual( prevPage, 'country-page', 'last page is country page (map not cached)' );
-	//strictEqual( prevprevPage, 'welcome-page', 'page before is welcome' );
+	var prevPage2 = app.goBack();
+	var prevPage3 = app.goBack();
+	strictEqual( prevPage, 'map-page', 'last page is country page (map not cached)' );
+	strictEqual( prevPage2, 'results-page', 'page before is results' );
+	strictEqual( prevPage3, 'country-page', 'page before is the country as the user has already been back to the map' );
 } );
 
 test( 'back behaviour (use my current location)', function() {
 	var app = WLMMobile.app;
 	app.showPage( 'welcome-page' );
 	app.showPage( 'map-page' );
-	app.showPage( 'results-page', null, true ); // switch to results via dropdown
-	app.showPage( 'map-page', null, true ); // switch back to map
+	app.showPage( 'results-page' ); // switch to results via dropdown
+	app.showPage( 'map-page' ); // switch back to map
 	app.showPage( 'detail-page' ); // click on marker to select detail
 	var prevPage = app.goBack();
-	//var prevprevPage = app.goBack();
-	strictEqual( prevPage, 'map-page', 'last page is the map as that is where we entered' );
-	//strictEqual( prevprevPage, 'welcome-page', 'page before is welcome' );
+	var prevPage2 = app.goBack();
+	var prevPage3 = app.goBack();
+	strictEqual( prevPage, 'map-page', 'last page is the mapd' );
+	strictEqual( prevPage2, 'results-page', 'page before is results' );
+	strictEqual( prevPage3, 'map-page' );
+} );
+
+test( 'toggling between monuments list and uploads-page', function() {
+	var app = WLMMobile.app;
+	app.showPage( 'country-page' );
+	app.showPage( 'results-page' );
+	app.showPage( 'uploads-page' );
+	app.showPage( 'results-page' );
+	app.showPage( 'uploads-page' );
+	app.showPage( 'results-page' );
+	var prevPage = app.goBack();
+	var prevPage2 = app.goBack();
+	var prevPage3 = app.goBack();
+	strictEqual( prevPage, 'uploads-page' );
+	strictEqual( prevPage2, 'results-page' );
+	strictEqual( prevPage3, 'country-page', 'results->upload repeats itself' );
+} );
+
+
+test( 'toggling between map and results', function() {
+	var app = WLMMobile.app;
+	app.showPage( 'welcome-page' );
+	app.showPage( 'country-page' );
+	app.showPage( 'results-page' ); // switch to results via dropdown
+	app.showPage( 'map-page' );
+	app.showPage( 'results-page' ); // switch to results via dropdown
+	app.showPage( 'map-page' ); // switch back to map
+	app.showPage( 'results-page' ); // switch to results via dropdown
+	app.showPage( 'map-page' ); // switch back to map
+	var prevPage = app.goBack();
+	var prevPage2 = app.goBack();
+	var prevPage3 = app.goBack();
+	strictEqual( prevPage, 'results-page' );
+	strictEqual( prevPage2, 'country-page' );
 } );
 
 }());
