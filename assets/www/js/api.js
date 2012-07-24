@@ -125,7 +125,6 @@ define(['jquery'], function() {
 				filename: filename,
 				ignorewarnings: 1,
 				stash: 1,
-				progress: true,
 				token: token,
 				format: 'json'
 			};
@@ -154,15 +153,14 @@ define(['jquery'], function() {
 			
 			window.resolveLocalFileSystemURI( sourceUri, function( fileEntry ) {
 				fileEntry.file( function( file ) {
-					ft.upload( sourceUri, that.url, function( r ) {
+					ft.onprogress = function( r ) {
 						var percentageSent, sent;
-						if( r && r.responseCode === -1 ) {
-							sent = r.bytesSent || 0;
-							percentageSent = sent / file.size * 100;
-							that.reportProgress( Math.round( percentageSent / 2 ) + 10 );
-						} else {
-							uploadSuccess( r );
-						}
+						sent = r.bytesSent || 0;
+						percentageSent = sent / file.size * 100;
+						that.reportProgress( Math.round( percentageSent / 2 ) + 10 );
+					};
+					ft.upload( sourceUri, that.url, function( r ) {
+						uploadSuccess( r );
 					}, uploadFail, options );
 				} );
 			});

@@ -1,5 +1,5 @@
 (function() {
-	var cordova = 'cordova-1.8.1',
+	var cordova = 'cordova-2.0.0',
 		os = false,
 		ua = navigator.userAgent,
 		detectorClasses = [];
