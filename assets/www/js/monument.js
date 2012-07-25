@@ -1,3 +1,5 @@
+/*global define,$,platform */
+/*jslint sloppy: true, white:true, maxerr: 50, indent: 4, plusplus: true, vars:true */
 define( [ 'jquery' ], function() {
 	function stripWikiText(str) {
 		str = str.replace( /\[\[[^\|]+\|([^\]]+)\]\]/g, '$1' );
@@ -38,7 +40,7 @@ define( [ 'jquery' ], function() {
 
 	Monument.prototype.generateFilename = function() {
 		var name = this.name.replace( String.fromCharCode(27), '-' );
-		return name.replace( /[\x7f\.\[\#\<\>\[\]\|\{\}]/g, '-' ); + " " + ( new Date() ).getTime();
+		return name.replace( /[\x7f\.\[#<>\[\]\|\{\}]/g, '-' ) + " " + ( new Date() ).getTime();
 	};
 
 	return Monument;
