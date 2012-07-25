@@ -38,9 +38,12 @@ define( [ 'jquery' ], function() {
 		return d.promise();
 	};
 
-	Monument.prototype.generateFilename = function() {
+	Monument.prototype.generateFilename = function( date ) {
 		var name = this.name.replace( String.fromCharCode(27), '-' );
-		return name.replace( /[\x7f\.\[#<>\[\]\|\{\}]/g, '-' ) + " " + ( new Date() ).getTime();
+		var d = date || new Date();
+		var months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec' ];
+		var suffix =  d.getDate() + months[ d.getMonth() ] + d.getFullYear() + ' ' + d.getHours() + 'hrs' + d.getMinutes() + 'mins' + d.getSeconds() + 'secs';
+		return name.replace( /[\x7f\.\[#<>\[\]\|\{\}]/g, '-' ) + ' (taken on ' + suffix + ')';
 	};
 
 	return Monument;
