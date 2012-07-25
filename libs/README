@@ -1,0 +1,3 @@
+This cordova-2.0.0.jar built from https://github.com/brion/incubator-cordova-android/commits/filetransfer-progress 4ecf66aae222e441958e7cafb9ce19b633e38bb3
+
+Has customized FileTransfer with onprogress event and abort method (implemented for upload only)

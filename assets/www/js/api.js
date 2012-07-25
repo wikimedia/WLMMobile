@@ -125,7 +125,6 @@ define(['jquery'], function() {
 				filename: filename,
 				ignorewarnings: 1,
 				stash: 1,
-				progress: true,
 				token: token,
 				format: 'json'
 			};
@@ -145,24 +144,32 @@ define(['jquery'], function() {
 					d.reject(data);
 				}
 			}
+			that.lastRequest = d.promise();
+			that.lastRequest.abort = function() {
+				console.log('Aborting upload...');
+				ft.abort();
+			}
 			function uploadFail( error ) {
 				console.log("upload error source " + error.source);
 				console.log("upload error target " + error.target);
 				console.log(JSON.stringify(error));
-				d.reject("HTTP error");
+				if (error.code == FileTransferError.ABORT_ERR ) {
+					d.reject("Aborted");
+				} else {
+					d.reject("HTTP error");
+				}
 			}
 			
 			window.resolveLocalFileSystemURI( sourceUri, function( fileEntry ) {
 				fileEntry.file( function( file ) {
-					ft.upload( sourceUri, that.url, function( r ) {
+					ft.onprogress = function( r ) {
 						var percentageSent, sent;
-						if( r && r.responseCode === -1 ) {
-							sent = r.bytesSent || 0;
-							percentageSent = sent / file.size * 100;
-							that.reportProgress( Math.round( percentageSent / 2 ) + 10 );
-						} else {
-							uploadSuccess( r );
-						}
+						sent = r.bytesSent || 0;
+						percentageSent = sent / file.size * 100;
+						that.reportProgress( Math.round( percentageSent / 2 ) + 10 );
+					};
+					ft.upload( sourceUri, that.url, function( r ) {
+						uploadSuccess( r );
 					}, uploadFail, options );
 				} );
 			});
