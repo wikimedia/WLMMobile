@@ -4,12 +4,11 @@ To import Android project to Eclipse:
 * create new project
 ** new "Android project"
 ** "from existing sources"
-** set API level to 2.3.3
+** set target API level to 4.0
 * go to project properties, make sure compiler is set to Java 1.6
 
 
 PhoneGap/Cordova issues:
 
 * https://issues.apache.org/jira/browse/CB-622 - no way to get progress information from FileTransfer
-
 
