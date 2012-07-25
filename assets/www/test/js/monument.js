@@ -27,4 +27,16 @@ console.log(name2, name2 === 'hello?')
 	strictEqual( name4.indexOf( '-evil-name--muh-h-a-hhh-' ), 0, 'the illegal symbols were escaped' );
 });
 
+test( 'randomness of monument names', function() {
+	var d = new Date(),
+		data = {
+			lat: 4, lon: 4, name: 'hello . symbol', address: '29 Acacier Road'
+		}, m, areDifferentNames,
+		d2 = new Date( d - 1000 ); // second before
+
+	m = new WLMMobile.Monument( data );
+	areDifferentNames = m.generateFilename( d ) === m.generateFilename( d2 );
+	strictEqual( areDifferentNames, false, 'ensure the names generated are unique' );
+} );
+
 }());
