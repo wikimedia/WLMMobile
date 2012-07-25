@@ -74,6 +74,7 @@ header.actionbar.hidden {
 	-webkit-box-align: center;
 	z-index: 200;
 	padding: 4px 5px;
+	top: 0;
 }
 
 .page header.actionbar img {
