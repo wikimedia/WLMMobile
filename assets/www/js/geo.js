@@ -59,8 +59,8 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 			// Causes lots of flicker in PhoneGap for some reason...
 			L.Browser.webkit3d = false;
 			map = new L.Map('map', {
-				touchZoom: true, // force on for Android 3/4
-				zoomControl: $( 'html' ).hasClass( 'android-2' )
+				touchZoom: false,
+				zoomControl: true
 			});
 			var tiles = new L.TileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {
 				maxZoom: 18,
