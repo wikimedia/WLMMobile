@@ -78,7 +78,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			curPageName = pageName;
 		}
 		$page.show();
-		$( 'select', $page ).val( '' ); // reset to the top item in the list
+		$( 'select', $page ).val( pageName ); // reset to the top item in the list
 		if( deferred ) {
 			$page.addClass( 'loading' );
 			// TODO: add fail e.g. warning triangle

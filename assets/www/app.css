@@ -12,6 +12,11 @@ body {
 	margin: 0;
 	background-color: #F2F2F2;
 	color: #222;
+	top: 0;
+	bottom: 0;
+	position: absolute;
+	right: 0;
+	left: 0;
 }
 
 /* spinner related styles */
@@ -74,6 +79,7 @@ header.actionbar.hidden {
 	-webkit-box-align: center;
 	z-index: 200;
 	padding: 4px 5px;
+	top: 0;
 }
 
 .page header.actionbar img {
@@ -304,6 +310,14 @@ button.requires-location {
 
 #map {
 	bottom: 0px;
+}
+
+.leaflet-control-container {
+	-webkit-transform: translate3d(0,0,0);
+	position: relative;
+	top: 0;
+	left: 0;
+	z-index: 2;
 }
 
 .leaflet-marker-pane,
