@@ -20,7 +20,6 @@ test( 'generateFilename: . symbol', function() {
 	name2 = m2.generateFilename();
 	name3 = m3.generateFilename();
 	name4 = m4.generateFilename();
-console.log(name2, name2 === 'hello?')
 	strictEqual( name.indexOf( 'hello - symbol' ), 0, 'the illegal symbol was escaped' );
 	strictEqual( name2.indexOf( 'hello-?' ), 0, 'the illegal symbol was escaped' );
 	strictEqual( name3.indexOf( '-hello-' ), 0, 'the illegal symbol was escaped' );
