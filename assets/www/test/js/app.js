@@ -65,4 +65,15 @@ test( 'back behaviour (use my current location)', function() {
 	//strictEqual( prevprevPage, 'welcome-page', 'page before is welcome' );
 } );
 
+test( 'resolveImageThumbnail', function() {
+	var url1 = 'http://upload.wikimedia.org/wikipedia/test/8/88/%28taken_on_25Jul2012_16hrs38mins14secs%29.jpeg'
+	var url1r = 'http://upload.wikimedia.org/wikipedia/test/thumb/8/88/%28taken_on_25Jul2012_16hrs38mins14secs%29.jpeg/180px-%28taken_on_25Jul2012_16hrs38mins14secs%29.jpeg'
+	var url2 = 'http://upload.wikimedia.org/wikipedia/commons/c/cc/Junonia_hierta_by_kadavoor.JPG';
+	var url2r = 'http://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Junonia_hierta_by_kadavoor.JPG/180px-Junonia_hierta_by_kadavoor.JPG';
+	var actual1 = WLMMobile.app.resolveImageThumbnail( url1 );
+	var actual2 = WLMMobile.app.resolveImageThumbnail( url2 );
+	strictEqual( actual1, url1r );
+	strictEqual( actual2, url2r );
+} );
+
 }());
