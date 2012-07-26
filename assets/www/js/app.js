@@ -246,6 +246,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		$( '<p />' ).text( text ).appendTo( info );
 	}
 
+	function resolveImageThumbnail( url ) {
+		var parts = url.split( '/' );
+		// slot thumb 3 levels down
+		return parts.slice(0, 5).join( '/' ) + '/thumb/'  + parts.slice( 5 ).join( '/' ) + '/180px-' + parts[ parts.length - 1 ];
+	}
+
 	function showPhotoConfirmation(fileUrl) {
 		var comment = 'Uploaded via WLM Mobile App';
 		var uploadConfirmTemplate = templates.getTemplate('upload-confirm-template');
@@ -263,7 +269,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			api.startUpload( fileUrl, fileName ).done( function( fileKey, token ) {
 				$("#upload-progress-state").html(mw.msg("upload-progress-in-progress"));
 				api.finishUpload( fileKey, fileName, comment, text, token ).done(function( imageinfo ) {
-					$( '#upload-latest-page img' ).attr( 'src', imageinfo.url );
+					$( '#upload-latest-page img' ).attr( 'src', resolveImageThumbnail( imageinfo.url ) );
 					$( '#upload-latest-page .share' ).html( mw.msg( 'upload-latest-view' ) );
 					$( '#upload-latest-page .share a' ).attr( 'href', imageinfo.descriptionurl );
 
@@ -678,6 +684,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		app: {
 			goBack: goBack,
 			showMonumentsList: showMonumentsList,
+			resolveImageThumbnail: resolveImageThumbnail,
 			showPage: showPage
 		},
 		Monument: Monument
