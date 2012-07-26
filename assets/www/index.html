@@ -45,6 +45,12 @@
 		</li>
 	</script>
 	<script type='text/html' id='upload-completed-item-detail-template'>
+		<h3><%= monument.name %></h3>
+		<p>
+			<a class="monumentLink">
+				<msg key="upload-monument-link-text"></msg>
+			</a>
+		</p>
 		<img class='uploaded-image-full' src='<%= upload.file %>' />
 		<div class='uploaded-image-details'>
 			<a><%= upload.title %></a>

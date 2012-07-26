@@ -423,6 +423,7 @@ button.myLocation,
 }
 
 #about-page a,
+#completed-upload-detail a,
 #login-page #login-create-account-msg a {
 	color: #666;
 	text-decoration: underline;
