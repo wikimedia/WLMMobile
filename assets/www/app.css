@@ -178,6 +178,33 @@ button {
 	font-size: 18px;
 	border: 0px;
 	cursor: pointer;
+	opacity: 0.9;
+}
+
+button.myLocation {
+	position: absolute;
+	z-index: 6;
+	width: 20px;
+	height: 20px;
+	overflow: hidden;
+	text-indent: -999px;
+	border: solid 1px #AAA;
+	background-color: white;
+	border-radius: 2px;
+	padding: 0;
+	top: 100px;
+	left: 28px;
+	background-repeat: no-repeat;
+	background-image: url(images/dot.png);
+	background-position: center center;
+}
+
+button.myLocation.loading {
+	background-image: url(images/loader.gif);
+	-webkit-background-size: 12px 12px;
+	background-size: 12px 12px;
+	background-repeat: no-repeat;
+	background-position: center;
 }
 
 input[type='text'] {
@@ -317,9 +344,10 @@ button.requires-location {
 	position: relative;
 	top: 0;
 	left: 0;
-	z-index: 2;
+	z-index: 6;
 }
 
+button.myLocation,
 .leaflet-marker-pane,
 .leaflet-shadow-pane,
 .leaflet-overlay-pane {
