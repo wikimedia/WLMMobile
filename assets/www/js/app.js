@@ -509,7 +509,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					$uploadItem = $( uploadsTemplate( { upload: upload, monument: monument } ) );
 					$uploadItem.click( function() {
 						$( '#completed-upload-detail' ).html( uploadCompleteTemplate( { upload: upload, monument: monument } ) );
-						$( '#completed-upload-detail-page .actionbar h2' ).text( monument.name );
+						$( '#completed-upload-detail .monumentLink' ).
+							data( 'monument', new Monument( monument, commonsApi ) ).
+							click( function() {
+								showMonumentDetail( $( this ).data( 'monument' ) );
+							} ).localize();
 						showPage( 'completed-upload-detail-page' );
 					} );
 					$( '#uploads-list' ).append( $uploadItem );
