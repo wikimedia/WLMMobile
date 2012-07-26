@@ -43,13 +43,44 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	var curMonument = null; // Used to store state for take photo, etc
 
 	var pageHistory = []; // TODO: retain history
+	function clearHistory() {
+		pageHistory = [];
+	}
+
 	function addToHistory( page ) {
+
+		function trimRepeats() {
+			var newHistory = [], i, thisEven, thisOdd, nextEven, nextOdd,
+				isRepeatPattern;
+
+			for( i = 0; i < pageHistory.length; i+=1 ) {
+				thisItem = pageHistory[ i ];
+				nextItem = pageHistory[ i + 1 ];
+				finalItem = pageHistory[ i + 3 ];
+				// only add i in situation where not the case that i+1 === i+3 && i+2 !== i
+				isRepeatPattern = nextItem && finalItem &&
+					nextItem === finalItem &&
+					thisItem === pageHistory[ i + 2 ];
+				if ( isRepeatPattern ) { // skip repeats
+					newHistory.push( thisItem );
+					if( nextItem ) {
+						newHistory.push( nextItem );
+					}
+					i += 4;
+				} else {
+					newHistory.push( thisItem );
+				}
+			}
+			pageHistory = newHistory;
+		}
+
 		var blacklist = [ 'locationlookup-page', 'login-progress-page' ];
 		var blacklisted = blacklist.indexOf( page ) > -1;
 		if( !blacklisted &&
 			pageHistory[ pageHistory.length - 1 ] !== page ) { // avoid adding the same page twice
 			pageHistory.push( page );
 		}
+		trimRepeats();
 	}
 	
 	function goBack() {
@@ -68,10 +99,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		return pageName;
 	}
 
-	function showPage( pageName, deferred, cloaked ) {
-		if( !cloaked ) {
-			addToHistory( pageName );
-		}
+	function showPage( pageName, deferred ) {
+		addToHistory( pageName );
 		var $page = $("#" + pageName); 
 		$('.page, .popup-container-container').hide(); // hide existing popups
 		if(!$page.hasClass('popup-container-container')) {
@@ -664,7 +693,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		// setup dropdowns that allow switching a page
 		$( 'select.toggle-page' ).change( function( ev ) {
 			var page = $( this ).val();
-			showPage( page, null, true );
+			showPage( page );
 			ev.preventDefault(); // stop the UI changing
 		} );
 
@@ -682,6 +711,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	window.WLMMobile = {
 		api : api,
 		app: {
+			clearHistory: clearHistory,
 			goBack: goBack,
 			showMonumentsList: showMonumentsList,
 			resolveImageThumbnail: resolveImageThumbnail,
