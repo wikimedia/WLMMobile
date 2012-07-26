@@ -564,6 +564,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		$('#countries').click(function() {
 			showPage('country-page');
 		});
+		
+		$( '#about' ).click( function() {
+			showPage( 'about-page' );
+		} );
 
 		$( '.show-search' ).click( function() {
 			var page = $( this ).parents( '.page' ).attr( 'id' );
@@ -653,6 +657,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		});
 
 		$(document).localize();
+		$( '#about-page-text' ).html( mw.msg( 'about-wlm-p1' ) );
 		showPage('welcome-page');
 
 		// allow cancellation of current api upload request
