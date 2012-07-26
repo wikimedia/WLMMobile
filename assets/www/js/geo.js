@@ -68,6 +68,18 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 			});
 			map.addLayer(tiles);
 
+			$( '<button>' ).addClass( 'myLocation' ).text( 'center on me' ).
+				click( function() {
+					var el = this;
+					$( el ).addClass( 'loading' );
+					navigator.geolocation.getCurrentPosition( function( pos ) {
+						map.panTo( new L.LatLng( pos.coords.latitude, pos.coords.longitude ) );
+						$( el ).removeClass( 'loading' );
+					}, function() {
+						$( el ).removeClass( 'loading' );
+					} );
+				} ).appendTo( '#map' );
+
 			map.attributionControl.setPrefix("");
 			map.attributionControl.addAttribution(
 				'<span class=".map-attribution">' + mw.message("attribution-mapquest") + '</span>'
