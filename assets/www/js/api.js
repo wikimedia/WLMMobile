@@ -164,7 +164,7 @@ define(['jquery'], function() {
 				fileEntry.file( function( file ) {
 					ft.onprogress = function( r ) {
 						var percentageSent, sent;
-						sent = r.bytesSent || 0;
+						sent = r.loaded || 0;
 						percentageSent = sent / file.size * 100;
 						that.reportProgress( Math.round( percentageSent / 2 ) + 10 );
 					};
