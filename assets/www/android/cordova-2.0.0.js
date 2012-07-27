@@ -1,6 +1,6 @@
-// commit e0b6bfa7d32093b31ab089da6d57d1b5153a4aab
+// commit fd8c37860178ac06d223ac32a69fcb2d2e867903
 
-// File generated at :: Tue Jul 24 2012 16:24:58 GMT-0700 (PDT)
+// File generated at :: Fri Jul 27 2012 12:15:55 GMT-0700 (PDT)
 
 /*
  Licensed to the Apache Software Foundation (ASF) under one
@@ -2558,15 +2558,26 @@ module.exports = FileSystem;
 // file: lib/common/plugin/FileTransfer.js
 define("cordova/plugin/FileTransfer", function(require, exports, module) {
 var exec = require('cordova/exec'),
-    FileTransferError = require('cordova/plugin/FileTransferError');
+    FileTransferError = require('cordova/plugin/FileTransferError'),
+    ProgressEvent = require('cordova/plugin/ProgressEvent');
+
+function newProgressEvent(result) {
+    var pe = new ProgressEvent();
+    pe.lengthComputable = result.lengthComputable;
+    pe.loaded = result.loaded;
+    pe.total = result.total;
+    return pe;
+}
+
+var idCounter = 0;
 
 /**
  * FileTransfer uploads a file to a remote server.
  * @constructor
  */
 var FileTransfer = function() {
-	this._id = 'ft' + Date.now() + '-' + Math.floor(Math.random() * 99999);
-	this.onprogress = null; // optional callback
+    this._id = ++idCounter;
+    this.onprogress = null; // optional callback
 };
 
 /**
@@ -2608,18 +2619,17 @@ FileTransfer.prototype.upload = function(filePath, server, successCallback, erro
         errorCallback(error);
     };
 
-	var self = this;
-	var successCallbackWrapper = function(e) {
-		if (e.responseCode == -1) {
-			if (self.onprogress) {
-				// @fixme create and send a ProgressEvent
-				return self.onprogress.apply(self, [e]);
-			}
-		} else {
-			return successCallback(e);
-		}
-	};
-    exec(successCallbackWrapper, fail, 'FileTransfer', 'upload', [filePath, server, fileKey, fileName, mimeType, params, trustAllHosts, chunkedMode, this._id]);
+    var self = this;
+    var win = function(result) {
+        if (typeof result.lengthComputable != "undefined") {
+            if (self.onprogress) {
+                return self.onprogress(newProgressEvent(result));
+            }
+        } else {
+            return successCallback(result);
+        }
+    };
+    exec(win, fail, 'FileTransfer', 'upload', [filePath, server, fileKey, fileName, mimeType, params, trustAllHosts, chunkedMode, this._id]);
 };
 
 /**
@@ -2632,19 +2642,26 @@ FileTransfer.prototype.upload = function(filePath, server, successCallback, erro
 FileTransfer.prototype.download = function(source, target, successCallback, errorCallback) {
     // sanity parameter checking
     if (!source || !target) throw new Error("FileTransfer.download requires source URI and target URI parameters at the minimum.");
+    var self = this;
     var win = function(result) {
-        var entry = null;
-        if (result.isDirectory) {
-            entry = new (require('cordova/plugin/DirectoryEntry'))();
+        if (typeof result.lengthComputable != "undefined") {
+            if (self.onprogress) {
+                return self.onprogress(newProgressEvent(result));
+            }
+        } else {
+            var entry = null;
+            if (result.isDirectory) {
+                entry = new (require('cordova/plugin/DirectoryEntry'))();
+            }
+            else if (result.isFile) {
+                entry = new (require('cordova/plugin/FileEntry'))();
+            }
+            entry.isDirectory = result.isDirectory;
+            entry.isFile = result.isFile;
+            entry.name = result.name;
+            entry.fullPath = result.fullPath;
+            successCallback(entry);
         }
-        else if (result.isFile) {
-            entry = new (require('cordova/plugin/FileEntry'))();
-        }
-        entry.isDirectory = result.isDirectory;
-        entry.isFile = result.isFile;
-        entry.name = result.name;
-        entry.fullPath = result.fullPath;
-        successCallback(entry);
     };
 
     var fail = function(e) {
@@ -2661,7 +2678,7 @@ FileTransfer.prototype.download = function(source, target, successCallback, erro
  * @param errorCallback {Function}    Callback to be invoked upon error
  */
 FileTransfer.prototype.abort = function(successCallback, errorCallback) {
-	exec(successCallback, errorCallback, 'FileTransfer', 'abort', [this._id]);
+    exec(successCallback, errorCallback, 'FileTransfer', 'abort', [this._id]);
 }
 
 module.exports = FileTransfer;
