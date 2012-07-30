@@ -19,9 +19,9 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument', 'preferences', 'database', 'admintree',
+require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument', 'preferences', 'database', 'admintree', 'photo',
 		'jquery.localize', 'campaigns-data', 'licenses-data' ],
-	function( $, l10n, geo, Api, templates, MonumentsApi, Monument, prefs, db, AdminTreeApi ) {
+	function( $, l10n, geo, Api, templates, MonumentsApi, Monument, prefs, db, AdminTreeApi, Photo ) {
 
 	var api = new Api( WLMConfig.WIKI_API, function( percent ) {
 		$( '#upload-progress-bar' ).empty();
@@ -344,21 +344,28 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		$("#confirm-license-text").html(mw.msg('confirm-license-text', api.userName, licenseText));
 		$("#continue-upload").click(function() {
 			// reset status message for any previous uploads
-			$( '#upload-progress-state' ).html(mw.msg( 'upload-progress-starting' ));
-			showPage("upload-progress-page");
-			api.startUpload( fileUrl, fileName ).done( function( fileKey, token ) {
-				$("#upload-progress-state").html(mw.msg("upload-progress-in-progress"));
-				api.finishUpload( fileKey, fileName, comment, text, token ).done(function( imageinfo ) {
-					$( '#upload-latest-page img' ).attr( 'src', resolveImageThumbnail( imageinfo.url ) );
-					$( '#upload-latest-page .share' ).html( mw.msg( 'upload-latest-view' ) );
-					$( '#upload-latest-page .share a' ).attr( 'href', imageinfo.descriptionurl );
+			var photo = new Photo({
+				contentURL: fileUrl,
+				fileTitle: fileName,
+				fileContent: text
+			});
+			photo.uploadTo( api, comment ).done( function( imageinfo ) {
+				$( '#upload-latest-page img' ).attr( 'src', resolveImageThumbnail( imageinfo.url ) );
+				$( '#upload-latest-page .share' ).html( mw.msg( 'upload-latest-view' ) );
+				$( '#upload-latest-page .share a' ).attr( 'href', imageinfo.descriptionurl );
 
-					db.addUpload( curMonument, api.userName, fileUrl, imageinfo.url, fileName, true );
-					goBack(); // undo back button to skip upload progress page
-					goBack(); // undo back button to skip upload form
-					showPage( 'upload-latest-page' );
-				});
-			}).fail( function( data ) {
+				db.addUpload( curMonument, api.userName, fileUrl, imageinfo.url, fileName, true );
+				goBack(); // undo back button to skip upload progress page
+				goBack(); // undo back button to skip upload form
+				showPage( 'upload-latest-page' );
+			} ).progress( function( state ) {
+				if( state === 'starting' ) {
+					$( '#upload-progress-state' ).html(mw.msg( 'upload-progress-starting' ));
+					showPage("upload-progress-page");
+				} else if ( state === 'in-progress' ) {
+					$("#upload-progress-state").html(mw.msg("upload-progress-in-progress"));
+				}
+			} ).fail( function( data ) {
 				if (data == "Aborted") {
 					// no-op
 					console.log( "Upload got aborted." );
