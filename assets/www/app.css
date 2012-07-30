@@ -207,16 +207,6 @@ button.myLocation.loading {
 	background-position: center;
 }
 
-header button#about {
-	background: none;
-	background-image: url(images/2-action-about.png);
-	text-indent: -999px;
-	background-repeat: no-repeat;
-	margin: 0; /* remove default margins */
-	width: 40px;
-	background-position: center center;
-}
-
 input[type='text'] {
 	-webkit-appearance: none;
 	appearance: none;
