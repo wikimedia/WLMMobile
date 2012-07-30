@@ -3,8 +3,11 @@
 define(['jquery'], function() {
 	var TIMEOUT = 15 * 1000; // Default timeout value
 
-	function Api(url) {
+	function Api( url, reportProgress ) {
+		reportProgress = reportProgress || function() {};
+
 		this.url = url;
+		this.reportProgress = reportProgress;
 	}
 
 	Api.prototype.request = function(method, params) {
@@ -99,12 +102,6 @@ define(['jquery'], function() {
 			d.reject( err );
 		} );
 		return d.promise();
-	};
-
-	Api.prototype.reportProgress = function( percentage ) {
-		$( '#upload-progress-bar' ).empty();
-		$( '<div>' ).css( 'width', percentage + '%').
-			appendTo( '#upload-progress-bar' );
 	};
 
 	Api.prototype.startUpload = function( sourceUri, filename ) {

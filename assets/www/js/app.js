@@ -23,7 +23,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		'jquery.localize', 'campaigns-data', 'licenses-data' ],
 	function( $, l10n, geo, Api, templates, MonumentsApi, Monument, prefs, db, AdminTreeApi ) {
 
-	var api = new Api( WLMConfig.WIKI_API );
+	var api = new Api( WLMConfig.WIKI_API, function( percent ) {
+		$( '#upload-progress-bar' ).empty();
+		$( '<div>' ).css( 'width', percent + '%').
+			appendTo( '#upload-progress-bar' );
+	} );
 	var commonsApi = new Api( WLMConfig.COMMONS_API );
 	var monuments = new MonumentsApi( WLMConfig.MONUMENT_API, commonsApi );
 	var wlmapi = 'http://toolserver.org/~erfgoed/api/api.php';
