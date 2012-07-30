@@ -215,6 +215,8 @@ header button#about {
 	margin: 0; /* remove default margins */
 	width: 40px;
 	background-position: center center;
+	position: absolute;
+	right: 0;
 }
 
 input[type='text'] {
