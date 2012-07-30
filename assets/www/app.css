@@ -181,42 +181,6 @@ button {
 	opacity: 0.9;
 }
 
-button.myLocation {
-	position: absolute;
-	z-index: 6;
-	width: 20px;
-	height: 20px;
-	overflow: hidden;
-	text-indent: -999px;
-	border: solid 1px #AAA;
-	background-color: white;
-	border-radius: 2px;
-	padding: 0;
-	top: 100px;
-	left: 28px;
-	background-repeat: no-repeat;
-	background-image: url(images/dot.png);
-	background-position: center center;
-}
-
-button.myLocation.loading {
-	background-image: url(images/loader.gif);
-	-webkit-background-size: 12px 12px;
-	background-size: 12px 12px;
-	background-repeat: no-repeat;
-	background-position: center;
-}
-
-header button#about {
-	background: none;
-	background-image: url(images/2-action-about.png);
-	text-indent: -999px;
-	background-repeat: no-repeat;
-	margin: 0; /* remove default margins */
-	width: 40px;
-	background-position: center center;
-}
-
 input[type='text'] {
 	-webkit-appearance: none;
 	appearance: none;
@@ -363,6 +327,32 @@ button.myLocation,
 .leaflet-overlay-pane {
 	/* hack to work around https://github.com/CloudMade/Leaflet/issues/335 */
     -webkit-transform: translateZ(0px);
+}
+
+button.myLocation {
+	position: absolute;
+	z-index: 6;
+	width: 20px;
+	height: 20px;
+	overflow: hidden;
+	text-indent: -999px;
+	border: solid 1px #AAA;
+	background-color: white;
+	border-radius: 2px;
+	padding: 0;
+	top: 100px;
+	left: 28px;
+	background-repeat: no-repeat;
+	background-image: url(images/dot.png);
+	background-position: center center;
+}
+
+button.myLocation.loading {
+	background-image: url(images/loader.gif);
+	-webkit-background-size: 12px 12px;
+	background-size: 12px 12px;
+	background-repeat: no-repeat;
+	background-position: center;
 }
 
 /* Monument details styles */
