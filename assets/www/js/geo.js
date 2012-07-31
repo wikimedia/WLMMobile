@@ -106,16 +106,6 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 		}
 	}
 
-	function showMap() {
-		$("#map").show();
-		// Makes leaflet aware of its' position - avoids 'wrong center' problem
-		map.invalidateSize();
-	}
-
-	function hideMap() {
-		$("#map").hide();
-	}
-
 	function clear() {
 		clusterer.clearMarkers();
 	}
@@ -144,9 +134,7 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 		addMonument: addMonument,
 		calculateCenterAndZoom: calculateCenterAndZoom,
 		setCenterAndZoom: setCenterAndZoom,
-		getMap: getMap,
-		showMap: showMap,
-		hideMap: hideMap
+		getMap: getMap
 	};
 
 });
