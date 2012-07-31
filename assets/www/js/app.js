@@ -226,15 +226,17 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		$("#monuments-list").show();
 	}
 
-	function showMonumentsMap( monumentList, center, zoom ) {
+	function addMonuments( monuments ) {
+		$.each( monuments, function( i, monument ) {
+			if ( monument.lat && monument.lon ) {
+				geo.addMonument( monument, showMonumentDetail );
+			}
+		} );
+	}
+
+	function initMap() {
+		showPage( 'map-page' );
 		var searchTimeout, lastRequest;
-		function addMonuments( monuments ) {
-			$.each( monuments, function( i, monument ) {
-				if ( monument.lat && monument.lon ) {
-					geo.addMonument( monument, showMonumentDetail );
-				}
-			} );
-		}
 		function ping( ev ) {
 			console.log( 'update map with new monuments' );
 			var pos = ev.target.getBounds(),
@@ -255,6 +257,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			} );
 		}
 		geo.init( ping );
+	}
+
+	function showMonumentsMap( monumentList, center, zoom ) {
 		geo.clear();
 		if( mapFocusNeeded && typeof center === 'undefined' && typeof zoom === 'undefined' ) {
 			var centerAndZoom = geo.calculateCenterAndZoom( monumentList );
@@ -687,6 +692,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		$(document).localize();
 		$( '#about-page-text' ).html( mw.msg( 'about-wlm-p1' ) );
+		initMap();
 		showPage('welcome-page');
 
 		// allow cancellation of current api upload request
