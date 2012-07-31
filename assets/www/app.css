@@ -28,6 +28,10 @@ body {
 	min-height: 50px;
 }
 
+.loading #results li {
+	display: none;
+}
+
 .loading#results-page .content {
 	background: none;
 }

@@ -123,6 +123,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			showMonumentsMap( monuments );
 		} else if( pageName === 'country-page' ) { // force a refresh of the map on visiting the country page
 			mapFocusNeeded = true;
+			$( '#results' ).data( 'monuments', [] ).empty();
 		}
 	}
 
