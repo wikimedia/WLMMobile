@@ -53,7 +53,7 @@ select {
 }
 
 .hidden {
-	display: none;
+	visibility: hidden; /* don't use display:none as this will effect map initialisation */
 }
 
 header.actionbar.hidden {
@@ -318,7 +318,7 @@ button.requires-location {
 	position: relative;
 	top: 0;
 	left: 0;
-	z-index: 6;
+	z-index: 7;
 }
 
 button.myLocation,

@@ -226,15 +226,17 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		$("#monuments-list").show();
 	}
 
-	function showMonumentsMap( monumentList, center, zoom ) {
+	function addMonuments( monuments ) {
+		$.each( monuments, function( i, monument ) {
+			if ( monument.lat && monument.lon ) {
+				geo.addMonument( monument, showMonumentDetail );
+			}
+		} );
+	}
+
+	function initMap() {
+		showPage( 'map-page' );
 		var searchTimeout, lastRequest;
-		function addMonuments( monuments ) {
-			$.each( monuments, function( i, monument ) {
-				if ( monument.lat && monument.lon ) {
-					geo.addMonument( monument, showMonumentDetail );
-				}
-			} );
-		}
 		function ping( ev ) {
 			console.log( 'update map with new monuments' );
 			var pos = ev.target.getBounds(),
@@ -255,6 +257,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			} );
 		}
 		geo.init( ping );
+	}
+
+	function showMonumentsMap( monumentList, center, zoom ) {
 		geo.clear();
 		if( mapFocusNeeded && typeof center === 'undefined' && typeof zoom === 'undefined' ) {
 			var centerAndZoom = geo.calculateCenterAndZoom( monumentList );
@@ -526,6 +531,30 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		} );
 	}
 
+	function showMonumentsForPosition( latitude, longitude, zoomLevel ) {
+		var d, map, bounds, nw, se,
+			pos = { lat: latitude, lon: longitude };
+
+		map = geo.getMap();
+		zoomLevel = zoomLevel || map.getMaxZoom();
+		geo.setCenterAndZoom( pos, zoomLevel, true );
+		bounds = map.getBounds();
+		nw = bounds.getNorthWest();
+		se = bounds.getSouthEast();
+		d = monuments.getInBoundingBox( nw.lng, se.lat, se.lng, nw.lat ).
+			done( function( monuments ) {
+				if( monuments.length === 0 ) {
+					showMonumentsForPosition( latitude, longitude, zoomLevel - 1 );
+				} else {
+					showMonumentsMap( monuments, false, false );
+					showPage( 'map-page' );
+				}
+			} ).fail( function() {
+				displayError( mw.msg( 'server-issue-heading'),
+					mw.msg( 'server-issue-text' ) );
+			} );
+	}
+
 	function init() {
 		var timeout, name, countryCode;
 		var countriesListTemplate = templates.getTemplate('country-list-template');
@@ -636,19 +665,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				userLocation = pos;
 				currentSortMethod = 'distance';
 				$( 'html' ).addClass( 'locationAvailable' );
-				var d = monuments.getInBoundingBox(pos.coords.longitude - nearbyDeg,
-					pos.coords.latitude - nearbyDeg,
-					pos.coords.longitude + nearbyDeg,
-					pos.coords.latitude + nearbyDeg
-				).done(function(monuments) {
-					$( '#results' ).data( 'monuments', monuments );
-					mapFocusNeeded = true;
-					showMonumentsMap(monuments, {
-						lat: pos.coords.latitude,
-						lon: pos.coords.longitude
-					}, 10);
-				});
-				showPage( 'map-page', d );
+				showMonumentsForPosition( pos.coords.latitude, pos.coords.longitude );
 			}, function(err) {
 				displayError( mw.msg( 'geolocating-failed-heading') , mw.msg( 'geolocating-failed-text' ) );
 			},{
@@ -687,6 +704,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		$(document).localize();
 		$( '#about-page-text' ).html( mw.msg( 'about-wlm-p1' ) );
+		initMap();
 		showPage('welcome-page');
 
 		// allow cancellation of current api upload request

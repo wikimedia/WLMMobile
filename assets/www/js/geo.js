@@ -106,18 +106,12 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 		}
 	}
 
-	function showMap() {
-		$("#map").show();
-		// Makes leaflet aware of its' position - avoids 'wrong center' problem
-		map.invalidateSize();
-	}
-
-	function hideMap() {
-		$("#map").hide();
-	}
-
 	function clear() {
 		clusterer.clearMarkers();
+	}
+
+	function getMap() {
+		return map;
 	}
 
 	function addMonument(monument, onClick) {
@@ -130,8 +124,8 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 		clusterer.addMarker( marker );
 	}
 
-	function setCenterAndZoom(center, zoom) {
-		map.setView(new L.LatLng(center.lat, center.lon), zoom);
+	function setCenterAndZoom( center, zoom, forceReset ) {
+		map.setView( new L.LatLng(center.lat, center.lon), zoom, forceReset );
 	}
 
 	return {
@@ -140,8 +134,7 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 		addMonument: addMonument,
 		calculateCenterAndZoom: calculateCenterAndZoom,
 		setCenterAndZoom: setCenterAndZoom,
-		showMap: showMap,
-		hideMap: hideMap
+		getMap: getMap
 	};
 
 });
