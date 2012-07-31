@@ -354,7 +354,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				$( '#upload-latest-page .share' ).html( mw.msg( 'upload-latest-view' ) );
 				$( '#upload-latest-page .share a' ).attr( 'href', imageinfo.descriptionurl );
 
-				db.addUpload( curMonument, api.userName, fileUrl, imageinfo.url, fileName, true );
+				db.addUpload( api.userName,curMonument, photo, true );
 				goBack(); // undo back button to skip upload progress page
 				goBack(); // undo back button to skip upload form
 				showPage( 'upload-latest-page' );
@@ -605,9 +605,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				var uploadCompleteTemplate = templates.getTemplate( 'upload-completed-item-detail-template' );
 				$.each( uploads, function( i, upload ) {
 					var monument = JSON.parse( upload.monument );
-					$uploadItem = $( uploadsTemplate( { upload: upload, monument: monument } ) );
+					var photo = JSON.parse( upload.photo );
+					$uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
 					$uploadItem.click( function() {
-						$( '#completed-upload-detail' ).html( uploadCompleteTemplate( { upload: upload, monument: monument } ) );
+						$( '#completed-upload-detail' ).html( uploadCompleteTemplate( { upload: upload, monument: monument, photo: photo } ) );
 						$( '#completed-upload-detail .monumentLink' ).
 							data( 'monument', new Monument( monument, commonsApi ) ).
 							click( function() {
