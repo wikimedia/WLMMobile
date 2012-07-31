@@ -546,7 +546,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				if( monuments.length === 0 ) {
 					showMonumentsForPosition( latitude, longitude, zoomLevel - 1 );
 				} else {
-					showMonumentsMap( monuments, false, false );
+					showMonumentsMap( monuments );
 					showPage( 'map-page' );
 				}
 			} ).fail( function() {
