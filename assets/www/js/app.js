@@ -706,6 +706,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		$(document).localize();
 		$( '#about-page-text' ).html( mw.msg( 'about-wlm-p1' ) );
 		initMap();
+		clearHistory();
 		showPage('welcome-page');
 
 		// allow cancellation of current api upload request
