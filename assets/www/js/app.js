@@ -43,6 +43,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	var curMonument = null; // Used to store state for take photo, etc
 
 	var pageHistory = []; // TODO: retain history
+	var blacklist = [ 'locationlookup-page', 'login-progress-page' ];
 	function clearHistory() {
 		pageHistory = [];
 	}
@@ -74,7 +75,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			pageHistory = newHistory;
 		}
 
-		var blacklist = [ 'locationlookup-page', 'login-progress-page' ];
 		var blacklisted = blacklist.indexOf( page ) > -1;
 		if( !blacklisted &&
 			pageHistory[ pageHistory.length - 1 ] !== page ) { // avoid adding the same page twice
@@ -85,7 +85,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	
 	function goBack() {
 		var pageName;
-		if( pageHistory.length > 1 ) {
+		if( blacklist.indexOf( curPageName ) > -1 ) {
+			return curPageName;
+		} else if( pageHistory.length > 1 ) {
 			pageName = pageHistory.pop(); // this is the current page
 			pageName = pageHistory.pop(); // this is the previous page
 			if( pageName === 'login-page' && api.loggedIn ) {
@@ -103,9 +105,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		addToHistory( pageName );
 		var $page = $("#" + pageName); 
 		$('.page, .popup-container-container').hide(); // hide existing popups
-		if(!$page.hasClass('popup-container-container')) {
-			curPageName = pageName;
-		}
+		curPageName = pageName;
 		$page.show();
 		$( 'select', $page ).val( pageName ); // reset to the top item in the list
 		if( deferred ) {
@@ -706,6 +706,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		$(document).localize();
 		$( '#about-page-text' ).html( mw.msg( 'about-wlm-p1' ) );
 		initMap();
+		clearHistory();
 		showPage('welcome-page');
 
 		// allow cancellation of current api upload request

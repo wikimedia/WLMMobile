@@ -40,6 +40,10 @@ $.ajax = function( options ) {
 	if( options && options.data && options.data.prop === 'imageinfo' ) {
 		data = { query: '' };
 		return d.resolve( data );
+	} else if( options.url === 'http://toolserver.org/~erfgoed/api/api.php' ) {
+		if( options.success ) {
+			options.success( [] );
+		}
 	} else if( options.url === 'messages/messages-en.properties' ) {
 		if( options.success ) {
 			options.success( 'foo=bar\nx=bar' );

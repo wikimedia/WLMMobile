@@ -14,6 +14,14 @@ module( 'app.js', {
 	}
 } );
 
+test( 'back button on geolookup-page', function() {
+	var app = WLMMobile.app;
+	app.showPage( 'welcome-page' );
+	app.showPage( 'locationlookup-page' );
+	var page = app.goBack();
+	strictEqual( page, 'locationlookup-page', 'back button should have no effect' );
+} );
+
 test( 'Skip login page on a back button press when user is authenticated', function() {
 	var app = WLMMobile.app;
 	app.showPage( 'detail-page' );
