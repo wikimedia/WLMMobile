@@ -262,6 +262,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 	function showMonumentsMap( monumentList, center, zoom ) {
 		geo.clear();
+		geo.onResize(); // hack to ensure resize on re-show after orientation change
 		if( mapFocusNeeded && typeof center === 'undefined' && typeof zoom === 'undefined' ) {
 			var centerAndZoom = geo.calculateCenterAndZoom( monumentList );
 			center = centerAndZoom.center;
@@ -272,12 +273,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			geo.setCenterAndZoom( center, zoom );
 		}
 		addMonuments( monumentList );
-		window.setTimeout(function() {
-			// This feels like a HORRIBLE hack.
-			// If we invalidate immediately, we end up squishing the virtual map
-			// area into 0x0 or something. With this delay, it fixes up ok...
-			geo.getMap().invalidateSize();
-		}, 500);
 	}
 
 	function displayError( heading, text ) {
