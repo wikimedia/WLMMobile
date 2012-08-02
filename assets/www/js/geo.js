@@ -75,13 +75,13 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 				touchZoom: false,
 				zoomControl: true,
 				trackResize: false
-			});
-			$(window).resize(function() {
+			} );
+			$( window ).resize( function() {
 				// Don't resize when invisible; it's unnecessary and can break.
-				if ($('#map-page').is(':visible')) {
+				if ( $( '#map-page' ).is( ':visible' ) ) {
 					onResize();
 				}
-			});
+			} );
 			var tiles = new L.TileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {
 				maxZoom: 18,
 				subdomains: '1234'
