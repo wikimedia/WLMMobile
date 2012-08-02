@@ -53,6 +53,19 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 		return location;
 	}
 
+	function onResize() {
+		// HACK: we're calling an internal function here for convenience.
+		//
+		// What we really care about is calling map.invalidateSize() after
+		// a short delay to ensure that DOM state has updated for any showing/
+		// hiding going on.
+		//
+		// The internal function uses a handy utility function to use the
+		// requestAnimationFrame interface instead of a crude setTimeout.
+		//
+		map._onResize();
+	}
+
 	function init( onmapchange ) {
 		if (!map) {
 			// Disable webkit 3d CSS transformations for tile positioning
@@ -60,7 +73,14 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 			L.Browser.webkit3d = false;
 			map = new L.Map('map', {
 				touchZoom: false,
-				zoomControl: true
+				zoomControl: true,
+				trackResize: false
+			});
+			$(window).resize(function() {
+				// Don't resize when invisible; it's unnecessary and can break.
+				if ($('#map-page').is(':visible')) {
+					onResize();
+				}
 			});
 			var tiles = new L.TileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {
 				maxZoom: 18,
@@ -134,7 +154,8 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 		addMonument: addMonument,
 		calculateCenterAndZoom: calculateCenterAndZoom,
 		setCenterAndZoom: setCenterAndZoom,
-		getMap: getMap
+		getMap: getMap,
+		onResize: onResize
 	};
 
 });
