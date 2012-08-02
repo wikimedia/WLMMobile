@@ -46,13 +46,32 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 		} );
 	};
 
+	var MAX_BOUNDING_BOX_DEGREES = 0.2
+	MonumentsApi.prototype.trimBoundingBox = function( minLon, minLat, maxLon, maxLat ) {
+		var deltaLat = maxLat - minLat,
+			deltaLon = maxLon - minLon,
+			centerLat = ( deltaLat / 2 ) + minLat,
+			centerLon = ( deltaLon / 2 ) + minLon,
+			bbCap = MAX_BOUNDING_BOX_DEGREES / 2;
+
+		if( deltaLat > MAX_BOUNDING_BOX_DEGREES ) {
+			minLat = centerLat - bbCap;
+			maxLat = centerLat + bbCap;
+		}
+		if( deltaLon > MAX_BOUNDING_BOX_DEGREES ) {
+			minLon = centerLon - bbCap;
+			maxLon = centerLon + bbCap;
+		}
+		return [ minLon, minLat, maxLon, maxLat ];
+	};
+
 	MonumentsApi.prototype.getInBoundingBox = function(minLon, minLat, maxLon, maxLat) {
-		var bboxString = [minLon, minLat, maxLon, maxLat].join(',');
-		console.log(bboxString);
-		return this.request({
-			action:'search',
+		var bb = this.trimBoundingBox( minLon, minLat, maxLon, maxLat ),
+			bboxString = bb.join( ',' );
+		return this.request( {
+			action: 'search',
 			bbox: bboxString
-		});
+		} );
 	};
 
 	return MonumentsApi;
