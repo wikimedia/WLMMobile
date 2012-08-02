@@ -534,17 +534,19 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 	function showMonumentsForPosition( latitude, longitude, zoomLevel ) {
 		var d, map, bounds, nw, se,
+			maxZoom,
 			pos = { lat: latitude, lon: longitude };
 
 		map = geo.getMap();
-		zoomLevel = zoomLevel || map.getMaxZoom();
+		maxZoom = map.getMaxZoom();
+		zoomLevel = zoomLevel || maxZoom;
 		geo.setCenterAndZoom( pos, zoomLevel, true );
 		bounds = map.getBounds();
 		nw = bounds.getNorthWest();
 		se = bounds.getSouthEast();
 		d = monuments.getInBoundingBox( nw.lng, se.lat, se.lng, nw.lat ).
 			done( function( monuments ) {
-				if( monuments.length === 0 ) {
+				if( monuments.length === 0 && zoomLevel > maxZoom - 5 ) {
 					showMonumentsForPosition( latitude, longitude, zoomLevel - 1 );
 				} else {
 					showMonumentsMap( monuments );
@@ -738,6 +740,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		app: {
 			clearHistory: clearHistory,
 			goBack: goBack,
+			showMonumentsForPosition: showMonumentsForPosition,
 			showMonumentsList: showMonumentsList,
 			resolveImageThumbnail: resolveImageThumbnail,
 			showPage: showPage
