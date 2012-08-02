@@ -249,8 +249,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			window.clearTimeout( searchTimeout );
 			searchTimeout = window.setTimeout( function() {
 				lastRequest = monuments.getInBoundingBox( nw.lng, se.lat, se.lng, nw.lat ).done( function( monuments ) {
+					geo.clear();
 					if ( monuments.length > 0 ) {
-						geo.clear();
 						addMonuments( monuments );
 						$( '#results' ).data( 'monuments', monuments );
 					}
@@ -745,6 +745,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			resolveImageThumbnail: resolveImageThumbnail,
 			showPage: showPage
 		},
+		monuments: monuments,
 		Monument: Monument
 	};
 });
