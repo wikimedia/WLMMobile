@@ -77,6 +77,9 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 						$( el ).removeClass( 'loading' );
 					}, function() {
 						$( el ).removeClass( 'loading' );
+					},
+					{
+						enableHighAccuracy: true
 					} );
 				} ).appendTo( '#map' );
 
