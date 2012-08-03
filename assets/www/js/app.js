@@ -672,6 +672,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			}, function(err) {
 				displayError( mw.msg( 'geolocating-failed-heading') , mw.msg( 'geolocating-failed-text' ) );
 			},{
+				enableHighAccuracy: true,
 				timeout: 20000 // give up looking up location.. maybe they are in airplane mode
 			});
 		});
