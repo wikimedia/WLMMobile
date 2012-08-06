@@ -294,9 +294,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		console.log("Filename is " + fileName);
 		var text = formatUploadDescription( curMonument, CAMPAIGNS[ curMonument.country ].config, api.userName );
 		console.log( "Page text is " + text );
+		var licenseText = formatLicenseText( CAMPAIGNS[ curMonument.country ].config );
 
 		$("#upload-confirm").html(uploadConfirmTemplate({monument: curMonument, fileUrl: fileUrl})).localize();
-		$("#confirm-license-text").html(mw.msg('confirm-license-text', api.userName));
+		$("#confirm-license-text").html(mw.msg('confirm-license-text', api.userName, licenseText));
 		$("#continue-upload").click(function() {
 			// reset status message for any previous uploads
 			$( '#upload-progress-state' ).html(mw.msg( 'upload-progress-starting' ));
@@ -500,6 +501,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			};
 		var template = templates.getTemplate( 'upload-photo-description', true )( { descData: descData } );
 		return template;
+	}
+	
+	function formatLicenseText( campaignConfig ) {
+		return campaignConfig.defaultOwnWorkLicence; // note the typo in the API field
 	}
 
 	// Expects user to be logged in
