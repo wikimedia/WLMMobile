@@ -262,7 +262,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 	function showMonumentsMap( monumentList, center, zoom ) {
 		geo.clear();
-		geo.onResize(); // hack to ensure resize on re-show after orientation change
+		geo.onResize(); // hack to ensure resize on re-show after orientation change (bug 38933)
 		if( mapFocusNeeded && typeof center === 'undefined' && typeof zoom === 'undefined' ) {
 			var centerAndZoom = geo.calculateCenterAndZoom( monumentList );
 			center = centerAndZoom.center;
