@@ -91,6 +91,13 @@
 			<% } else { %>
 				<strong> <msg key='monument-no-address' /></strong>
 			<% } %>	
+			<% if (monument.articleLink) { %>
+				<span class='monument-article'>
+					<a class="external" href="<%= monument.articleLink %>">
+						<msg key='monument-article' />
+					</a>
+				</span>
+			<% } %>
 
 		</div>
 	</script>
