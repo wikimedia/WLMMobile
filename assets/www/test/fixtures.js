@@ -41,7 +41,16 @@ $.ajax = function( options ) {
 		data = { query: '' };
 		return d.resolve( data );
 	} else if( options.url === 'http://toolserver.org/~erfgoed/api/api.php' ) {
-		if( options.success ) {
+		if ( options.data && options.data.action === 'adminlevels' ) {
+			if ( options.data.admtree === 'US|US-CA|Los%20Angeles%20County%2C%20California' ) {
+				d.resolve( { admin_levels: [ { name: 'ok' } ] } );
+			}
+		} else if( options.data.action === 'search' ) {
+			if ( options.data.sradm2 === 'San Francisco' &&
+				options.data.sradm1 === 'US-CA' && options.data.sradm0 === 'US' ) {
+				d.resolve( [ { country: 'us', id: 2, name: 'Golden Gate Bridge' } ] );
+			}
+		} else if ( options.success ) {
 			options.success( [] );
 		}
 	} else if( options.url === 'messages/messages-en.properties' ) {

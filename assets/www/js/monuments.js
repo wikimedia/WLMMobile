@@ -37,6 +37,16 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 		});
 	};
 
+	MonumentsApi.prototype.getForAdminLevel = function( tree ) {
+		var d = $.Deferred(), i,
+			data = { action: 'search' };
+		for( i = 0; i < tree.length; i++ ) {
+			data[ 'sradm' + i ] = tree[ i ];
+		}
+		return this.request( data );
+	};
+	
+
 	MonumentsApi.prototype.filterByNameForCountry = function( country, str ) {
 		var d = $.Deferred();
 		return this.request( {
