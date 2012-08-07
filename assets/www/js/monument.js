@@ -23,6 +23,7 @@ define( [ 'jquery' ], function() {
 			}
 		});
 		this.addressLink = platform.geoUrl( this.lat, this.lon, this.address );
+		this.articleLink = this.processArticleLink();
 		this.mwApi = mwApi;
 	}
 
@@ -45,6 +46,14 @@ define( [ 'jquery' ], function() {
 		var suffix =  d.getDate() + months[ d.getMonth() ] + d.getFullYear() + ' ' + d.getHours() + 'hrs' + d.getMinutes() + 'mins' + d.getSeconds() + 'secs';
 		return name.replace( /[\x7f\.\[#<>\[\]\|\{\}]/g, '-' ) + ' (taken on ' + suffix + ')';
 	};
+	
+	Monument.prototype.processArticleLink = function() {
+		if ( this.monument_article ) {
+			return 'https://' + this.lang + '.wikipedia.org/wiki/' + encodeURIComponent( this.monument_article );
+		} else {
+			return null;
+		}
+	}
 
 	return Monument;
 } );
