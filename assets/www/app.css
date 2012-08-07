@@ -378,12 +378,6 @@ button.myLocation.loading {
 	color: #666;
 }
 
-#monument-detail .monument-sub-details span,
-#monument-detail .monument-sub-details a
-{
-	display: block;
-}
-
 #monument-detail strong {
 	font-weight: normal;
 	color: #333;
