@@ -317,11 +317,18 @@ button.requires-location {
 	bottom: 0px;
 }
 
-.leaflet-control-container {
+.leaflet-control-zoom {
 	-webkit-transform: translate3d(0,0,0);
 	position: relative;
 	top: 0;
 	left: 0;
+	z-index: 7;
+}
+.leaflet-control-attribution {
+	-webkit-transform: translate3d(0,0,0);
+	position: relative;
+	bottom: 0;
+	right: 0;
 	z-index: 7;
 }
 
