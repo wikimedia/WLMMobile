@@ -1,9 +1,9 @@
-Wiki Loves Monuments Android Applicaiton
+Wiki Loves Monuments Android Application
 
 Monument discovery and photo upload app built with Apache Cordova for Android.
 
 = General =
-Contains iOS and Android thingies.
+Contains iOS and Android code.
 
 To import Android project to Eclipse:
 * create new project
@@ -16,4 +16,3 @@ To import Android project to Eclipse:
 PhoneGap/Cordova issues:
 
 * https://issues.apache.org/jira/browse/CB-622 - no way to get progress information from FileTransfer
-
