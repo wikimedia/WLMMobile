@@ -20,7 +20,7 @@ function handleOpenURL(url)
 }
 */
 require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument', 'preferences', 'database', 
-		'jquery.localize', 'campaigns-data' ],
+		'jquery.localize', 'campaigns-data', 'licenses-data' ],
 	function( $, l10n, geo, Api, templates, MonumentsApi, Monument, prefs, db ) {
 
 	var api = new Api("https://test.wikipedia.org/w/api.php");
@@ -519,7 +519,19 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 	
 	function formatLicenseText( campaignConfig ) {
-		return campaignConfig.defaultOwnWorkLicence; // note the typo in the API field
+		var key = campaignConfig.defaultOwnWorkLicence, // note the typo in the API field
+			text = key,
+			$stub = $( '<span>' );
+		if (key in LICENSES && 'url' in LICENSES[key] ) {
+			var $link = $( '<a>' )
+				.text( text )
+				.attr( 'class', 'external' )
+				.attr( 'href', LICENSES[key].url )
+				.appendTo( $stub );
+		} else {
+			$stub.text( text );
+		}
+		return $stub.html();
 	}
 
 	// Expects user to be logged in

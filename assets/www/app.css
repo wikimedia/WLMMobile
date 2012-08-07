@@ -41,6 +41,12 @@ a {
 	color: inherit;
 }
 
+/* At last make external links easy to find? */
+a.external {
+	text-decoration: underline;
+	color: #00f;
+}
+
 input {
 	/* see: http://stackoverflow.com/questions/9005550/input-elements-on-android-4-x-can-not-be-styled-when-focused */
 	-webkit-user-modify: read-write-plaintext-only;
