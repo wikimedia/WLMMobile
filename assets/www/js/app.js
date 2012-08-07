@@ -135,10 +135,24 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		monument.requestThumbnail(imageFetcher).done(function(imageinfo) {
 			$('#monument-detail').find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
 		});
-		console.log('addressLink is ' + monument.addressLink);
 		imageFetcher.send();
+		
+		if( monument.articleLink ) {
+			$( '#monument-detail' ).find( '.monument-article' ).html( buildMonumentLink( monument ) );
+		}
+
 		curMonument = monument;
 		showPage('detail-page');
+	}
+	
+	function buildMonumentLink( monument ) {
+		var $link = $( '<a>' )
+			.attr( 'class', 'external' )
+			.attr( 'href', monument.articleLink )
+			.text( (monument.monument_article + '').replace(/_/g, ' ' ) );
+		var $stub = $( '<span>' ).append( $link );
+		var html = mw.message( 'monument-article-link', $stub.html() ).plain();
+		return html;
 	}
 
 	// haversine formula ( http://en.wikipedia.org/wiki/Haversine_formula )

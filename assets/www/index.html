@@ -81,22 +81,20 @@
 		</span>
 		<div class='monument-sub-details'>
 			<% if(monument.address) { %>
-				<span class='monument-address'> 
+				<div class='monument-address'> 
 					<strong> <msg key='monument-address' / > </strong>
 					<%= monument.address %> 
-				</span>
-				<a class="external monument-directions" href="<%= monument.addressLink %>">
-					<msg key='monument-directions' />
-				</a>
+				</div>
+				<div>
+					<a class="external monument-directions" href="<%= monument.addressLink %>">
+						<msg key='monument-directions' />
+					</a>
+				</div>
 			<% } else { %>
-				<strong> <msg key='monument-no-address' /></strong>
+				<div><strong> <msg key='monument-no-address' /></strong></div>
 			<% } %>	
 			<% if (monument.articleLink) { %>
-				<span class='monument-article'>
-					<a class="external" href="<%= monument.articleLink %>">
-						<msg key='monument-article' />
-					</a>
-				</span>
+				<div class='monument-article'></div>
 			<% } %>
 
 		</div>
