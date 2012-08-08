@@ -67,6 +67,11 @@ define(['jquery', 'propertiesFileReader'], function($, propertiesFileReader) {
 	}
 
 	function navigatorLang(success) {
+		// Override
+		if( platform.navigatorLang ) {
+			platform.navigatorLang( success );
+			return;
+		}
 		var lang = navigator.language;
 		if (lang == 'en') {
 			/**
