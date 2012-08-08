@@ -585,6 +585,22 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		} );
 	}
 
+	/**
+	* Returns the current bounding box as a string
+	* @return {array} the bounding box in order [ minLon, minLat, maxLon, maxLat ]
+	*/
+	function getCurrentBoundingBox() {
+		return $( '#results' ).data( 'bbox' ) || [];
+	}
+
+	/**
+	* Sets the current bounding box
+	* @param bbox {array} An array representing the bounding box [ minLon, minLat, maxLon, maxLat ]
+	*/
+	function setCurrentBoundingBox( bbox ) {
+		$( '#results' ).data( 'bbox', bbox );
+	}
+
 	function showMonumentsForPosition( latitude, longitude, zoomLevel ) {
 		var d, map, bounds, nw, se,
 			maxZoom,
@@ -597,6 +613,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		bounds = map.getBounds();
 		nw = bounds.getNorthWest();
 		se = bounds.getSouthEast();
+		setCurrentBoundingBox( [ nw.lng, se.lat, se.lng, nw.lat ] );
 		d = monuments.getInBoundingBox( nw.lng, se.lat, se.lng, nw.lat ).
 			done( function( monuments ) {
 				if( monuments.length === 0 && zoomLevel > maxZoom - 5 ) {
@@ -609,6 +626,18 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				displayError( mw.msg( 'server-issue-heading'),
 					mw.msg( 'server-issue-text' ) );
 			} );
+	}
+
+	/**
+	* Sets the current campaign
+	* @param campaignTree {array} An array of codes representing the tree of a campaign. First item is the root node.
+	*/
+	function setCurrentCampaign( campaign ) {
+		$( '#results' ).data( 'campaign', campaign );
+	}
+
+	function getCurrentCampaign() {
+		return $( '#results' ).data( 'campaign' ) || [];
 	}
 
 	/**
@@ -635,6 +664,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		
 		function listMonuments( tree ) {
 			$( '#results' ).empty();
+			setCurrentCampaign( tree );
 			var d = monuments.getForAdminLevel( tree ).
 					done( function( monuments ) {
 						showMonumentsList( monuments );
@@ -670,7 +700,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 
 	function init() {
-		var timeout, name, countryCode;
+		var timeout, name;
 
 		var monumentSearchTimeout = null;
 		var monumentSearchReq = null;
@@ -688,8 +718,20 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			}
 
 			monumentSearchTimeout = window.setTimeout( function() {
+				var args = [].concat( getCurrentBoundingBox() ),
+					campaign = getCurrentCampaign();
 				$("#results").empty();
-				monumentSearchReq = monuments.filterByNameForCountry( countryCode, value ).done( function( monuments ) {
+				args.push( value );
+
+				if ( args.length === 5 ) {
+					console.log( 'searching with bounding box: ' + args.join( ',' ) );
+					monumentSearchReq = monuments.getInBoundingBox.apply( this, args ) :
+				} else {
+					console.log( 'searching with campaign ' + campaign.join( ',' ) );
+					monumentSearchReq = monuments.getForAdminLevel( campaign, value );
+				}
+
+				monumentSearchReq.done( function( monuments ) {
 					showMonumentsList( monuments );
 				} ).always( function() {
 					monumentSearchReq = null;
