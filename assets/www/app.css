@@ -266,6 +266,11 @@ header .back {
 	margin-left: 5px;
 }
 
+.back {
+	-webkit-tap-highlight-color: rgba( 0, 0, 0, 0 );
+	tap-highlight-color: rgba( 0, 0, 0, 0 );
+}
+
 /* Welcome page Styles */
 
 #welcome-page .content {
