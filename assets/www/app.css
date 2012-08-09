@@ -271,11 +271,6 @@ header .back {
 	tap-highlight-color: rgba( 0, 0, 0, 0 );
 }
 
-/* Welcome page Styles */
-
-#welcome-page .content {
-}
-
 /* Monuments list styles */
 
 .monuments-list li {
@@ -307,9 +302,6 @@ button.requires-location {
 .monuments-list .monument-detail {
 	-webkit-box-flex: 1;
 	display: box;
-}
-
-.monuments-list .monument-thumbnail {
 }
 
 .monuments-list .monument-name {
