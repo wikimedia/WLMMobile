@@ -14,4 +14,10 @@ test( 'trimBoundingBox', function() {
 	strictEqual( bb2[ 3 ], 0.1,  'capped at 0.2 degrees width/height' );
 });
 
+test( 'getForAdminLevel', function() {
+	WLMMobile.monuments.getForAdminLevel( [ 'US', 'US-CA', 'San Francisco' ]).done( function( data ) {
+		strictEqual( data[ 0 ].name, 'Golden Gate Bridge' );
+	} );
+} );
+
 }());

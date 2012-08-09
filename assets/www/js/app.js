@@ -19,14 +19,15 @@ function handleOpenURL(url)
 	// TODO: do something with the url passed in.
 }
 */
-require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument', 'preferences', 'database', 
+require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument', 'preferences', 'database', 'admintree',
 		'jquery.localize', 'campaigns-data', 'licenses-data' ],
-	function( $, l10n, geo, Api, templates, MonumentsApi, Monument, prefs, db ) {
+	function( $, l10n, geo, Api, templates, MonumentsApi, Monument, prefs, db, AdminTreeApi ) {
 
 	var api = new Api( WLMConfig.WIKI_API );
 	var commonsApi = new Api( WLMConfig.COMMONS_API );
 	var monuments = new MonumentsApi( WLMConfig.MONUMENT_API, commonsApi );
 	var wlmapi = 'http://toolserver.org/~erfgoed/api/api.php';
+	var admintree = new AdminTreeApi( WLMConfig.MONUMENT_API );
 	var nearbyDeg = 1.5; // degree 'radius' approx on the bounding box
 	var state = {
 		fileUri: null,
@@ -84,7 +85,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 	
 	function goBack() {
-		var pageName;
+		var pageName, data;
 		if( blacklist.indexOf( curPageName ) > -1 ) {
 			return curPageName;
 		} else if( pageHistory.length > 1 ) {
@@ -93,7 +94,14 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			if( pageName === 'login-page' && api.loggedIn ) {
 				pageName = pageHistory.pop(); // skip the login screen as user is logged in
 			}
+			data = pageName.split( '/' );
 			showPage( pageName );
+
+			// special casing for specific pages
+			// TODO: provide generic mechanism for this
+			if( data[ 0 ] === 'campaign-page' ) {
+				listCampaigns( data.slice( 1 ) );
+			}
 		} else {
 			console.log( 'Nothing in pageHistory to go back to. Quitting :(' );
 			navigator.app.exitApp();
@@ -102,7 +110,14 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 
 	function showPage( pageName, deferred ) {
+		var subPage, heading;
 		addToHistory( pageName );
+		if( pageName.indexOf( '/' ) > -1 ) {
+			pageName = pageName.split( '/' );
+			subPage = pageName[ pageName.length - 1 ];
+			pageName = pageName[ 0 ];
+		}
+
 		var $page = $("#" + pageName); 
 		$('.page, .popup-container-container').hide(); // hide existing popups
 		curPageName = pageName;
@@ -116,6 +131,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			} );
 		}
 		// special casing for specific pages
+		// TODO: provide generic mechanism for this
 		var monuments = $( "#results" ).data( 'monuments' );
 		if( monuments && pageName === 'results-page' ) {
 			showMonumentsList( monuments );
@@ -124,6 +140,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		} else if( pageName === 'country-page' ) { // force a refresh of the map on visiting the country page
 			mapFocusNeeded = true;
 			$( '#results' ).data( 'monuments', [] ).empty();
+		} else if( pageName === 'campaign-page' ) {
+			// TODO: translate subpage
+			heading = subPage ? mw.msg( 'choose-campaign' ) + ' (' + decodeURIComponent( subPage ) + ')' :
+				mw.msg( 'choose-campaign' );
+			$page.find( 'h3' ).text( heading );
 		}
 	}
 
@@ -564,6 +585,22 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		} );
 	}
 
+	/**
+	* Returns the current bounding box as a string
+	* @return {array} the bounding box in order [ minLon, minLat, maxLon, maxLat ]
+	*/
+	function getCurrentBoundingBox() {
+		return $( '#results' ).data( 'bbox' ) || [];
+	}
+
+	/**
+	* Sets the current bounding box
+	* @param bbox {array} An array representing the bounding box [ minLon, minLat, maxLon, maxLat ]
+	*/
+	function setCurrentBoundingBox( bbox ) {
+		$( '#results' ).data( 'bbox', bbox );
+	}
+
 	function showMonumentsForPosition( latitude, longitude, zoomLevel ) {
 		var d, map, bounds, nw, se,
 			maxZoom,
@@ -576,6 +613,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		bounds = map.getBounds();
 		nw = bounds.getNorthWest();
 		se = bounds.getSouthEast();
+		setCurrentBoundingBox( [ nw.lng, se.lat, se.lng, nw.lat ] );
 		d = monuments.getInBoundingBox( nw.lng, se.lat, se.lng, nw.lat ).
 			done( function( monuments ) {
 				if( monuments.length === 0 && zoomLevel > maxZoom - 5 ) {
@@ -590,21 +628,79 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			} );
 	}
 
-	function init() {
-		var timeout, name, countryCode;
-		var countriesListTemplate = templates.getTemplate('country-list-template');
-		$("#country-list").html(countriesListTemplate({countries: CAMPAIGNS}));
-		$("#country-list .country-search").click(function() {
-			countryCode = $(this).data('campaign');
-			var params = {
-				limit: 200
-			};
-			$("#results").empty();
-			var d = monuments.getForCountry( countryCode, params ).done( function( monuments ) {
-				showMonumentsList(monuments);
-			});
+	/**
+	* Sets the current campaign
+	* @param campaignTree {array} An array of codes representing the tree of a campaign. First item is the root node.
+	*/
+	function setCurrentCampaign( campaign ) {
+		$( '#results' ).data( 'campaign', campaign );
+	}
+
+	function getCurrentCampaign() {
+		return $( '#results' ).data( 'campaign' ) || [];
+	}
+
+	/**
+	* Lists the campaigns listed under the existing campaign trail
+	* if bottom of tree lists monuments
+	* @param campaignTree {array} An array of codes representing the tree of a campaign. First item is the root node.
+	*/
+	function listCampaigns( campaignTree ) {
+		var pageName, d,
+			$clist = $( '#campaign-list' );
+
+		function constructCampaignTrailPageName( tree ) {
+			var page = [ 'campaign-page' ], i;
+			for ( i = 0; i < tree.length; i++ ) {
+				page.push( encodeURIComponent( tree[ i ] ) );
+			}
+			return page.join( '/' );
+		}
+
+		pageName = constructCampaignTrailPageName( campaignTree );
+
+		d = admintree.getLeaves( campaignTree );
+		$clist.empty()
+		
+		function listMonuments( tree ) {
+			$( '#results' ).empty();
+			setCurrentCampaign( tree );
+			var d = monuments.getForAdminLevel( tree ).
+					done( function( monuments ) {
+						showMonumentsList( monuments );
+					});
 			showPage( 'results-page', d );
-		});
+		}
+
+		d.done( function( campaigns ) {
+			if( campaigns.length === 0 ) {
+				goBack(); // kill the last campaign page request (seems hacky...)
+				listMonuments( campaignTree );
+			} else {
+				var countriesListTemplate = templates.getTemplate( 'country-list-template' );
+				$clist.empty().html(
+					countriesListTemplate( { campaigns: campaigns } )
+				);
+
+				// setup links
+				$( 'a', $clist ).
+					each( function() {
+						var campaign = $( this ).data( 'campaign' );
+						var tree = [].concat( campaignTree );
+						tree.push( campaign );
+						$( this ).data( 'tree', tree );
+					} ).
+					click( function() {
+						var tree = $( this ).data( 'tree' );
+						listCampaigns( tree );
+					} );
+			}
+		} );
+		showPage( pageName, d );
+	}
+
+	function init() {
+		var timeout, name;
 
 		var monumentSearchTimeout = null;
 		var monumentSearchReq = null;
@@ -622,8 +718,20 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			}
 
 			monumentSearchTimeout = window.setTimeout( function() {
+				var args = [].concat( getCurrentBoundingBox() ),
+					campaign = getCurrentCampaign();
 				$("#results").empty();
-				monumentSearchReq = monuments.filterByNameForCountry( countryCode, value ).done( function( monuments ) {
+				args.push( value );
+
+				if ( args.length === 5 ) {
+					console.log( 'searching with bounding box: ' + args.join( ',' ) );
+					monumentSearchReq = monuments.getInBoundingBox.apply( this, args ) :
+				} else {
+					console.log( 'searching with campaign ' + campaign.join( ',' ) );
+					monumentSearchReq = monuments.getForAdminLevel( campaign, value );
+				}
+
+				monumentSearchReq.done( function( monuments ) {
 					showMonumentsList( monuments );
 				} ).always( function() {
 					monumentSearchReq = null;
@@ -659,7 +767,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		} );
 
 		$('#countries').click(function() {
-			showPage('country-page');
+			listCampaigns( [] );
 		});
 
 		$( '.show-search' ).click( function() {
@@ -769,6 +877,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		prefs.init().done( function() { db.init().done( init ); } );
 	});
 	window.WLMMobile = {
+		admintree: admintree,
 		api : api,
 		app: {
 			clearHistory: clearHistory,
