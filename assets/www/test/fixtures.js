@@ -40,7 +40,7 @@ $.ajax = function( options ) {
 	if( options && options.data && options.data.prop === 'imageinfo' ) {
 		data = { query: '' };
 		return d.resolve( data );
-	} else if( options.url === 'http://toolserver.org/~erfgoed/api/api.php' ) {
+	} else if ( options.url === WLMConfig.MONUMENT_API ) {
 		if ( options.data && options.data.action === 'adminlevels' ) {
 			if ( options.data.admtree === 'US|US-CA|Los%20Angeles%20County%2C%20California' ) {
 				d.resolve( { admin_levels: [ { name: 'ok' } ] } );
@@ -57,7 +57,7 @@ $.ajax = function( options ) {
 		if( options.success ) {
 			options.success( 'foo=bar\nx=bar' );
 		}
-	} else if( options.url = 'https://test.wikipedia.org/w/api.php' ) {
+	} else if ( options.url = WLMConfig.WIKI_API ) {
 		var user = options.data.lgname;
 		var pass = options.data.lgpassword;
 		if( user === 'bad' && pass === 'bad' ) {
