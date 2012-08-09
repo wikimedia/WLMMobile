@@ -17,7 +17,7 @@
   </head>
   <body class='hidden'>
 	<script type="text/html" id="country-list-template">
-		<% _.each( _.sortBy( campaigns, function( campaign ) { return campaign.desc } ), function( campaign ) { %>
+		<% _.each( _.sortBy( campaigns, function( campaign ) { return campaign.name } ), function( campaign ) { %>
 			<li>
 				<a class='country-search' href='#'
 					data-campaign='<%= campaign.code %>'><%= campaign.name %></a>
