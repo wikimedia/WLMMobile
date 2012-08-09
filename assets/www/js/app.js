@@ -44,7 +44,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	var curMonument = null; // Used to store state for take photo, etc
 
 	var pageHistory = []; // TODO: retain history
-	var blacklist = [ 'locationlookup-page', 'login-progress-page', 'logout-progress-page' ];
+	var blacklist = [];
+	$( '.blacklistedPage' ).each( function() {
+		blacklist.push( $( this ).attr( 'id' ) );
+	} );
 	function clearHistory() {
 		pageHistory = [];
 	}
