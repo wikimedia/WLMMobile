@@ -28,6 +28,10 @@ body {
 	min-height: 50px;
 }
 
+#campaign-page.loading h3 {
+	display: none;
+}
+
 .loading #results li {
 	display: none;
 }

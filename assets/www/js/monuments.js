@@ -37,6 +37,19 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 		});
 	};
 
+	MonumentsApi.prototype.getForAdminLevel = function( tree, str ) {
+		var d = $.Deferred(), i,
+			data = { action: 'search' };
+		for( i = 0; i < tree.length; i++ ) {
+			data[ 'sradm' + i ] = tree[ i ];
+		}
+		if( str ) {
+			data.srname = '~' + str + '*';
+		}
+		return this.request( data );
+	};
+	
+
 	MonumentsApi.prototype.filterByNameForCountry = function( country, str ) {
 		var d = $.Deferred();
 		return this.request( {
@@ -65,13 +78,18 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 		return [ minLon, minLat, maxLon, maxLat ];
 	};
 
-	MonumentsApi.prototype.getInBoundingBox = function(minLon, minLat, maxLon, maxLat) {
+	MonumentsApi.prototype.getInBoundingBox = function( minLon, minLat, maxLon, maxLat, str ) {
 		var bb = this.trimBoundingBox( minLon, minLat, maxLon, maxLat ),
-			bboxString = bb.join( ',' );
-		return this.request( {
-			action: 'search',
-			bbox: bboxString
-		} );
+			bboxString = bb.join( ',' ),
+			data = {
+				action: 'search',
+				bbox: bboxString
+			};
+		if( str ) {
+			data.srname = '~' + str + '*';
+		}
+		return this.request( data );
+		
 	};
 
 	return MonumentsApi;

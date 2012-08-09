@@ -17,9 +17,10 @@
   </head>
   <body class='hidden'>
 	<script type="text/html" id="country-list-template">
-		<% _.each( _.sortBy( countries, function( country ) { return country.desc } ), function( country ) { %>
+		<% _.each( _.sortBy( campaigns, function( campaign ) { return campaign.desc } ), function( campaign ) { %>
 			<li>
-				<a class='country-search' data-campaign='<%= country.name %>' href="#"><%= country.desc %></a>
+				<a class='country-search' href='#'
+					data-campaign='<%= campaign.code %>'><%= campaign.name %></a>
 			</li>
 		<% }); %>
 	</script>
@@ -172,7 +173,7 @@
 		</div>
 	</div>
 
-	<div class="page" id="country-page">
+	<div class="page" id="campaign-page">
 		<header class='actionbar'>
 			<a class='back' data-page="welcome-page" href="#"> </a>
 			<h2>
@@ -181,7 +182,7 @@
 		</header>
 		<div class="content">
 			<h3><msg key='choose-campaign' /></h3>
-			<ul id="country-list"></ul>
+			<ul id="campaign-list"></ul>
 		</div>
 	</div>
 
