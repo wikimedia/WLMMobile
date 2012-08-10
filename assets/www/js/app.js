@@ -44,7 +44,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	var curMonument = null; // Used to store state for take photo, etc
 
 	var pageHistory = []; // TODO: retain history
-	var blacklist = [ 'locationlookup-page', 'login-progress-page' ];
+	var blacklist = [];
+	$( '.blacklistedPage' ).each( function() {
+		blacklist.push( $( this ).attr( 'id' ) );
+	} );
 	function clearHistory() {
 		pageHistory = [];
 	}
@@ -314,7 +317,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		showPage( 'error-page' );
 		var info = $( '.error-information' ).empty()[ 0 ];
 		$( '<h3 />' ).text( heading ).appendTo( info );
-		$( '<p />' ).text( text ).appendTo( info );
+		$( '<p />' ).html( text ).appendTo( info );
+		return info;
 	}
 
 	function resolveImageThumbnail( url ) {
@@ -355,13 +359,38 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					// no-op
 					console.log( "Upload got aborted." );
 				} else {
-					var code, info;
+					var code, info, container;
 					if( data.error ) {
 						code = data.error.code;
 						info = data.error.info;
 					}
+					/*
+					error codes: http://www.mediawiki.org/wiki/API:Errors_and_warnings
+					*/
+					switch ( code ) {
+						case 'permissiondenied':
+							code = mw.msg( 'failure-upload-permissiondenied-heading' );
+							info = mw.msg( 'failure-upload-permissiondenied-text' );
+							break;
+						case 'badtoken':
+							code = mw.msg( 'failure-upload-token-heading' );
+							info = mw.msg( 'failure-upload-token-text' );
+							break;
+					}
 					$( '#upload-progress-state' ).html( mw.msg( 'upload-progress-failed' ) );
-					displayError( code, info );
+					container = displayError( code, info );
+					$( 'a.logout', container ).click( function() {
+						showPage( 'logout-progress-page' );
+						api.logout().done(function() {
+							prefs.clear( 'username' );
+							prefs.clear( 'password' );
+							doLogin( function() {
+								goBack(); // escape error popup
+								goBack(); // escape progress bar
+								showPage( 'detail-page' );
+							});
+						} );
+					} );
 					console.log( 'Upload failed: ' + code );
 				}
 			} );
