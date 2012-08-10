@@ -400,6 +400,10 @@ button.myLocation.loading {
 	color: #333;
 }
 
+.monument-directions {
+	font-size: 200%;
+}
+
 /* Login specific styles */
 
 #login-page ul li {
