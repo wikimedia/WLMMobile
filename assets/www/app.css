@@ -266,9 +266,9 @@ header .back {
 	margin-left: 5px;
 }
 
-/* Welcome page Styles */
-
-#welcome-page .content {
+.back {
+	-webkit-tap-highlight-color: rgba( 0, 0, 0, 0 );
+	tap-highlight-color: rgba( 0, 0, 0, 0 );
 }
 
 /* Monuments list styles */
@@ -302,9 +302,6 @@ button.requires-location {
 .monuments-list .monument-detail {
 	-webkit-box-flex: 1;
 	display: box;
-}
-
-.monuments-list .monument-thumbnail {
 }
 
 .monuments-list .monument-name {
