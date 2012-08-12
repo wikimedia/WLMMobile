@@ -26,6 +26,7 @@
     <plugin name="Media" value="org.apache.cordova.AudioHandler"/>
     <plugin name="Camera" value="org.apache.cordova.CameraLauncher"/>
     <plugin name="Contacts" value="org.apache.cordova.ContactManager"/>
+    <plugin name="GlobalizationCommand" value="com.phonegap.plugins.globalization.GlobalizationCommand"/>
     <plugin name="File" value="org.apache.cordova.FileUtils"/>
     <plugin name="NetworkStatus" value="org.apache.cordova.NetworkManager"/>
     <plugin name="Notification" value="org.apache.cordova.Notification"/>

@@ -19,6 +19,8 @@
 		} else if( ua.match( /Android 4/ ) ) {
 			detectorClasses.push( 'android-4' );
 		}
+		// Define plugins used for Android
+		window.CORDOVA_PLUGINS = ['../android/globalization'];
 	}
 
 	// FIXME: There ought to be a better way to get root element, but I'm jQuery spoilt
