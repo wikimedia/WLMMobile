@@ -797,7 +797,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		document.addEventListener( 'backbutton', goBack, false );
 
 		$( 'button.back, a.back' ).click( function() {
-			goBack();
+			var times = $( this ).data( 'back' ), i;
+			times = times ? parseInt( times, 10 ) : 1;
+			for( i = 0; i < times; i++ ) {
+				goBack();
+			}
 		} );
 
 		$('#countries').click(function() {
