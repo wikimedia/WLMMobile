@@ -428,6 +428,7 @@ button.myLocation.loading {
 	border: 1px solid red;
 }
 
+.visibleLinks a,
 #error-page a,
 #about-page a,
 #completed-upload-detail a,

@@ -124,6 +124,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 
 	function showPage( pageName, deferred ) {
+		$( window ).scroll( 0, 0 ); // scroll to top
 		var subPage, heading;
 		addToHistory( pageName );
 		curPageName = pageName;
@@ -361,13 +362,26 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		$("#upload-confirm").html(uploadConfirmTemplate({monument: curMonument, fileUrl: fileUrl})).localize();
 		$("#confirm-license-text").html(mw.msg('confirm-license-text', api.userName, licenseText));
+
+		var photo = new Photo( {
+			contentURL: fileUrl,
+			fileTitle: fileName,
+			fileContent: text
+		} );
+		$( '#upload-later-button' ).click( function() {
+			db.addUpload( api.userName, curMonument, photo, false );
+			$( '#upload-later .content' ).html( mw.msg( 'saved-later-text' ) );
+			$( '#upload-later .content a.incomplete' ).click( function() {
+				showPage( 'uploads-page' ); // TODO: link to the correct place
+			} );
+			$( '#upload-later .content a.welcome' ).click( function() {
+				showPage( 'welcome-page' );
+			} );
+			goBack(); // escape the confirmation screen
+			showPage( 'upload-later' );
+		} );
 		$("#continue-upload").click(function() {
 			// reset status message for any previous uploads
-			var photo = new Photo( {
-				contentURL: fileUrl,
-				fileTitle: fileName,
-				fileContent: text
-			} );
 			photo.uploadTo( api, comment ).done( function( imageinfo ) {
 				$( '#upload-latest-page img' ).attr( 'src', resolveImageThumbnail( imageinfo.url ) );
 				$( '#upload-latest-page .share' ).html( mw.msg( 'upload-latest-view' ) );
