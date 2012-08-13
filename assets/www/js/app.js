@@ -148,6 +148,14 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			heading = subPage ? mw.msg( 'choose-campaign' ) + ' (' + decodeURIComponent( subPage ) + ')' :
 				mw.msg( 'choose-campaign' );
 			$page.find( 'h3' ).text( heading );
+		} else if ( pageName === 'uploads-page' ) {
+			if( api.loggedIn ) {
+				showUploads();
+			} else {
+				doLogin( function() {
+					showPage( pageName );
+				} );
+			}
 		}
 	}
 
@@ -610,7 +618,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				var emptyUploadTemplate = templates.getTemplate( 'upload-list-empty-template' );
 				$( '#uploads-list' ).html( emptyUploadTemplate() ).localize();
 			}
-			showPage( 'uploads-page' );
 		} );
 	}
 
@@ -830,14 +837,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				});
 			}, 400);
 		});
-
-		$( '#show-uploads' ).click( function() {
-			if( api.loggedIn ) {
-				showUploads();
-			} else {
-				doLogin( showUploads );
-			}
-		} );
 
 		$('#nearby').click(function() {
 			showPage( 'locationlookup-page' );
