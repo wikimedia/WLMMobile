@@ -1,3 +1,5 @@
+/*global define, localStorage*/
+/*jslint sloppy: true, white:true, maxerr: 50, indent: 4, plusplus: true, vars:true */
 // Preferences singleton, to access all 'preferences'
 // localStorage is used for persistance
 // Call initializeDefaults before using.
@@ -10,7 +12,7 @@ define( [ 'jquery', 'l10n' ], function( $, l10n ) {
 	// If it is not a function, is just used as is
 	var defaults = {
 		// The locale. Default content language + UI language
-		'locale': function( success ) {
+		locale: function( success ) {
 			var defaults = this;
 			l10n.navigatorLang( function( lang ) {
 				defaults.locale = l10n.normalizeLanguageCode( lang || 'en' );
@@ -18,8 +20,9 @@ define( [ 'jquery', 'l10n' ], function( $, l10n ) {
 			});
 		},
 		// UI Language. 
-		'uiLanguage': function(success) {
-			this.uiLanguage = l10n.normalizeLanguageCode(get('locale').replace(/-.*?$/, ''));
+		uiLanguage: function( success ) {
+			this.uiLanguage = l10n.normalizeLanguageCode(
+				get( 'locale' ).replace( /-.*?$/, '' ) );
 			success();
 		}
 	};
@@ -41,7 +44,7 @@ define( [ 'jquery', 'l10n' ], function( $, l10n ) {
 			curFunction += 1;
 			if( curFunction < functions.length ) {
 				// We have more functions to call!
-				defaults[ functions[ curFunction ]].apply( defaults, [ recallFunction ] );
+				defaults[ functions[ curFunction ] ].apply( defaults, [ recallFunction ] );
 			} else {
 				// We are out of functions, let's say we succeeded
 				d.resolve();
