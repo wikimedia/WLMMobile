@@ -733,6 +733,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		var monumentSearchTimeout = null;
 		var monumentSearchReq = null;
+
+		if( l10n.isLangRTL( prefs.get( 'uiLanguage' ) ) ) {
+			$( 'body' ).attr( 'dir', 'rtl' );
+		}
+
 		$( '#filter-monuments' ).keyup( function() {
 			var value = this.value;
 			if( monumentSearchTimeout ) {
