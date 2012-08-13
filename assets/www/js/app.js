@@ -586,14 +586,20 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 	// Expects user to be logged in
 	function showUploads() {
-		var username = api.userName;
+		var username = api.userName,
+			showCompleted = ( $( '#toggle-uploads-view' ).val() == 'complete-view' );
 		db.requestUploadsForUser( username ).done( function( uploads ) {
 			$( '#uploads-list' ).empty();
 			if( uploads.length ) {
 				var uploadsTemplate = templates.getTemplate( 'upload-list-item-template' );
 				var uploadCompleteTemplate = templates.getTemplate( 'upload-completed-item-detail-template' );
 				$.each( uploads, function( i, upload ) {
-					var monument = JSON.parse( upload.monument );
+					var monument = JSON.parse( upload.monument ),
+						completed = ( upload.completed == 'true' );
+					if ( completed != showCompleted ) {
+						// filter for completion status
+						return;
+					}
 					$uploadItem = $( uploadsTemplate( { upload: upload, monument: monument } ) );
 					$uploadItem.click( function() {
 						$( '#completed-upload-detail' ).html( uploadCompleteTemplate( { upload: upload, monument: monument } ) );
@@ -833,6 +839,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			} else {
 				doLogin( showUploads );
 			}
+		} );
+		$( '#toggle-uploads-view' ).change( function() {
+			showUploads();
 		} );
 
 		$('#nearby').click(function() {
