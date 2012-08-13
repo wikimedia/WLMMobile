@@ -395,6 +395,13 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				}
 			} );
 		});
+		$( '#continue-save' ).click( function() {
+			// fixme: save to more permanent storage?
+			var fileName = curMonument.generateFilename();
+			db.addUpload( curMonument, api.userName, fileUrl, fileUrl, fileName, false );
+			goBack(); // undo back button to skip upload form
+			showPage( 'upload-latest-page' );
+		});
 		showPage('upload-confirm-page');
 	}
 
