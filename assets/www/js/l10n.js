@@ -67,6 +67,11 @@ define(['jquery', 'propertiesFileReader'], function($, propertiesFileReader) {
 	}
 
 	function navigatorLang(success) {
+		// Override
+		if( platform.navigatorLang ) {
+			platform.navigatorLang( success );
+			return;
+		}
 		var lang = navigator.language;
 		if (lang == 'en') {
 			/**
@@ -84,36 +89,38 @@ define(['jquery', 'propertiesFileReader'], function($, propertiesFileReader) {
 	function init() {
 		var d = $.Deferred();
 		// Always load english as a fallback
-		var langs = ['en'],
-			lang = 'en'; // may be eg "en-us" or "zh-tw" // @fixme de-hardcode
-			console.log(lang);
-		var	baseLang = lang.replace(/-.*?$/, ''); // strip country code, eg "en" or "zh"
-			console.log(baseLang);
+		navigatorLang( function( osLang ) {
+			var langs = ['en'],
+				lang = osLang;
+				console.log(lang);
+			var	baseLang = lang.replace(/-.*?$/, ''); // strip country code, eg "en" or "zh"
+				console.log(baseLang);
 
-		if (baseLang != 'en') {
-			// Load the base language, eg 'en', 'fr', 'zh'
-			langs.push(baseLang);
-		}
-		if (lang != baseLang) {
-			// Load the variant language, eg 'en-us', 'fr-ca', 'zh-cn'
-			langs.push(lang);
-		}
-
-		console.log('langs are: ' + langs.join(','));
-		var i = 0;
-		var step = function() {
-			if (i < langs.length) {
-				console.log('loading more messages');
-				var sub = langs[i];
-				i++;
-				loadMessages(sub, function(ok) {
-					step();
-				});
-			} else {
-				d.resolve();
+			if (baseLang != 'en') {
+				// Load the base language, eg 'en', 'fr', 'zh'
+				langs.push(baseLang);
 			}
-		};
-		step();
+			if (lang != baseLang) {
+				// Load the variant language, eg 'en-us', 'fr-ca', 'zh-cn'
+				langs.push(lang);
+			}
+
+			console.log('langs are: ' + langs.join(','));
+			var i = 0;
+			var step = function() {
+				if (i < langs.length) {
+					console.log('loading more messages');
+					var sub = langs[i];
+					i++;
+					loadMessages(sub, function(ok) {
+						step();
+					});
+				} else {
+					d.resolve();
+				}
+			};
+			step();
+		} );
 		return d.promise();
 	}
 
