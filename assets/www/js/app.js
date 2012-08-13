@@ -903,7 +903,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 
 	l10n.init().done( function() {
-		prefs.init().done( function() { db.init().done( init ); } );
+		prefs.init().done( function() {
+			db.init().done( init );
+			monuments.lang = prefs.get( 'uiLanguage' );
+		} );
 	});
 	window.WLMMobile = {
 		admintree: admintree,
