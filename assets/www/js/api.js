@@ -3,7 +3,15 @@
 define(['jquery'], function() {
 	var TIMEOUT = 15 * 1000; // Default timeout value
 
-	function Api(url) {
+	var defaultOptions = {
+		onProgressChanged: function() {
+		}
+	};
+
+	function Api( url, options ) {
+		options = options || defaultOptions;
+
+		this.options = options;
 		this.url = url;
 	}
 
@@ -101,19 +109,13 @@ define(['jquery'], function() {
 		return d.promise();
 	};
 
-	Api.prototype.reportProgress = function( percentage ) {
-		$( '#upload-progress-bar' ).empty();
-		$( '<div>' ).css( 'width', percentage + '%').
-			appendTo( '#upload-progress-bar' );
-	};
-
 	Api.prototype.startUpload = function( sourceUri, filename ) {
 		var d = $.Deferred();
 		var that = this;
-		that.reportProgress( 0 );
+		that.options.onProgressChanged( 0 );
 		that.requestEditToken().done(function(token) {
 			console.log( 'got token', token );
-			that.reportProgress( 10 );
+			that.options.onProgressChanged( 10 );
 			var options = new FileUploadOptions();
 			options.fileKey = 'file';
 			options.fileName = filename;
@@ -166,7 +168,7 @@ define(['jquery'], function() {
 						var percentageSent, sent;
 						sent = r.loaded || 0;
 						percentageSent = sent / file.size * 100;
-						that.reportProgress( Math.round( percentageSent / 2 ) + 10 );
+						that.options.onProgressChanged( Math.round( percentageSent / 2 ) + 10 );
 					};
 					ft.upload( sourceUri, that.url, function( r ) {
 						uploadSuccess( r );
@@ -183,11 +185,11 @@ define(['jquery'], function() {
 		var that = this;
 		function sendImage( token ) {
 			var progress = 70;
-			that.reportProgress( progress );
+			that.options.onProgressChanged( progress );
 			console.log('.... got token');
 			var progressTimeout = window.setInterval( function() {
 				progress = progress < 100 ? progress + 1 : progress;
-				that.reportProgress( progress );
+				that.options.onProgressChanged( progress );
 			}, 500 );
 			console.log('starting ajax upload completion...');
 			that.request('POST', {
@@ -199,7 +201,7 @@ define(['jquery'], function() {
 				token: token,
 				ignorewarnings: 1
 			}).done(function(data) {
-				that.reportProgress( 100 );
+				that.options.onProgressChanged( 100 );
 				window.clearTimeout( progressTimeout );
 				console.log(JSON.stringify(data));
 				if (data.upload.result === 'Success') {

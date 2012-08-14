@@ -38,7 +38,7 @@
 				<div class='monument-name'> <%= monument.name %> </div>
 				<small class='monument-address'> <%= monument.address %> </small>
 			</a>
-			<img class='monument-thumbnail' width="64" src="<%= upload.file %>"/>
+			<img class='monument-thumbnail' width="64" src="<%= photo.data.contentURL %>"/>
 		</li>
 	</script>
 	<script type="text/html" id="upload-list-empty-template">
@@ -53,9 +53,9 @@
 				<msg key="upload-monument-link-text"></msg>
 			</a>
 		</p>
-		<img class='uploaded-image-full' src='<%= upload.file %>' />
+		<img class='uploaded-image-full' src='<%= photo.data.contentURL %>' />
 		<div class='uploaded-image-details'>
-			<a><%= upload.title %></a>
+			<a><%= photo.data.fileTitle %></a>
 		</div>
 	</script>
 	<script type="text/html" id="monument-list-item-template">
