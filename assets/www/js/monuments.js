@@ -1,11 +1,14 @@
 define([ 'jquery', 'monument' ], function( $, Monument ) {
-	function MonumentsApi(url, mwApi) {
+	function MonumentsApi(url, mwApi, lang) {
 		this.url = url;
 		this.mwApi = mwApi;
+		this.lang = lang || 'en';
 	}
-
+	
 	MonumentsApi.prototype.request = function(params) {
 		var that = this;
+		
+		console.log(this.url + ' : ' + JSON.stringify(params));
 
 		// Force JSON
 		params.format = 'json';
@@ -33,13 +36,17 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 		var d = $.Deferred();
 		return this.request({
 			action: 'search',
-			srcountry: country
+			srcountry: country,
+			uselang: this.lang
 		});
 	};
 
 	MonumentsApi.prototype.getForAdminLevel = function( tree, str ) {
 		var d = $.Deferred(), i,
-			data = { action: 'search' };
+			data = {
+				action: 'search',
+				uselang: this.lang
+			};
 		for( i = 0; i < tree.length; i++ ) {
 			data[ 'sradm' + i ] = tree[ i ];
 		}
@@ -55,7 +62,8 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 		return this.request( {
 			action: 'search',
 			srcountry: country,
-			srname: '~' + str + '*'
+			srname: '~' + str + '*',
+			uselang: this.lang
 		} );
 	};
 
@@ -83,7 +91,8 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 			bboxString = bb.join( ',' ),
 			data = {
 				action: 'search',
-				bbox: bboxString
+				bbox: bboxString,
+				uselang: this.lang
 			};
 		if( str ) {
 			data.srname = '~' + str + '*';
