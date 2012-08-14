@@ -138,7 +138,18 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 	}
 
 	function addMonument(monument, onClick) {
-		var marker = new L.Marker(new L.LatLng(monument.lat, monument.lon));
+		var url = 'images/', iconOptions;
+		url += monument.image ? 'pin.png' : 'pin-no-photos.png';
+		if ( L.VERSION === '0.3' ) { // TODO: upgrade leaflet to 4.0
+			 iconOptions = url;
+		} else {
+			iconOptions = {
+				iconUrl: url,
+				iconSize: [ 30, 50 ]
+			};
+		}
+		var markerIcon = new L.Icon( iconOptions );
+		var marker = new L.Marker( new L.LatLng( monument.lat, monument.lon ), { icon: markerIcon } );
 		var popup = "<div><strong>" + monument.name + "</strong></div>";
 		var popupDOM = $(popup).click(function() {
 			onClick(monument);
