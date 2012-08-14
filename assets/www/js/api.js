@@ -12,6 +12,7 @@ define(['jquery'], function() {
 		options = options || defaultOptions;
 
 		this.options = options;
+		this.options.onProgressChanged = this.options.onProgressChanged || function(){};
 		this.url = url;
 	}
 
