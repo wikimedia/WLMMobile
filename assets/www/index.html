@@ -200,9 +200,8 @@
 			<a class='back' href="#"> </a>
 			<h2>
 				<select class="toggle-page">
-					<!-- FIXME: Find why jquery.localize doesn't seem to hit <option> tags -->
-					<option value="results-page" selected>List View</option>
-					<option value="map-page">Map View</option>
+					<option value="results-page" data-msg-text="dropdown-list-view" selected></option>
+					<option value="map-page" data-msg-text="dropdown-map-view"></option>
 				</select>
 			</h2>
 			<a class="show-search"><img src='images/2-action-search.png' /></a>
@@ -227,9 +226,8 @@
 			<a class='back' href="#"> </a>
 			<h2>
 				<select class="toggle-page">
-					<!-- FIXME: Find why jquery.localize doesn't seem to hit <option> tags -->
-					<option value="map-page" selected>Map View</option>
-					<option value="results-page">List View</option>
+					<option value="map-page" data-msg-text="dropdown-map-view" selected></option>
+					<option value="results-page" data-msg-text="dropdown-list-view"></option>
 				</select>
 			</h2>
 			<a class='page-link' data-page='country-page'><img src='images/7-location-place.png' /></a>
