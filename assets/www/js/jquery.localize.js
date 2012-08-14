@@ -122,20 +122,16 @@ $.fn.localize = function ( options ) {
 	// 'html:msg', but searching for 'html:msg' doesn't. In later IE and other browsers, searching
 	// for 'html:msg' turns up the 'html:msg', but searching for 'msg' doesn't. So searching for
 	// both 'msg' and 'html:msg' seems to get the job done. This feels pretty icky, though.
-	window.t = $target;
 	$target.find( 'msg,html\\:msg' ).each( function () {
 		var $el = $(this);
 		// Escape by default
-		if( $(this).attr('key') === 'dropdown-map-view' ) {
-		console.log( '\n\n!!!', this, $el, this.tagName, this.parentNode.tagName );}
 		if ( $el.attr( 'raw' ) ) {
 			$el.html( msg( options, $el.attr( 'key' ) ) );
 		} else {
-			console.log( 'do', $el.attr( 'key' ), msg( options, $el.attr( 'key' ) ));
 			$el.text( msg( options, $el.attr( 'key' ) ) );
 		}
 		// Remove wrapper
-		//$el.replaceWith( $el.html() );
+		$el.replaceWith( $el.html() );
 	} );
 
 	// Attributes
@@ -147,6 +143,17 @@ $.fn.localize = function ( options ) {
 			var $el = $(this);
 			$el.attr( attr, msg( options, $el.attr( msgAttr ) ) ).removeAttr( msgAttr );
 		} );
+	} );
+
+	// HTML, Text for elements which cannot have children e.g. OPTION
+	$target.find( '[data-msg-text]' ).each( function() {
+		var $el = $( this );
+		$el.text( msg( options, $el.attr( 'data-msg-text' ) ) );
+	} );
+
+	$target.find( '[data-msg-html]' ).each( function() {
+		var $el = $( this );
+		$el.html( msg( options, $el.attr( 'data-msg-html' ) ) );
 	} );
 
 	return $target;
