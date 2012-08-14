@@ -112,10 +112,11 @@ define(['jquery'], function() {
 	Api.prototype.startUpload = function( sourceUri, filename ) {
 		var d = $.Deferred();
 		var that = this;
-		that.options.onProgressChanged( 0 );
+		var onprogresschange = that.options.onProgressChanged;
+		onprogresschange( 0 );
 		that.requestEditToken().done(function(token) {
 			console.log( 'got token', token );
-			that.options.onProgressChanged( 10 );
+			onprogresschange( 10 );
 			var options = new FileUploadOptions();
 			options.fileKey = 'file';
 			options.fileName = filename;
@@ -168,7 +169,7 @@ define(['jquery'], function() {
 						var percentageSent, sent;
 						sent = r.loaded || 0;
 						percentageSent = sent / file.size * 100;
-						that.options.onProgressChanged( Math.round( percentageSent / 2 ) + 10 );
+						onprogresschange( Math.round( percentageSent / 2 ) + 10 );
 					};
 					ft.upload( sourceUri, that.url, function( r ) {
 						uploadSuccess( r );
@@ -181,15 +182,16 @@ define(['jquery'], function() {
 
 	Api.prototype.finishUpload = function( fileKey, filename, comment, text, token ) {
 		var d = $.Deferred();
+		var onprogresschange = this.options.onProgressChanged;
 		console.log('upload completing... getting token...');
 		var that = this;
 		function sendImage( token ) {
 			var progress = 70;
-			that.options.onProgressChanged( progress );
+			onprogresschange( progress );
 			console.log('.... got token');
 			var progressTimeout = window.setInterval( function() {
 				progress = progress < 100 ? progress + 1 : progress;
-				that.options.onProgressChanged( progress );
+				onprogresschange( progress );
 			}, 500 );
 			console.log('starting ajax upload completion...');
 			that.request('POST', {
@@ -201,7 +203,7 @@ define(['jquery'], function() {
 				token: token,
 				ignorewarnings: 1
 			}).done(function(data) {
-				that.options.onProgressChanged( 100 );
+				onprogresschange( 100 );
 				window.clearTimeout( progressTimeout );
 				console.log(JSON.stringify(data));
 				if (data.upload.result === 'Success') {
