@@ -3,9 +3,10 @@ $('html').addClass('android');
 // Android opens a.external externally automatically.
 
 platform.geoUrl = function(lat, lon, address) {
-    var q = 'geo:' + lat + ',' + lon;
+	var latlng = lat + ',' + lon;
+	var q = 'geo:' + latlng;
     if (address) {
-        q += '?q=' + encodeURIComponent(address);
+		q += '?q=' + latlng + ' (' + encodeURIComponent( address ) + ')';
     }
     return q;
 }
