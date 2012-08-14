@@ -459,7 +459,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 							break;
 						case 'CreateBlocked': // IP address blocked from account creation
 						case 'Blocked': // User is blocked
-							errMsg = mw.msg( 'login-failed-blocked' );
+							errMsg = mw.msg( 'login-failed-blocked', WLMConfig.BLOCKING_POLICY.replace( '$1', lang ) );
 							break;
 						case 'Throttled': // Attempting to login too many times in a short time
 							errMsg = mw.msg( 'login-failed-throttled' );
@@ -729,12 +729,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 
 	function init() {
-		var timeout, name;
+		var timeout, name, lang = prefs.get( 'uiLanguage' );
 
 		var monumentSearchTimeout = null;
 		var monumentSearchReq = null;
 
-		if( l10n.isLangRTL( prefs.get( 'uiLanguage' ) ) ) {
+		if( l10n.isLangRTL( lang ) ) {
 			$( 'body' ).attr( 'dir', 'rtl' );
 		}
 
@@ -901,7 +901,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		// Display the translated account creation message this way since the
 		// HTML in the message can't be rendered via jquery.localize.js
-		$('#login-create-account-msg').html( mw.msg( 'login-create-account' ) );
+		$( '#login-create-account-msg' ).html(
+			mw.msg( 'login-create-account', WLMConfig.SIGNUP_PAGE.replace( '$1', lang ) ) );
 
 		// Everything has been initialized, so let's show them the UI!
 		$( 'body' ).removeClass( 'hidden' );
