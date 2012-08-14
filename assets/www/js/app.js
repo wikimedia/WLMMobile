@@ -29,7 +29,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				$( '<div>' ).css( 'width', percent + '%').
 				appendTo( '#upload-progress-bar' );
 		}
-	});
+	} );
 	var commonsApi = new Api( WLMConfig.COMMONS_API );
 	var monuments = new MonumentsApi( WLMConfig.MONUMENT_API, commonsApi );
 	var wlmapi = 'http://toolserver.org/~erfgoed/api/api.php';
@@ -354,11 +354,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		$("#confirm-license-text").html(mw.msg('confirm-license-text', api.userName, licenseText));
 		$("#continue-upload").click(function() {
 			// reset status message for any previous uploads
-			var photo = new Photo({
+			var photo = new Photo( {
 				contentURL: fileUrl,
 				fileTitle: fileName,
 				fileContent: text
-			});
+			} );
 			photo.uploadTo( api, comment ).done( function( imageinfo ) {
 				$( '#upload-latest-page img' ).attr( 'src', resolveImageThumbnail( imageinfo.url ) );
 				$( '#upload-latest-page .share' ).html( mw.msg( 'upload-latest-view' ) );

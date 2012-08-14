@@ -52,7 +52,7 @@ define( [ 'jquery' ], function( $ ) {
 	}
 
 	function addUpload( username, monument, photo, completed ) {
-		var timestamp = (new Date()).getTime();
+		var timestamp = ( new Date() ).getTime();
 		var insertSQL = "INSERT INTO uploads ( username, monument, photo, timestamp, completed ) VALUES ( ?, ?, ?, ?, ? );";
 		execute( insertSQL, [ username, JSON.stringify( monument ), JSON.stringify( photo ), timestamp, completed ] );
 	}
