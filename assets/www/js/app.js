@@ -24,7 +24,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	function( $, l10n, geo, Api, templates, MonumentsApi, Monument, prefs, db, AdminTreeApi, Photo ) {
 
 	var api = new Api( WLMConfig.WIKI_API, {
-		onProgressChange: function( percent ) {
+		onProgressChanged: function( percent ) {
 				$( '#upload-progress-bar' ).empty();
 				$( '<div>' ).css( 'width', percent + '%').
 				appendTo( '#upload-progress-bar' );

@@ -4,7 +4,7 @@ define(['jquery'], function() {
 	var TIMEOUT = 15 * 1000; // Default timeout value
 
 	var defaultOptions = {
-		onProgressChange: function() {
+		onProgressChanged: function() {
 		}
 	};
 
