@@ -245,9 +245,8 @@
 			<a class='back' href="#"></a>
 			<h2>
 			<select id="toggle-uploads-view">
-				<!-- FIXME: Find why jquery.localize doesn't seem to hit <option> tags -->
-				<option value="complete-view" selected>Completed</option>
-				<option value="incomplete-view">Incomplete</option>
+				<option value="complete-view" selected data-msg-text="uploads-completed"></option>
+				<option value="incomplete-view" data-msg-text="uploads-incomplete"></option>
 			</select>
 			</h2>
 			<a class='page-link' data-page='country-page'><img src='images/7-location-place.png' /></a>
