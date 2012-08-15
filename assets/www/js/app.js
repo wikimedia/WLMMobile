@@ -196,7 +196,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				} else {
 					// No existy.
 					$( '#monument-detail .monument-article a' )
-						.css( 'color', 'red' )
+						.addClass( 'broken' )
 						.click( function( event ) {
 							alert( mw.message( 'article-does-not-exist', monument.monument_article.replace( /_/g, ' ' ) ).plain() );
 							event.preventDefault();
