@@ -54,6 +54,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	$( '.blacklistedPage' ).each( function() {
 		blacklist.push( $( this ).attr( 'id' ) );
 	} );
+
+	function getCurrentPage() {
+		return curPageName;
+	}
+
 	function clearHistory() {
 		pageHistory = [];
 	}
@@ -121,6 +126,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	function showPage( pageName, deferred ) {
 		var subPage, heading;
 		addToHistory( pageName );
+		curPageName = pageName;
 		if( pageName.indexOf( '/' ) > -1 ) {
 			pageName = pageName.split( '/' );
 			subPage = pageName[ pageName.length - 1 ];
@@ -129,7 +135,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		var $page = $("#" + pageName); 
 		$('.page, .popup-container-container').hide(); // hide existing popups
-		curPageName = pageName;
 		$page.show();
 		$( 'select', $page ).val( pageName ); // reset to the top item in the list
 		if( deferred ) {
@@ -724,6 +729,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					});
 			showPage( 'results-page', d );
 		}
+		showPage( pageName, d );
 
 		d.done( function( campaigns ) {
 			if( campaigns.length === 0 ) {
@@ -749,7 +755,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					} );
 			}
 		} );
-		showPage( pageName, d );
 	}
 
 	function init() {
@@ -936,7 +941,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		api : api,
 		app: {
 			clearHistory: clearHistory,
+			getCurrentPage: getCurrentPage,
 			goBack: goBack,
+			listCampaigns: listCampaigns,
 			showMonumentsForPosition: showMonumentsForPosition,
 			showMonumentsList: showMonumentsList,
 			resolveImageThumbnail: resolveImageThumbnail,
