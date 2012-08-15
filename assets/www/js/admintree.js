@@ -22,13 +22,13 @@ define( [ 'jquery' ], function() {
 
 	AdminTreeApi.prototype = {
 		getLeaves: function( tree ) {
-			var data = { action: 'adminlevels', format: 'json' }, i, admtree,
+			var data = { action: 'adminlevels', format: 'json' }, i, admtree = [],
 				cacheKey = 'root', d = new $.Deferred();
 			if( tree ) {
 				for( i = 0; i < tree.length; i++ ) {
-					tree[ i ] = encodeURIComponent( tree[ i ] );
+					admtree.push( encodeURIComponent( tree[ i ] ) );
 				}
-				admtree = tree.join( '|' );
+				admtree = admtree.join( '|' );
 				cacheKey = admtree;
 				data.admtree = admtree;
 			}

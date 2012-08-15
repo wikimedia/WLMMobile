@@ -70,8 +70,15 @@ $.ajax = function( options ) {
 				d.resolve( { admin_levels: [
 					{ name: 'Los Angeles County, California' },
 					{ name: 'San Francisco, California' },
-					{ name: 'Stump Town' }
+					{ name: 'Stump Town' },
+					{ name: '[[Alameda, California|Alameda]]' }
 				] } );
+			} else if( admintree === 'US|US-CA|%5B%5BAlameda%2C%20California%7CAlameda%5D%5D' ) {
+				d.resolve( { admin_levels: [
+					{ name: '[[Alameda, California|Alameda]]' }
+				] } );
+			} else if( admintree === 'US|US-CA|%5B%5BAlameda%2C%20California%7CAlameda%5D%5D|%5B%5BAlameda%2C%20California%7CAlameda%5D%5D' ) {
+				d.resolve( { admin_levels: [] } );
 			} else if ( admintree === 'US|US-CA|Los%20Angeles%20County%2C%20California' ) {
 				d.resolve( { admin_levels: [ { name: 'ok' } ] } );
 			} else if( admintree === 'US|US-CA|Stump%20Town' ) { // bottom of treee

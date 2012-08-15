@@ -148,4 +148,25 @@ test( 'click uploads and click back from resulting login screen (bug 39347)', fu
 	var pageName = app.goBack();
 	strictEqual( pageName, 'welcome-page' );
 } );
+
+test( 'drilling down with non-unique names (arthurs bug)', function() {
+	var page1, page2, page3, page4, page5;
+	app.listCampaigns( [] );
+	page1 = app.getCurrentPage();
+	strictEqual( page1, 'campaign-page', 'check page name' );
+	strictEqual( $( '#campaign-list a' ).length, 2, '2 countries listed' );
+	$( '#campaign-list a' ).eq( 1 ).trigger( 'click' ); // select united states
+	page2 = app.getCurrentPage();
+	strictEqual( page2, 'campaign-page/US', 'check page name' );
+	$( '#campaign-list a' ).eq( 1 ).trigger( 'click' ); // select ca
+	page3 = app.getCurrentPage();
+	strictEqual( page3, 'campaign-page/US/US-CA', 'check page name' );
+	$( '#campaign-list a' ).eq( 3 ).trigger( 'click' ); // select alameda county
+	page4 = app.getCurrentPage();
+	strictEqual( page4, 'campaign-page/US/US-CA/%5B%5BAlameda%2C%20California%7CAlameda%5D%5D' );
+	$( '#campaign-list a' ).eq( 0 ).trigger( 'click' ); // select alameda county sub level
+	page5 = app.getCurrentPage();
+	strictEqual( page5, 'results-page' );
+} );
+
 }());
