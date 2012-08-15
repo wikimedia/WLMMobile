@@ -5,9 +5,9 @@ window.platform = {
 		// Google maps links for web & iOS
 		// on iOS these open in native Maps app
 		var url = ['http://maps.google.com/maps',
-			'?ll=', lat, ',', lon];
+			'?q=', lat, ',', lon ];
 		if(address) {
-			url.push('&q=' + encodeURIComponent(address));
+			url.push( '%20(' + encodeURIComponent( address ) + ')' );
 		}
 		return url.join('');
 	}

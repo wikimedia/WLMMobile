@@ -5,6 +5,8 @@ module( 'app.js', {
 	setup: function() {
 		WLMMobile.app.clearHistory();
 		_loggedIn = WLMMobile.api.loggedIn;
+		WLMMobile.api.loggedIn = true;
+		WLMMobile.db.init();
 		$( '<div id="results" />' ).appendTo( document.body );
 	},
 	teardown: function() {

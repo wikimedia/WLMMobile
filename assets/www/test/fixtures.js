@@ -7,6 +7,12 @@ var L = {
 	extend: NOP
 };
 
+// clear autologin from localstorage
+localStorage.clear( 'username' );
+localStorage.clear( 'password' );
+
+var EMPTY_TEMPLATE = '<div></div>';
+
 // SETUP TEMPLATES
 var DUMMY_TEMPLATES = {
 	'country-list-template': '<div></div>',
@@ -14,6 +20,7 @@ var DUMMY_TEMPLATES = {
 	'monument-list-item-template': '<li>foo</li>',
 	'monument-list-empty-template': '<div>empty</div>',
 	'monument-list-heading': '<div></div>',
+	'upload-list-empty-template': EMPTY_TEMPLATE,
 	'results-page': [ '<select class="toggle-page"><option value="results-page">list</option>',
 	 	'<option value="map-page-stub">map</option></select>' ].join( '' )
 };
@@ -57,7 +64,7 @@ $.ajax = function( options ) {
 		if( options.success ) {
 			options.success( 'foo=bar\nx=bar' );
 		}
-	} else if ( options.url = WLMConfig.WIKI_API ) {
+	} else if ( options.url = WLMConfig.WIKI_API && options.data ) {
 		var user = options.data.lgname;
 		var pass = options.data.lgpassword;
 		if( user === 'bad' && pass === 'bad' ) {
