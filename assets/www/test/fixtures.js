@@ -15,7 +15,7 @@ var EMPTY_TEMPLATE = '<div></div>';
 
 // SETUP TEMPLATES
 var DUMMY_TEMPLATES = {
-	'country-list-template': '<div></div>',
+	'country-list-template': '<% _.each( campaigns, function( campaign ) { %><li><a data-campaign="<%= campaign.code %>"><%= campaign.code %></a></li><% }); %>',
 	'map-page-stub': '<div></div>',
 	'monument-list-item-template': '<li>foo</li>',
 	'monument-list-empty-template': '<div>empty</div>',
@@ -24,9 +24,15 @@ var DUMMY_TEMPLATES = {
 	'results-page': [ '<select class="toggle-page"><option value="results-page">list</option>',
 	 	'<option value="map-page-stub">map</option></select>' ].join( '' )
 };
+var DUMMY_TEMPLATE_SCRIPTS = [ 'country-list-template' ]
+
 for( var id in DUMMY_TEMPLATES ) {
 	if( DUMMY_TEMPLATES.hasOwnProperty( id ) ) {
-		$( '<div />' ).attr( 'id', id ).html( DUMMY_TEMPLATES[ id ] ).appendTo( document.body );
+		if( DUMMY_TEMPLATE_SCRIPTS.indexOf( id ) > -1 ) {
+			$( '<script type="text/html"></script>' ).attr( 'id', id ).html( DUMMY_TEMPLATES[ id ] ).appendTo( document.body );
+		} else {
+			$( '<div />' ).attr( 'id', id ).html( DUMMY_TEMPLATES[ id ] ).appendTo( document.body );
+		}
 	}
 }
 
@@ -41,7 +47,7 @@ API_SUCCESS = { login: { result: 'Success' } };
 
 var _firstLoginRequest = true;
 $.ajax = function( options ) {
-	var data;
+	var data, admintree;
 	var d = $.Deferred();
 	console.log( 'dummy ajax request', options );
 	if( options && options.data && options.data.prop === 'imageinfo' ) {
@@ -49,8 +55,27 @@ $.ajax = function( options ) {
 		return d.resolve( data );
 	} else if ( options.url === WLMConfig.MONUMENT_API ) {
 		if ( options.data && options.data.action === 'adminlevels' ) {
-			if ( options.data.admtree === 'US|US-CA|Los%20Angeles%20County%2C%20California' ) {
+			admintree = options.data.admtree;
+			if ( admintree === '' ) {
+				d.resolve( { admin_levels: [
+					{ name: 'FR', value: 'FR' },
+					{ name: 'US', value: 'US' }
+				] } );
+			} else if ( admintree === 'US' ) {
+				d.resolve( { admin_levels: [
+					{ name: 'US-AZ', value: 'US-AZ' },
+					{ name: 'US-CA', value: 'US-CA' }
+				] } );
+			} else if ( admintree === 'US|US-CA' ) {
+				d.resolve( { admin_levels: [
+					{ name: 'Los Angeles County, California' },
+					{ name: 'San Francisco, California' },
+					{ name: 'Stump Town' }
+				] } );
+			} else if ( admintree === 'US|US-CA|Los%20Angeles%20County%2C%20California' ) {
 				d.resolve( { admin_levels: [ { name: 'ok' } ] } );
+			} else if( admintree === 'US|US-CA|Stump%20Town' ) { // bottom of treee
+				d.resolve( { admin_levels: [] } );
 			}
 		} else if( options.data.action === 'search' ) {
 			if ( options.data.sradm2 === 'San Francisco' &&
