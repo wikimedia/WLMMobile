@@ -355,13 +355,13 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		$("#upload-confirm").html(uploadConfirmTemplate({monument: curMonument, fileUrl: fileUrl})).localize();
 		$("#confirm-license-text").html(mw.msg('confirm-license-text', api.userName, licenseText));
+		var photo = new Photo( {
+			contentURL: fileUrl,
+			fileTitle: fileName,
+			fileContent: text
+		} );
 		$("#continue-upload").click(function() {
 			// reset status message for any previous uploads
-			var photo = new Photo( {
-				contentURL: fileUrl,
-				fileTitle: fileName,
-				fileContent: text
-			} );
 			photo.uploadTo( api, comment ).done( function( imageinfo ) {
 				$( '#upload-latest-page img' ).attr( 'src', resolveImageThumbnail( imageinfo.url ) );
 				$( '#upload-latest-page .share' ).html( mw.msg( 'upload-latest-view' ) );
@@ -422,9 +422,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		$( '#continue-save' ).click( function() {
 			// fixme: save to more permanent storage?
 			var fileName = curMonument.generateFilename();
-			db.addUpload( curMonument, api.userName, fileUrl, fileUrl, fileName, false );
+			db.addUpload( api.userName, curMonument, photo, false );
 			goBack(); // undo back button to skip upload form
-			showPage( 'upload-latest-page' );
+			goBack(); // undo back button to skip upload form
+			$( '#toggle-uploads-view' )[0].selectedIndex = 2; //.val( 'incomplete-view' );
+			showPage( 'uploads-page' );
 		});
 		showPage('upload-confirm-page');
 	}
