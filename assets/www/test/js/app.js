@@ -1,5 +1,6 @@
 (function() {
 
+var app;
 var _loggedIn;
 module( 'app.js', {
 	setup: function() {
@@ -126,4 +127,25 @@ test( 'resolveImageThumbnail', function() {
 	strictEqual( actual2, url2r );
 } );
 
+module( 'not logged in', {
+	setup: function() {
+		app = WLMMobile.app;
+		WLMMobile.app.clearHistory();
+		_loggedIn = WLMMobile.api.loggedIn;
+		WLMMobile.api.loggedIn = false;
+		WLMMobile.db.init();
+	},
+	teardown: function() {
+		WLMMobile.api.loggedIn = _loggedIn;
+		$( '#results' ).remove();
+		WLMMobile.app.clearHistory();
+	}
+} );
+
+test( 'click uploads and click back from resulting login screen (bug 39347)', function() {
+	app.showPage( 'welcome-page' );
+	app.showPage( 'uploads-page' );
+	var pageName = app.goBack();
+	strictEqual( pageName, 'welcome-page' );
+} );
 }());
