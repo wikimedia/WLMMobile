@@ -158,6 +158,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			if( api.loggedIn ) {
 				showUploads();
 			} else {
+				goBack(); // revert history change for login screen
 				doLogin( function() {
 					showPage( pageName );
 				} );
