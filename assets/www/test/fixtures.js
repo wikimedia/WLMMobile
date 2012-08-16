@@ -70,11 +70,25 @@ $.ajax = function( options ) {
 				d.resolve( { admin_levels: [
 					{ name: 'Los Angeles County, California' },
 					{ name: 'San Francisco, California' },
-					{ name: 'Stump Town' }
+					{ name: 'Stump Town' },
+					{ name: '[[Alameda, California|Alameda]]' },
+					{ name: '[[Foo County, California]]' }
 				] } );
-			} else if ( admintree === 'US|US-CA|Los%20Angeles%20County%2C%20California' ) {
+			} else if( admintree === 'US|US-CA|[[Alameda, California|Alameda]]' ) {
+				d.resolve( { admin_levels: [
+					{ name: '[[Alameda, California|Alameda]]' }
+				] } );
+			} else if( admintree === 'US|US-CA|[[Foo County, California]]' ) {
+				d.resolve( { admin_levels: [
+					{ name: '[[Foo, California|Foo]]' }
+				] } );
+			} else if( admintree === 'US|US-CA|[[Foo County, California]]|[[Foo, California|Foo]]' ) {
+				d.resolve( { admin_levels: [] } );
+			} else if( admintree === 'US|US-CA|[[Alameda, California|Alameda]]|[[Alameda, California|Alameda]]' ) {
+				d.resolve( { admin_levels: [] } );
+			} else if ( admintree === 'US|US-CA|Los Angeles County, California' ) {
 				d.resolve( { admin_levels: [ { name: 'ok' } ] } );
-			} else if( admintree === 'US|US-CA|Stump%20Town' ) { // bottom of treee
+			} else if( admintree === 'US|US-CA|Stump Town' ) { // bottom of treee
 				d.resolve( { admin_levels: [] } );
 			}
 		} else if( options.data.action === 'search' ) {
