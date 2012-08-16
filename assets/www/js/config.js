@@ -3,5 +3,6 @@ var WLMConfig = {
 	COMMONS_API: 'https://commons.wikimedia.org/w/api.php',
 	MONUMENT_API: 'http://wlm.wikimedia.org/api/api.php',
 	SIGNUP_PAGE: 'http://commons.wikimedia.org/w/index.php?title=Special:UserLogin&type=signup&uselang=$1',
-	WIKI_API: 'https://test.wikipedia.org/w/api.php'
+	WIKI_API: 'https://test.wikipedia.org/w/api.php',
+	WIKIPEDIA_API: 'https://$1.wikipedia.org/w/api.php'
 };
