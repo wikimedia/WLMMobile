@@ -26,6 +26,7 @@ define( [ 'jquery' ], function() {
 				cacheKey = 'root', d = new $.Deferred();
 			if( tree ) {
 				for( i = 0; i < tree.length; i++ ) {
+					tree[ i ] = tree[ i ].replace( /\|/g, '\\|' ); // escape any pipes so as not to conflict with separators
 					admtree.push( tree[ i ] );
 				}
 				admtree = admtree.join( '|' );
