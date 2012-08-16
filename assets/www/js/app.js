@@ -99,7 +99,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 	
 	function goBack() {
-		var pageName, data;
+		var pageName, data, campaigns = [];
 		if( blacklist.indexOf( curPageName ) > -1 ) {
 			return curPageName;
 		} else if( pageHistory.length > 1 ) {
@@ -114,7 +114,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			// special casing for specific pages
 			// TODO: provide generic mechanism for this
 			if( data[ 0 ] === 'campaign-page' ) {
-				listCampaigns( data.slice( 1 ) );
+				campaigns = data.slice( 1 );
+				// campaigns are currently url encoded so we must decode
+				campaigns.forEach( function( el, i ) {
+					campaigns[ i ] = decodeURIComponent( el );
+				} );
+				listCampaigns( campaigns );
 			}
 		} else {
 			console.log( 'Nothing in pageHistory to go back to. Quitting :(' );

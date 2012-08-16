@@ -26,7 +26,7 @@ define( [ 'jquery' ], function() {
 				cacheKey = 'root', d = new $.Deferred();
 			if( tree ) {
 				for( i = 0; i < tree.length; i++ ) {
-					admtree.push( encodeURIComponent( tree[ i ] ) );
+					admtree.push( tree[ i ] );
 				}
 				admtree = admtree.join( '|' );
 				cacheKey = admtree;
