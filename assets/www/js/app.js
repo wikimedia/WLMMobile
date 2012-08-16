@@ -188,6 +188,36 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		
 		if( monument.articleLink ) {
 			$( '#monument-detail' ).find( '.monument-article' ).html( buildMonumentLink( monument ) );
+			// Run an existence check on the article...
+			var apiUrl = WLMConfig.WIKIPEDIA_API.replace( '$1', monument.lang ),
+				api = new Api( apiUrl );
+			api.request( 'get', {
+				action: 'query',
+				prop: 'revisions',
+				titles: monument.monument_article, // yes titles, API can take multiple values :)
+				rvlimit: 1
+			} ).done( function( data ) {
+				if ( 'query' in data && 'pages' in data.query ) {
+					var pageId;
+					$.each( data.query.pages, function( i, item ) {
+						pageId = i;
+					});
+					if ( pageId > 0 ) {
+						// Page exists!
+					} else {
+						// No existy.
+						$( '#monument-detail .monument-article a' )
+							.addClass( 'broken' )
+							.click( function( event ) {
+								alert( mw.message( 'article-does-not-exist', monument.monument_article.replace( /_/g, ' ' ) ).plain() );
+								event.preventDefault();
+							});
+					}
+				} else {
+					// Error in API check.
+					// Silently ignore it for now.
+				}
+			} );
 		}
 
 		curMonument = monument;
