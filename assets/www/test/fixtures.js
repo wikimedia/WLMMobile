@@ -74,7 +74,7 @@ $.ajax = function( options ) {
 					{ name: '[[Alameda, California|Alameda]]' },
 					{ name: '[[Foo County, California]]' }
 				] } );
-			} else if( admintree === 'US|US-CA|[[Alameda, California|Alameda]]' ) {
+			} else if( admintree === 'US|US-CA|[[Alameda, California\\|Alameda]]' ) {
 				d.resolve( { admin_levels: [
 					{ name: '[[Alameda, California|Alameda]]' }
 				] } );
@@ -82,9 +82,9 @@ $.ajax = function( options ) {
 				d.resolve( { admin_levels: [
 					{ name: '[[Foo, California|Foo]]' }
 				] } );
-			} else if( admintree === 'US|US-CA|[[Foo County, California]]|[[Foo, California|Foo]]' ) {
+			} else if( admintree === 'US|US-CA|[[Foo County, California]]|[[Foo, California\\|Foo]]' ) {
 				d.resolve( { admin_levels: [] } );
-			} else if( admintree === 'US|US-CA|[[Alameda, California|Alameda]]|[[Alameda, California|Alameda]]' ) {
+			} else if( admintree === 'US|US-CA|[[Alameda, California\\|Alameda]]|[[Alameda, California\\|Alameda]]' ) {
 				d.resolve( { admin_levels: [] } );
 			} else if ( admintree === 'US|US-CA|Los Angeles County, California' ) {
 				d.resolve( { admin_levels: [ { name: 'ok' } ] } );
