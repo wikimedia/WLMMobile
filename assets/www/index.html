@@ -110,6 +110,9 @@
 
 		<div class="center">
 			<button id="continue-upload"><msg key="confirm-license-upload" /></button>
+			<button id="upload-later-button">
+				<msg key="confirm-license-upload-later"></msg>
+			</button>
 		</div>
 	</script>
 
@@ -316,11 +319,28 @@
 				<header>
 					<h2><msg key='add-photo-title' /></h2>
 				</header>
+				<msg key="add-photo-explained"></msg>
 				<ul>
 					<li><a href="#" id="selectphoto"><msg key="add-photo-gallery"></msg></a></li>
 					<li><a href="#" id="takephoto"><msg key="add-photo-camera"></msg></a></li>
 				</ul>
 				<button class="back"><msg key='popup-cancel' /></button>
+			</div>
+		</div>
+	</div>
+
+	<div class="popup-container-container" id="upload-later">
+		<div class="popup-container">
+			<div class="popup">
+				<header>
+					<h2><msg key='saved-later-title' /></h2>
+				</header>
+				<div class="content visibleLinks">
+					<msg key="saved-later-text"></msg>
+				</div>
+				<button class="back">
+					<msg key='popup-ok'></msg>
+				</button>
 			</div>
 		</div>
 	</div>
