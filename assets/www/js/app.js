@@ -396,13 +396,13 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		$("#upload-confirm").html(uploadConfirmTemplate({monument: curMonument, fileUrl: fileUrl})).localize();
 		$("#confirm-license-text").html(mw.msg('confirm-license-text', api.userName, licenseText));
+		var photo = new Photo( {
+			contentURL: fileUrl,
+			fileTitle: fileName,
+			fileContent: text
+		} );
 		$("#continue-upload").click(function() {
 			// reset status message for any previous uploads
-			var photo = new Photo( {
-				contentURL: fileUrl,
-				fileTitle: fileName,
-				fileContent: text
-			} );
 			photo.uploadTo( api, comment ).done( function( imageinfo ) {
 				$( '#upload-latest-page img' ).attr( 'src', resolveImageThumbnail( imageinfo.url ) );
 				$( '#upload-latest-page .share' ).html( mw.msg( 'upload-latest-view' ) );
@@ -459,6 +459,15 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					console.log( 'Upload failed: ' + code );
 				}
 			} );
+		});
+		$( '#continue-save' ).click( function() {
+			// fixme: save to more permanent storage?
+			var fileName = curMonument.generateFilename();
+			db.addUpload( api.userName, curMonument, photo, false );
+			goBack(); // undo back button to skip upload form
+			goBack(); // undo back button to skip upload form
+			$( '#toggle-uploads-view' )[0].selectedIndex = 2; //.val( 'incomplete-view' );
+			showPage( 'uploads-page' );
 		});
 		showPage('upload-confirm-page');
 	}
@@ -651,13 +660,19 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 	// Expects user to be logged in
 	function showUploads() {
-		var username = api.userName;
+		var username = api.userName,
+			showCompleted = ( $( '#toggle-uploads-view' ).val() == 'complete-view' );
 		db.requestUploadsForUser( username ).done( function( uploads ) {
 			$( '#uploads-list' ).empty();
 			if( uploads.length ) {
 				var uploadsTemplate = templates.getTemplate( 'upload-list-item-template' );
 				var uploadCompleteTemplate = templates.getTemplate( 'upload-completed-item-detail-template' );
 				$.each( uploads, function( i, upload ) {
+					var completed = ( upload.completed == 'true' );
+					if ( completed != showCompleted ) {
+						// filter for completion status
+						return;
+					}
 					var monument = JSON.parse( upload.monument );
 					var photo = JSON.parse( upload.photo );
 					$uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
@@ -895,6 +910,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				});
 			}, 400);
 		});
+
+		$( '#toggle-uploads-view' ).change( function() {
+			showUploads();
+		} );
 
 		$('#nearby').click(function() {
 			showPage( 'locationlookup-page' );
