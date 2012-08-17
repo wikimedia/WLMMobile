@@ -58,6 +58,21 @@
 			<a><%= photo.data.fileTitle %></a>
 		</div>
 	</script>
+	<script type='text/html' id='upload-incomplete-item-detail-template'>
+		<h3><%= monument.name %></h3>
+		<p>
+			<a class="monumentLink">
+				<msg key="upload-monument-link-text"></msg>
+			</a>
+		</p>
+		<img class='uploaded-image-full' width='320' src='<%= photo.data.contentURL %>' />
+		<div class='uploaded-image-details'>
+			<a><%= photo.data.fileTitle %></a>
+		</div>
+		<div>
+			<button class="upload-incomplete"><msg key="incomplete-image-upload"></msg></button>
+		</div>
+	</script>
 	<script type="text/html" id="monument-list-item-template">
 		<li>
 			<a class='monument-detail' href="#">
@@ -115,9 +130,6 @@
 			</button>
 		</div>
 
-		<div class="center">
-			<button id="continue-save"><msg key="confirm-license-save" /></button>
-		</div>
 	</script>
 
 	<script type="text/html" id="upload-photo-description">
@@ -266,6 +278,15 @@
 			<h2><msg key="upload-completeddetail-title"></msg></h2>
 		</header>
 		<div class='content' id="completed-upload-detail">
+		</div>
+	</div>
+
+	<div class="page" id="incomplete-upload-detail-page">
+		<header class="actionbar">
+			<a class='back' href="#"> </a>
+			<h2><msg key="upload-incompletedetail-title"></msg></h2>
+		</header>
+		<div class='content' id="incomplete-upload-detail">
 		</div>
 	</div>
 
