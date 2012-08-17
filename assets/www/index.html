@@ -114,6 +114,10 @@
 				<msg key="confirm-license-upload-later"></msg>
 			</button>
 		</div>
+
+		<div class="center">
+			<button id="continue-save"><msg key="confirm-license-save" /></button>
+		</div>
 	</script>
 
 	<script type="text/html" id="upload-photo-description">
@@ -242,7 +246,12 @@
 	<div class="page" id="uploads-page">
 		<header class='actionbar'>
 			<a class='back' href="#"></a>
-			<h2><msg key="tabbar-uploads"></msg></h2>
+			<h2>
+			<select id="toggle-uploads-view">
+				<option value="complete-view" selected data-msg-text="uploads-completed"></option>
+				<option value="incomplete-view" data-msg-text="uploads-incomplete"></option>
+			</select>
+			</h2>
 			<a class='page-link' data-page='country-page'><img src='images/7-location-place.png' /></a>
 			<a class='page-link' data-page='settings-page'><img src='images/2-action-settings.png' /></a>
 		</header>
