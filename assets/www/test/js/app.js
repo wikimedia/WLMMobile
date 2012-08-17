@@ -4,6 +4,7 @@ var app;
 var _loggedIn;
 module( 'app.js', {
 	setup: function() {
+		app = WLMMobile.app;
 		WLMMobile.app.clearHistory();
 		_loggedIn = WLMMobile.api.loggedIn;
 		WLMMobile.api.loggedIn = true;
@@ -125,6 +126,28 @@ test( 'resolveImageThumbnail', function() {
 	var actual2 = WLMMobile.app.resolveImageThumbnail( url2 );
 	strictEqual( actual1, url1r );
 	strictEqual( actual2, url2r );
+} );
+
+test( 'drill down back behaviour (bug 39354)', function() {
+	var page1, page2, page3, page4, page5, page6;
+	app.listCampaigns( [] );
+	page1 = app.getCurrentPage();
+	strictEqual( page1, 'campaign-page', 'check page name' );
+	strictEqual( $( '#campaign-list a' ).length, 2, '2 countries listed' );
+	$( '#campaign-list a' ).eq( 1 ).trigger( 'click' ); // select united states
+	page2 = app.getCurrentPage();
+	strictEqual( page2, 'campaign-page/US', 'check page name' );
+	$( '#campaign-list a' ).eq( 1 ).trigger( 'click' ); // select ca
+	page3 = app.getCurrentPage();
+	strictEqual( page3, 'campaign-page/US/US-CA', 'check page name' );
+	$( '#campaign-list a' ).eq( 2 ).trigger( 'click' ); // select stumptown which has no sub campaigns so should take user to results page
+	page4 = app.getCurrentPage();
+	strictEqual( page4, 'results-page', 'check page name is results as we reached the bottom level' );
+	page5 = app.goBack(); // go back
+	strictEqual( page5, 'campaign-page/US/US-CA', 'check page name after back press' );
+	$( '#campaign-list a' ).eq( 2 ).trigger( 'click' ); // select stump town again
+	page6 = app.getCurrentPage();
+	strictEqual( page6, 'results-page', 'check page name' );
 } );
 
 module( 'not logged in', {
