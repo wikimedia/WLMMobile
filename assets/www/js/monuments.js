@@ -1,10 +1,10 @@
 define([ 'jquery', 'monument' ], function( $, Monument ) {
-	function MonumentsApi(url, mwApi) {
+	function MonumentsApi( url, mwApi ) {
 		this.url = url;
 		this.mwApi = mwApi;
 	}
 
-	MonumentsApi.prototype.request = function(params) {
+	MonumentsApi.prototype.request = function( params ) {
 		var that = this;
 
 		// Force JSON
@@ -14,7 +14,7 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 			data: params,
 			dataType: 'text',
 			type: 'GET',
-			dataFilter: function(text) {
+			dataFilter: function( text ) {
 				// Pick up only the last line of the response
 				// This ignores all the PHP errors and warnings spouted by the API
 				// FIXME: Fix the errors and warnings in the server of the API
@@ -29,7 +29,7 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 		});
 	};
 
-	MonumentsApi.prototype.getForCountry = function(country) {
+	MonumentsApi.prototype.getForCountry = function( country ) {
 		var d = $.Deferred();
 		return this.request({
 			action: 'search',
