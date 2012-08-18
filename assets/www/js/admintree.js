@@ -10,9 +10,13 @@ define( [ 'jquery' ], function() {
 		return name;
 	}
 
-	function AdminLevel( code, parents ) {
+	function AdminLevel( code, translated, parents ) {
 		this.code = code;
-		this.name = translateCode( code );
+		if ( translated !== undefined ) {
+			this.name = translated;
+		} else {
+			this.name = translateCode( code );
+		}
 		this.parents = parents;
 	}
 
@@ -21,8 +25,8 @@ define( [ 'jquery' ], function() {
 	}
 
 	AdminTreeApi.prototype = {
-		getLeaves: function( tree ) {
-			var data = { action: 'adminlevels', format: 'json' }, i, admtree = [],
+		getLeaves: function( tree, lang ) {
+			var data = { action: 'adminlevels', format: 'json', uselang: lang }, i, admtree = [],
 				cacheKey = 'root', d = new $.Deferred();
 			if( tree ) {
 				for( i = 0; i < tree.length; i++ ) {
@@ -44,7 +48,7 @@ define( [ 'jquery' ], function() {
 					var adminLevels = [];
 					if ( levels ) {
 						levels.forEach( function( item ) {
-							adminLevels.push( new AdminLevel( item.name, tree ) );
+							adminLevels.push( new AdminLevel( item.name, item.translated, tree ) );
 						} );
 					}
 					cache[ cacheKey ] = adminLevels;

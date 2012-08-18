@@ -755,7 +755,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	*/
 	function listCampaigns( campaignTree ) {
 		var pageName, d,
-			$clist = $( '#campaign-list' );
+			$clist = $( '#campaign-list' ),
+			lang = prefs.get( 'uiLanguage' );
 
 		function constructCampaignTrailPageName( tree ) {
 			var page = [ 'campaign-page' ], i;
@@ -767,7 +768,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		pageName = constructCampaignTrailPageName( campaignTree );
 
-		d = admintree.getLeaves( campaignTree );
+		d = admintree.getLeaves( campaignTree, lang );
 		$clist.empty()
 		
 		function listMonuments( tree ) {
