@@ -838,7 +838,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			$( 'body' ).attr( 'dir', 'rtl' );
 		}
 
-		$( '#filter-monuments' ).keyup( function() {
+		function filterMonuments() {
 			var value = this.value;
 			if( monumentSearchTimeout ) {
 				window.clearTimeout( timeout );
@@ -873,7 +873,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				showPage( 'results-page', monumentSearchReq );
 				monumentSearchTimeout = null;
 			}, 500 );
-		});
+		}
+		$( '#filter-monuments' ).on( 'input', filterMonuments );
 
 		$( ".page-link" ).click( function() {
 			var toPage = $( this ).data('page');
@@ -914,7 +915,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		});
 
 		var campaignSearchTimeout = null;
-		$( "#filter-campaign" ).keyup( function() {
+		function filterCampaigns() {
 			if( campaignSearchTimeout ) {
 				window.clearTimeout( campaignSearchTimeout );
 			}
@@ -929,7 +930,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					}
 				});
 			}, 400);
-		});
+		};
+		$( "#filter-campaign" ).on( 'input', filterCampaigns );
 
 		$( '#toggle-uploads-view' ).change( function() {
 			showUploads();
