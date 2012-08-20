@@ -1,201 +1,99 @@
 window.CAMPAIGNS = {
-    "es": {
-        "isenabled": 1, 
-        "desc": "Spain", 
-        "config": {
-            "idFieldLabel": "Identificador del monumento", 
-            "idField": "{{BIC|$1}}", 
-            "headerLabelPage": "Commons:Wiki_Loves_Monuments_upload/$1/wizard-intro-es", 
-            "defaultCategories": [
-                "Category:Cultural heritage monuments in Spain"
-            ], 
-            "skipTutorial": "1", 
-            "ownWorkOption": "own", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0-es", 
-            "tutorialWidth": "720", 
-            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
-            "licensesOwnWork": [
-                "cc-by-sa-3.0", 
-                "cc-by-3.0", 
-                "own-pd", 
-                "cc-by-sa-3.0-es"
-            ], 
-            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-es-id/$1", 
-            "autoCategories": [], 
-            "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
-            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25"
-        }, 
-        "name": "es", 
-        "id": 16
-    }, 
-    "fr": {
-        "isenabled": 1, 
-        "desc": "France", 
-        "config": {
-            "idFieldLabel": "Identifiant dans la base M\u00e9rim\u00e9e", 
-            "idField": "{{M\u00e9rim\u00e9e|$1}}", 
-            "headerLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-fr-header/$1", 
-            "defaultCategories": [
-                "Monuments historiques in France"
-            ], 
-            "skipTutorial": "", 
-            "ownWorkOption": "own", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
-            "tutorialWidth": "720", 
-            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
-            "licensesOwnWork": [
-                "cc-by-sa-3.0"
-            ], 
-            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-fr-id/$1", 
-            "autoCategories": [
-                "Images from Wiki Loves Monuments 2011 in France after deadline"
-            ], 
-            "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
-            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "10"
-        }, 
-        "name": "fr", 
-        "id": 31
-    }, 
     "ch": {
         "isenabled": 1, 
         "desc": "Switzerland", 
         "config": {
+            "defaultLon": "", 
             "idFieldLabel": "", 
-            "idField": "", 
-            "headerLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-ch-header/$1", 
+            "idField": "{{Cultural property of national significance in Switzerland|$1}}", 
+            "defaultAlt": "", 
             "defaultCategories": [
                 "Cultural properties of national significance in Switzerland"
             ], 
             "skipTutorial": "1", 
-            "ownWorkOption": "own", 
+            "defaultDescription": "", 
             "defaultOwnWorkLicence": "cc-by-sa-3.0", 
             "tutorialWidth": "720", 
             "tutorialTemplate": "Licensing_tutorial_$1.svg", 
             "licensesOwnWork": [
                 "cc-by-sa-3.0"
             ], 
-            "idFieldLabelPage": "", 
+            "defaultLat": "", 
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-ch-id/$1", 
+            "idFieldInitialValue": "", 
             "autoCategories": [], 
-            "autoWikiText": "{{Wiki Loves Monuments 2011|ch}}", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
+            "autoWikiText": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
             "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": ""
+            "idFieldMaxLength": "50", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
         }, 
         "name": "ch", 
         "id": 36
-    }, 
-    "nl": {
-        "isenabled": 1, 
-        "desc": "Netherlands", 
-        "config": {
-            "idFieldLabel": "Rijksmonument nummer", 
-            "idField": "{{Rijksmonument|$1}}", 
-            "headerLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-nl-header/$1", 
-            "defaultCategories": [
-                "Rijksmonumenten"
-            ], 
-            "skipTutorial": "1", 
-            "ownWorkOption": "own", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0-nl", 
-            "tutorialWidth": "720", 
-            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
-            "licensesOwnWork": [
-                "cc-by-sa-3.0-nl"
-            ], 
-            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-nl-id/$1", 
-            "autoCategories": [], 
-            "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
-            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25"
-        }, 
-        "name": "nl", 
-        "id": 5
     }, 
     "ad": {
         "isenabled": 1, 
         "desc": "Andorra", 
         "config": {
+            "defaultLon": "", 
             "idFieldLabel": "", 
             "idField": "{{B\u00e9ns Andorra|$1}}", 
-            "headerLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-ad-header/$1", 
+            "defaultAlt": "", 
             "defaultCategories": [
                 "Cultural heritage monuments in Andorra"
             ], 
             "skipTutorial": "1", 
-            "ownWorkOption": "own", 
+            "defaultDescription": "", 
             "defaultOwnWorkLicence": "cc-by-sa-3.0", 
             "tutorialWidth": "720", 
             "tutorialTemplate": "Licensing_tutorial_$1.svg", 
             "licensesOwnWork": [
                 "cc-by-sa-3.0"
             ], 
+            "defaultLat": "", 
             "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-ad-id/$1", 
+            "idFieldInitialValue": "", 
             "autoCategories": [], 
             "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
             "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25"
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
         }, 
         "name": "ad", 
         "id": 4
-    }, 
-    "pt": {
-        "isenabled": 1, 
-        "desc": "Portugal", 
-        "config": {
-            "idFieldLabel": "", 
-            "idField": "{{WLM-PT|$1}}", 
-            "headerLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-pt-notice/$1", 
-            "defaultCategories": [
-                "Cultural heritage monuments in Portugal"
-            ], 
-            "skipTutorial": "1", 
-            "ownWorkOption": "own", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
-            "tutorialWidth": "720", 
-            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
-            "licensesOwnWork": [
-                "cc-by-sa-3.0"
-            ], 
-            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-pt-id/$1", 
-            "autoCategories": [], 
-            "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
-            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25"
-        }, 
-        "name": "pt", 
-        "id": 8
     }, 
     "be-vlg": {
         "isenabled": 1, 
         "desc": "Belgium (Flanders)", 
         "config": {
+            "defaultLon": "", 
             "idFieldLabel": "", 
             "idField": "{{Onroerend erfgoed|$1}}", 
-            "headerLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-be-vlg-header/$1", 
+            "defaultAlt": "", 
             "defaultCategories": [
                 "Onroerend erfgoed in Flanders"
             ], 
             "skipTutorial": "1", 
-            "ownWorkOption": "own", 
+            "defaultDescription": "", 
             "defaultOwnWorkLicence": "cc-by-sa-3.0", 
             "tutorialWidth": "720", 
             "tutorialTemplate": "Licensing_tutorial_$1.svg", 
             "licensesOwnWork": [
                 "cc-by-sa-3.0"
             ], 
+            "defaultLat": "", 
             "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-be-vlg-id/$1", 
+            "idFieldInitialValue": "", 
             "autoCategories": [], 
             "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
             "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25"
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
         }, 
         "name": "be-vlg", 
         "id": 34
@@ -204,88 +102,508 @@ window.CAMPAIGNS = {
         "isenabled": 1, 
         "desc": "Estonia", 
         "config": {
+            "defaultLon": "", 
             "idFieldLabel": "", 
             "idField": "{{Kultuurim\u00e4lestis|$1}}", 
-            "headerLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-ee-header/$1", 
+            "defaultAlt": "", 
             "defaultCategories": [
                 "Cultural heritage monuments in Estonia"
             ], 
             "skipTutorial": "1", 
-            "ownWorkOption": "own", 
+            "defaultDescription": "", 
             "defaultOwnWorkLicence": "cc-by-sa-3.0-ee", 
             "tutorialWidth": "720", 
             "tutorialTemplate": "Licensing_tutorial_$1.svg", 
             "licensesOwnWork": [
                 "cc-by-sa-3.0-ee"
             ], 
+            "defaultLat": "", 
             "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-ee-id/$1", 
+            "idFieldInitialValue": "", 
             "autoCategories": [], 
             "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
             "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25"
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
         }, 
         "name": "ee", 
         "id": 15
     }, 
-    "ro": {
+    "at": {
         "isenabled": 1, 
-        "desc": "Romania", 
+        "desc": "Austria", 
         "config": {
-            "idFieldLabel": "", 
-            "idField": "{{Monument istoric|$1}}", 
-            "headerLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-ro-header/$1", 
+            "defaultLon": "", 
+            "idFieldLabel": "Objekt ID", 
+            "idField": "{{Denkmalgesch\u00fctztes Objekt \u00d6sterreich|1=$1}}", 
+            "defaultAlt": "", 
             "defaultCategories": [
-                "Historical_monuments_in_Romania"
+                "Cultural heritage monuments in Austria"
             ], 
             "skipTutorial": "1", 
-            "ownWorkOption": "own", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0-ro", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0-at", 
             "tutorialWidth": "720", 
             "tutorialTemplate": "Licensing_tutorial_$1.svg", 
             "licensesOwnWork": [
-                "cc-by-sa-3.0-ro"
+                "cc-by-sa-3.0", 
+                "cc-by-sa-3.0-at", 
+                "cc-zero"
             ], 
-            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-ro-id/$1", 
+            "defaultLat": "", 
+            "idFieldLabelPage": "", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [
+                "Cultural heritage monuments in Austria needing check"
+            ], 
+            "autoWikiText": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+        }, 
+        "name": "at", 
+        "id": 12
+    }, 
+    "es": {
+        "isenabled": 1, 
+        "desc": "Spain", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "Identificador del monumento", 
+            "idField": "{{BIC|$1}}", 
+            "defaultAlt": "", 
+            "defaultCategories": [
+                "Category:Cultural heritage monuments in Spain"
+            ], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0-es", 
+            "tutorialWidth": "720", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0", 
+                "cc-by-sa-3.0-es", 
+                "cc-by-3.0", 
+                "own-pd"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-es-id/$1", 
+            "idFieldInitialValue": "", 
             "autoCategories": [], 
             "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
             "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25"
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Commons:Wiki_Loves_Monuments_upload/$1/wizard-intro-es"
         }, 
-        "name": "ro", 
-        "id": 7
+        "name": "es", 
+        "id": 16
+    }, 
+    "nl": {
+        "isenabled": 1, 
+        "desc": "Netherlands", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "Rijksmonument nummer", 
+            "idField": "{{Rijksmonument|$1}}", 
+            "defaultAlt": "", 
+            "defaultCategories": [
+                "Rijksmonumenten"
+            ], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0-nl", 
+            "tutorialWidth": "720", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0-nl"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-nl-id/$1", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [], 
+            "autoWikiText": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+        }, 
+        "name": "nl", 
+        "id": 5
+    }, 
+    "pt": {
+        "isenabled": 1, 
+        "desc": "Portugal", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "", 
+            "idField": "{{WLM-PT|$1}}", 
+            "defaultAlt": "", 
+            "defaultCategories": [
+                "Cultural heritage monuments in Portugal"
+            ], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "720", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-pt-id/$1", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [], 
+            "autoWikiText": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+        }, 
+        "name": "pt", 
+        "id": 8
     }, 
     "no": {
         "isenabled": 1, 
         "desc": "Norway", 
         "config": {
+            "defaultLon": "", 
             "idFieldLabel": "", 
             "idField": "{{Monument Norge|$1}}", 
-            "headerLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-no-header/$1", 
+            "defaultAlt": "", 
             "defaultCategories": [
                 "Cultural heritage monuments in Norway"
             ], 
             "skipTutorial": "1", 
-            "ownWorkOption": "own", 
+            "defaultDescription": "", 
             "defaultOwnWorkLicence": "cc-by-sa-3.0-no", 
             "tutorialWidth": "720", 
             "tutorialTemplate": "Licensing_tutorial_$1.svg", 
             "licensesOwnWork": [
                 "cc-by-sa-3.0-no"
             ], 
+            "defaultLat": "", 
             "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-no-id", 
+            "idFieldInitialValue": "", 
             "autoCategories": [], 
             "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
             "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25"
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
         }, 
         "name": "no", 
         "id": 11
     }, 
+    "pa": {
+        "isenabled": 1, 
+        "desc": "Panama", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "N\u00famero de Identificaci\u00f3n", 
+            "idField": "", 
+            "defaultAlt": "", 
+            "defaultCategories": [], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "720", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0", 
+                "cc-by-3.0", 
+                "cc-zero"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [], 
+            "autoWikiText": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+        }, 
+        "name": "pa", 
+        "id": 65
+    }, 
+    "de-nrw-k": {
+        "isenabled": 1, 
+        "desc": "Germany (nrw-k)", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "Denkmalnummer aus der Liste", 
+            "idField": "{{Kulturdenkmal K\u00f6ln|$1}}", 
+            "defaultAlt": "", 
+            "defaultCategories": [
+                "Maintenance for cultural heritage monuments in Cologne"
+            ], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "900", 
+            "tutorialTemplate": "WLM Introscreen UploadWizard-de-nrw-k.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [
+                "Cultural heritage monuments in Cologne"
+            ], 
+            "autoWikiText": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
+            "tutorialHelpdeskCoords": "", 
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Commons:Wiki Loves Monuments upload/de/wizard-intro-de-k"
+        }, 
+        "name": "de-nrw-k", 
+        "id": 48
+    }, 
+    "be-wal": {
+        "isenabled": 1, 
+        "desc": "Belgium (Wallonia)", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "", 
+            "idField": "{{WLM-identifier|be-wal|$1}}", 
+            "defaultAlt": "", 
+            "defaultCategories": [
+                "Cultural heritage monuments in Wallonia"
+            ], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "720", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-be-wal-id/$1", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [], 
+            "autoWikiText": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+        }, 
+        "name": "be-wal", 
+        "id": 35
+    }, 
+    "ro": {
+        "isenabled": 1, 
+        "desc": "Romania", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "", 
+            "idField": "{{Monument istoric|$1}}", 
+            "defaultAlt": "", 
+            "defaultCategories": [], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0-ro", 
+            "tutorialWidth": "720", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0-ro"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-ro-id/$1", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [], 
+            "autoWikiText": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+        }, 
+        "name": "ro", 
+        "id": 7
+    }, 
+    "de-by": {
+        "isenabled": 1, 
+        "desc": "Germany (Bavaria)", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "Stadt oder Gemeinde, f\u00fcr M\u00fcnchen: Stadtteil", 
+            "idField": "{{safesubst:WLM2011-DE-BY|$1}}", 
+            "defaultAlt": "", 
+            "defaultCategories": [
+                "Images from Wiki Loves Monuments 2011, DE-BY"
+            ], 
+            "skipTutorial": "", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "900", 
+            "tutorialTemplate": "WLM Introscreen UploadWizard-de.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [], 
+            "autoWikiText": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
+            "tutorialHelpdeskCoords": "", 
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Commons:Wiki Loves Monuments upload/de/wizard-intro-de-by"
+        }, 
+        "name": "de-by", 
+        "id": 13
+    }, 
+    "pl": {
+        "isenabled": 1, 
+        "desc": "Poland", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "Nr rejestrowy obiektu", 
+            "idField": "", 
+            "defaultAlt": "", 
+            "defaultCategories": [], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0-pl", 
+            "tutorialWidth": "720", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0-pl"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-pl-id/$1", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [], 
+            "autoWikiText": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+        }, 
+        "name": "pl", 
+        "id": 9
+    }, 
+    "fr": {
+        "isenabled": 1, 
+        "desc": "France", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "Identifiant dans la base M\u00e9rim\u00e9e", 
+            "idField": "{{M\u00e9rim\u00e9e|$1}}", 
+            "defaultAlt": "", 
+            "defaultCategories": [
+                "Monuments historiques in France"
+            ], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "720", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-fr-id/$1", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [
+                "Images from Wiki Loves Monuments 2012 in France \u2212 early"
+            ], 
+            "autoWikiText": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
+            "idFieldMaxLength": "10", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+        }, 
+        "name": "fr", 
+        "id": 31
+    }, 
+    "lu": {
+        "isenabled": 1, 
+        "desc": "Luxemburg", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "", 
+            "idField": "", 
+            "defaultAlt": "", 
+            "defaultCategories": [
+                "Cultural heritage monuments in Luxembourg"
+            ], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0-lu", 
+            "tutorialWidth": "720", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0-lu"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-lu-id/$1", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [], 
+            "autoWikiText": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+        }, 
+        "name": "lu", 
+        "id": 37
+    }, 
+    "by": {
+        "isenabled": 1, 
+        "desc": "Belarus", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "\u0428\u044b\u0444\u0440", 
+            "idField": "{{Belarus heritage|$1}}", 
+            "defaultAlt": "", 
+            "defaultCategories": [
+                "Belarusian heritage monuments"
+            ], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "720", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0", 
+                "cc-by-3.0", 
+                "cc-zero"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [], 
+            "autoWikiText": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
+            "idFieldMaxLength": "13", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+        }, 
+        "name": "by", 
+        "id": 61
+    }, 
     "us": {
-        "isenabled": 0, 
+        "isenabled": 1, 
         "desc": "United States", 
         "config": {
             "defaultLon": "", 
@@ -301,302 +619,156 @@ window.CAMPAIGNS = {
             "tutorialWidth": "720", 
             "tutorialTemplate": "Licensing_tutorial_$1.svg", 
             "licensesOwnWork": [
-                "cc-by-sa-3.0"
+                "cc-by-sa-3.0", 
+                "cc-by-3.0", 
+                "cc-zero"
             ], 
             "defaultLat": "", 
             "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-us-id/$1", 
             "idFieldInitialValue": "", 
             "autoCategories": [], 
             "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
             "ownWorkOption": "own", 
             "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
             "idFieldMaxLength": "25", 
-            "headerLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-us-header/$1"
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
         }, 
         "name": "us", 
         "id": 58
     }, 
-    "lu": {
+    "de-he": {
         "isenabled": 1, 
-        "desc": "Luxemburg", 
+        "desc": "Germany (Hesse)", 
         "config": {
+            "defaultLon": "", 
             "idFieldLabel": "", 
-            "idField": "", 
-            "headerLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-lu-header/$1", 
+            "idField": "{{safesubst:WLM2011-DE-HE|$1}}", 
+            "defaultAlt": "", 
             "defaultCategories": [
-                "Cultural heritage monuments in Luxembourg"
-            ], 
-            "skipTutorial": "1", 
-            "ownWorkOption": "own", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0-lu", 
-            "tutorialWidth": "720", 
-            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
-            "licensesOwnWork": [
-                "cc-by-sa-3.0-lu"
-            ], 
-            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-lu-id/$1", 
-            "autoCategories": [], 
-            "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
-            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25"
-        }, 
-        "name": "lu", 
-        "id": 37
-    }, 
-    "at": {
-        "isenabled": 1, 
-        "desc": "Austria", 
-        "config": {
-            "idFieldLabel": "", 
-            "idField": "{{Denkmalgesch\u00fctztes Objekt \u00d6sterreich|1=$1}}", 
-            "headerLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-at-header/$1", 
-            "defaultCategories": [
-                "Cultural heritage monuments in Austria"
+                "Images from Wiki Loves Monuments 2011, DE-HE"
             ], 
             "skipTutorial": "", 
-            "ownWorkOption": "own", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0-at", 
-            "tutorialWidth": "720", 
-            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "900", 
+            "tutorialTemplate": "WLM Introscreen UploadWizard-de.svg", 
             "licensesOwnWork": [
-                "cc-by-sa-3.0-at"
+                "cc-by-sa-3.0"
             ], 
-            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-at-id/$1", 
+            "defaultLat": "", 
+            "idFieldLabelPage": "Commons:Wiki Loves Monuments upload/de/label-ortshinweis", 
+            "idFieldInitialValue": "", 
             "autoCategories": [], 
             "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
-            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25"
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
+            "tutorialHelpdeskCoords": "", 
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Commons:Wiki Loves Monuments upload/de/wizard-intro-de-he"
         }, 
-        "name": "at", 
-        "id": 12
+        "name": "de-he", 
+        "id": 20
     }, 
     "de-nrw-bm": {
         "isenabled": 1, 
         "desc": "Germany (nrw-bm)", 
         "config": {
+            "defaultLon": "", 
             "idFieldLabel": "Denkmalnummer", 
             "idField": "{{Kulturdenkmal Bergheim|$1}}", 
-            "headerLabelPage": "Commons:Wiki Loves Monuments upload/de/wizard-intro-de-bm", 
+            "defaultAlt": "", 
             "defaultCategories": [
                 "Cultural heritage monuments in Bergheim"
             ], 
             "skipTutorial": "", 
-            "ownWorkOption": "own", 
+            "defaultDescription": "", 
             "defaultOwnWorkLicence": "cc-by-sa-3.0", 
             "tutorialWidth": "900", 
             "tutorialTemplate": "WLM_Introscreen_UploadWizard-de-nrw-bm.svg", 
             "licensesOwnWork": [
                 "cc-by-sa-3.0"
             ], 
+            "defaultLat": "", 
             "idFieldLabelPage": "", 
+            "idFieldInitialValue": "", 
             "autoCategories": [
                 "Images from Wiki Loves Monuments 2011, DE-NW"
             ], 
             "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
             "tutorialHelpdeskCoords": "", 
-            "idFieldMaxLength": "25"
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Commons:Wiki Loves Monuments upload/de/wizard-intro-de-bm"
         }, 
         "name": "de-nrw-bm", 
         "id": 30
-    }, 
-    "se": {
-        "isenabled": 1, 
-        "desc": "Sweden", 
-        "config": {
-            "idFieldLabel": "", 
-            "idField": "{{BBR|$1}}", 
-            "headerLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-se-header/$1", 
-            "defaultCategories": [
-                "Protected buildings in Sweden"
-            ], 
-            "skipTutorial": "1", 
-            "ownWorkOption": "own", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
-            "tutorialWidth": "720", 
-            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
-            "licensesOwnWork": [
-                "cc-by-sa-3.0"
-            ], 
-            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-se-id/$1", 
-            "autoCategories": [], 
-            "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
-            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25"
-        }, 
-        "name": "se", 
-        "id": 38
-    }, 
-    "be-wal": {
-        "isenabled": 1, 
-        "desc": "Belgium (Wallonia)", 
-        "config": {
-            "idFieldLabel": "", 
-            "idField": "{{WLM-identifier|be-wal|$1}}", 
-            "headerLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-be-wal-header/$1", 
-            "defaultCategories": [
-                "Cultural heritage monuments in Wallonia"
-            ], 
-            "skipTutorial": "1", 
-            "ownWorkOption": "own", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
-            "tutorialWidth": "720", 
-            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
-            "licensesOwnWork": [
-                "cc-by-sa-3.0"
-            ], 
-            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-be-wal-id/$1", 
-            "autoCategories": [], 
-            "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
-            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25"
-        }, 
-        "name": "be-wal", 
-        "id": 35
     }, 
     "be-bru": {
         "isenabled": 1, 
         "desc": "Belgium (Brussels)", 
         "config": {
+            "defaultLon": "", 
             "idFieldLabel": "", 
             "idField": "{{WLM-identifier|be-bru|$1}}", 
-            "headerLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-be-bru-header/$1", 
+            "defaultAlt": "", 
             "defaultCategories": [
                 "Cultural heritage monuments in Brussels"
             ], 
             "skipTutorial": "1", 
-            "ownWorkOption": "own", 
+            "defaultDescription": "", 
             "defaultOwnWorkLicence": "cc-by-sa-3.0", 
             "tutorialWidth": "720", 
             "tutorialTemplate": "Licensing_tutorial_$1.svg", 
             "licensesOwnWork": [
                 "cc-by-sa-3.0"
             ], 
+            "defaultLat": "", 
             "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-be-bru-id/$1", 
+            "idFieldInitialValue": "", 
             "autoCategories": [], 
             "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
             "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25"
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
         }, 
         "name": "be-bru", 
         "id": 33
     }, 
-    "de-by": {
+    "se": {
         "isenabled": 1, 
-        "desc": "Germany (Bavaria)", 
+        "desc": "Sweden", 
         "config": {
-            "idFieldLabel": "Stadt oder Gemeinde, f\u00fcr M\u00fcnchen: Stadtteil", 
-            "idField": "{{safesubst:WLM2011-DE-BY|$1}}", 
-            "headerLabelPage": "Commons:Wiki Loves Monuments upload/de/wizard-intro-de-by", 
+            "defaultLon": "", 
+            "idFieldLabel": "", 
+            "idField": "{{BBR|$1}}", 
+            "defaultAlt": "", 
             "defaultCategories": [
-                "Images from Wiki Loves Monuments 2011, DE-BY"
+                "Protected buildings in Sweden"
             ], 
-            "skipTutorial": "", 
-            "ownWorkOption": "own", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
-            "tutorialWidth": "900", 
-            "tutorialTemplate": "WLM Introscreen UploadWizard-de.svg", 
-            "licensesOwnWork": [
-                "cc-by-sa-3.0"
-            ], 
-            "idFieldLabelPage": "", 
-            "autoCategories": [], 
-            "autoWikiText": "\n", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
-            "tutorialHelpdeskCoords": "", 
-            "idFieldMaxLength": "25"
-        }, 
-        "name": "de-by", 
-        "id": 13
-    }, 
-    "pl": {
-        "isenabled": 1, 
-        "desc": "Poland", 
-        "config": {
-            "idFieldLabel": "Nr rejestrowy obiektu", 
-            "idField": "", 
-            "headerLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-pl-header/$1", 
-            "defaultCategories": [], 
             "skipTutorial": "1", 
-            "ownWorkOption": "own", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0-pl", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
             "tutorialWidth": "720", 
             "tutorialTemplate": "Licensing_tutorial_$1.svg", 
             "licensesOwnWork": [
-                "cc-by-sa-3.0-pl"
+                "cc-by-sa-3.0"
             ], 
-            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-pl-id/$1", 
+            "defaultLat": "", 
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-se-id/$1", 
+            "idFieldInitialValue": "", 
             "autoCategories": [], 
             "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
             "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25"
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
         }, 
-        "name": "pl", 
-        "id": 9
-    }, 
-    "de-he": {
-        "isenabled": 1, 
-        "desc": "Germany (Hesse)", 
-        "config": {
-            "idFieldLabel": "", 
-            "idField": "{{safesubst:WLM2011-DE-HE|$1}}", 
-            "headerLabelPage": "Commons:Wiki Loves Monuments upload/de/wizard-intro-de-he", 
-            "defaultCategories": [
-                "Images from Wiki Loves Monuments 2011, DE-HE"
-            ], 
-            "skipTutorial": "", 
-            "ownWorkOption": "own", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
-            "tutorialWidth": "900", 
-            "tutorialTemplate": "WLM Introscreen UploadWizard-de.svg", 
-            "licensesOwnWork": [
-                "cc-by-sa-3.0"
-            ], 
-            "idFieldLabelPage": "Commons:Wiki Loves Monuments upload/de/label-ortshinweis", 
-            "autoCategories": [], 
-            "autoWikiText": "", 
-            "thanksLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-eu-use/$1", 
-            "tutorialHelpdeskCoords": "", 
-            "idFieldMaxLength": "25"
-        }, 
-        "name": "de-he", 
-        "id": 20
-    }, 
-    "de-nrw-k": {
-        "isenabled": 1, 
-        "desc": "Germany (nrw-k)", 
-        "config": {
-            "idFieldLabel": "Denkmalnummer aus der Liste", 
-            "idField": "{{Kulturdenkmal K\u00f6ln|$1}}", 
-            "headerLabelPage": "Commons:Wiki Loves Monuments upload/de/wizard-intro-de-k", 
-            "defaultCategories": [
-                "Maintenance for cultural heritage monuments in Cologne"
-            ], 
-            "skipTutorial": "1", 
-            "ownWorkOption": "own", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
-            "tutorialWidth": "900", 
-            "tutorialTemplate": "WLM Introscreen UploadWizard-de-nrw-k.svg", 
-            "licensesOwnWork": [
-                "cc-by-sa-3.0"
-            ], 
-            "idFieldLabelPage": "", 
-            "autoCategories": [
-                "Cultural heritage monuments in Cologne"
-            ], 
-            "autoWikiText": "", 
-            "thanksLabelPage": "", 
-            "tutorialHelpdeskCoords": "", 
-            "idFieldMaxLength": "25"
-        }, 
-        "name": "de-nrw-k", 
-        "id": 48
+        "name": "se", 
+        "id": 38
     }
 }
