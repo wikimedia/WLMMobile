@@ -48,14 +48,7 @@ define( [ 'jquery' ], function() {
 					var adminLevels = [];
 					if ( levels ) {
 						levels.forEach( function( item ) {
-							var adminLevel = new AdminLevel( item.name, item.translated, tree );
-							// ensure that countries have specified a license and template for photo uploads
-							// otherwise throw away to avoid errors downstream
-							if ( adminLevel.parents.length > 0 || CAMPAIGNS[ adminLevel.code ] ) {
-								adminLevels.push( adminLevel );
-							} else {
-								console.log( 'ignoring ' + adminLevel.code + ' as there is no key for it in campaigns-data.js' );
-							}
+							adminLevels.push( new AdminLevel( item.name, item.translated, tree ) );
 						} );
 					}
 					cache[ cacheKey ] = adminLevels;
