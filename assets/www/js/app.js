@@ -474,15 +474,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				}
 			} );
 		});
-		$( '#continue-save' ).click( function() {
-			// fixme: save to more permanent storage?
-			var fileName = curMonument.generateFilename();
-			db.addUpload( api.userName, curMonument, photo, false );
-			goBack(); // undo back button to skip upload form
-			goBack(); // undo back button to skip upload form
-			$( '#toggle-uploads-view' )[0].selectedIndex = 2; //.val( 'incomplete-view' );
-			showPage( 'uploads-page' );
-		});
 		showPage('upload-confirm-page');
 	}
 
