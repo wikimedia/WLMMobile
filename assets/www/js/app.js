@@ -128,6 +128,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		return pageName;
 	}
 
+	var translatedPageNames = {};
+	function translatePageName( name ) {
+		return translatedPageNames[ name ] || name;
+	}
+
 	function showPage( pageName, deferred ) {
 		$( window ).scroll( 0, 0 ); // scroll to top
 		var subPage, heading;
@@ -162,7 +167,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			$( '#results' ).data( 'monuments', [] ).empty();
 		} else if( pageName === 'campaign-page' ) {
 			// TODO: translate subpage
-			heading = subPage ? mw.msg( 'choose-campaign' ) + ' (' + decodeURIComponent( subPage ) + ')' :
+			heading = subPage ? mw.msg( 'choose-campaign' ) + ' (' + decodeURIComponent( translatePageName( subPage ) ) + ')' :
 				mw.msg( 'choose-campaign' );
 			$page.find( 'h3' ).text( heading );
 		} else if ( pageName === 'uploads-page' ) {
@@ -825,6 +830,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				$( 'a', $clist ).
 					each( function() {
 						var campaign = $( this ).data( 'campaign' );
+						translatedPageNames[ campaign ] = $( this ).text();
 						var tree = [].concat( campaignTree );
 						tree.push( campaign );
 						$( this ).data( 'tree', tree );
@@ -914,6 +920,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		} );
 
 		$('#countries').click(function() {
+			translatedPageNames = {};
 			listCampaigns( [] );
 		});
 
