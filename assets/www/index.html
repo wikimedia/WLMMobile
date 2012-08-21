@@ -90,14 +90,14 @@
 		</li>
 	</script>
 	<script type="text/html" id="monument-details-template">
+	<h3 class='monument-name'> 
+		<%= monument.name %> 
+	</h3>
 		<img class='monument-thumbnail' src="images/placeholder-full-photo.png" />
-		<div class='monument-name'> 
-			<%= monument.name %> 
-		</div>
-		<span class='monument-country'> 
+		<div class='monument-country'> 
 			<strong> <msg key='monument-country' / > </strong>
 			<%= monument.country %> 
-		</span>
+		</div>
 		<div class='monument-sub-details'>
 			<% if(monument.address) { %>
 				<div class='monument-address'> 

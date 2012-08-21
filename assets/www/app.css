@@ -193,6 +193,10 @@ a.upload {
 	text-transform: uppercase;
 }
 
+#detail-page .content h3 {
+	margin-right: 92px;
+}
+
 ul {
 	margin: 0px;
 	padding: 0px;
