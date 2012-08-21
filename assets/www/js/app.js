@@ -702,8 +702,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					} );
 					
 					// Note that items uploaded before addition of the '.jpg' extension will fail here.
+					var $thumb = $uploadItem.find('img.monument-thumbnail');
 					thumbFetcher.request( photo.data.fileTitle ).done( function( imageinfo ) {
-						$uploadItem.find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
+						$thumb.attr('src', imageinfo.thumburl);
+					} ).fail( function() {
+						$thumb.attr('src', 'images/placeholder-thumb.png');
 					} );
 					$list.append( $uploadItem );
 				} );
