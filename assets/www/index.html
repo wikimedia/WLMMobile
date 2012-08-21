@@ -90,14 +90,14 @@
 		</li>
 	</script>
 	<script type="text/html" id="monument-details-template">
+	<h3 class='monument-name'> 
+		<%= monument.name %> 
+	</h3>
 		<img class='monument-thumbnail' src="images/placeholder-full-photo.png" />
-		<div class='monument-name'> 
-			<%= monument.name %> 
-		</div>
-		<span class='monument-country'> 
+		<div class='monument-country'> 
 			<strong> <msg key='monument-country' / > </strong>
 			<%= monument.country %> 
-		</span>
+		</div>
 		<div class='monument-sub-details'>
 			<% if(monument.address) { %>
 				<div class='monument-address'> 
@@ -293,7 +293,8 @@
 		<header class="actionbar">
 			<a class='back' href="#"> </a>
 			<h2><msg key="detail-title"></msg></h2>
-			<a class='page-link' data-login='required' data-page="upload-page">
+			<a class='page-link upload' data-login='required' data-page="upload-page">
+				<msg key="submit-photo"></msg><br/>
 				<img src='images/5-content-new-picture.png' />
 			</a>
 		</header>
