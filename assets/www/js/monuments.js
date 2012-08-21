@@ -4,7 +4,7 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 		this.mwApi = mwApi;
 		this.lang = lang || 'en';
 	}
-	
+
 	MonumentsApi.prototype.request = function(params) {
 		var that = this;
 		
