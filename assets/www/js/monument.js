@@ -44,7 +44,7 @@ define( [ 'jquery' ], function() {
 		var d = date || new Date();
 		var months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec' ];
 		var suffix =  d.getDate() + months[ d.getMonth() ] + d.getFullYear() + ' ' + d.getHours() + 'hrs' + d.getMinutes() + 'mins' + d.getSeconds() + 'secs';
-		return name.replace( /[\x7f\.\[#<>\[\]\|\{\}]/g, '-' ) + ' (taken on ' + suffix + ')';
+		return name.replace( /[\x7f\.\[#<>\[\]\|\{\}]/g, '-' ) + ' (taken on ' + suffix + ').jpg';
 	};
 	
 	Monument.prototype.processArticleLink = function() {
