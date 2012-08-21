@@ -20,7 +20,7 @@ function handleOpenURL(url)
 }
 */
 require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument', 'preferences', 'database', 'admintree', 'photo',
-		'jquery.localize', 'campaigns-data', 'licenses-data' ],
+		'jquery.localize', 'campaigns-data', 'licenses-data', 'utils' ],
 	function( $, l10n, geo, Api, templates, MonumentsApi, Monument, prefs, db, AdminTreeApi, Photo ) {
 
 	var api = new Api( WLMConfig.WIKI_API, {
@@ -137,7 +137,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 	var translatedPageNames = {};
 	function translatePageName( name ) {
-		return translatedPageNames[ name ] || name;
+		return translatedPageNames[ name ] || stripWikiText( name );
 	}
 
 	function showPage( pageName, deferred ) {
@@ -174,7 +174,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			$( '#results' ).data( 'monuments', [] ).empty();
 		} else if( pageName === 'campaign-page' ) {
 			// TODO: translate subpage
-			heading = subPage ? mw.msg( 'choose-campaign' ) + ' (' + decodeURIComponent( translatePageName( subPage ) ) + ')' :
+			heading = subPage ? mw.msg( 'choose-campaign' ) + ' (' + translatePageName( decodeURIComponent( subPage ) ) + ')' :
 				mw.msg( 'choose-campaign' );
 			$page.find( 'h3' ).text( heading );
 		} else if ( pageName === 'uploads-page' ) {
