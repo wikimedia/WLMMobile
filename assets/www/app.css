@@ -264,9 +264,10 @@ header h2 input[type='text'] {
 header .back {
 	display: block;
 	background: url('images/button-dark-back.png') no-repeat;
-	width: 24px;
+	width: 36px;
 	height: 48px;
 	margin-left: 5px;
+	background-position: left center;
 }
 
 .back {
