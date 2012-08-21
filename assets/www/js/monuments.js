@@ -22,7 +22,14 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 				var data = JSON.parse(split[split.length -1]);
 				var monuments = [];
 				$.each(data.monuments || [], function(i, monument) {
-					monuments.push(new Monument(monument, that.mwApi));
+					var m = new Monument( monument, that.mwApi );
+					// if a monument is associated with a country ( WARNING: country actually means campaign )
+					// that is not listed in CAMPAIGNS it suggests out of date campaigns-data.js
+					if ( CAMPAIGNS[ m.country ] ) {
+						monuments.push( m );
+					} else {
+						console.log( 'the campaign ' + m.country + ' is not currently supported by app so throwing away ' + m.name );
+					}
 				});
 				return monuments;
 			}
