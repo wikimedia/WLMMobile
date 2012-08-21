@@ -684,12 +684,13 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		db.requestUploadsForUser( username, db.UPLOAD_COMPLETE ).done( function( uploads ) {
 			$list.empty();
 			if( uploads.length ) {
+				var thumbFetcher = api.getImageFetcher( 64, 64 ); // important: use same API we upload to!
 				var uploadsTemplate = templates.getTemplate( 'upload-list-item-template' );
 				var uploadCompleteTemplate = templates.getTemplate( 'upload-completed-item-detail-template' );
 				$.each( uploads, function( i, upload ) {
-					var monument = JSON.parse( upload.monument );
+					var monument = new Monument( JSON.parse( upload.monument ), api );
 					var photo = JSON.parse( upload.photo );
-					$uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
+					var $uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
 					$uploadItem.click( function() {
 						$( '#completed-upload-detail' ).html( uploadCompleteTemplate( { upload: upload, monument: monument, photo: photo } ) );
 						$( '#completed-upload-detail .monumentLink' ).
@@ -699,8 +700,14 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 							} ).localize();
 						showPage( 'completed-upload-detail-page' );
 					} );
+					
+					// Note that items uploaded before addition of the '.jpg' extension will fail here.
+					thumbFetcher.request( photo.data.fileTitle ).done( function( imageinfo ) {
+						$uploadItem.find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
+					} );
 					$list.append( $uploadItem );
 				} );
+				thumbFetcher.send();
 			} else {
 				var emptyUploadTemplate = templates.getTemplate( 'upload-list-empty-template' );
 				$list.html( emptyUploadTemplate() ).localize();
@@ -719,7 +726,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				$.each( uploads, function( i, upload ) {
 					var monument = JSON.parse( upload.monument );
 					var photo = JSON.parse( upload.photo );
-					$uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
+					var $uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
 					$uploadItem.click( function() {
 						$( '#incomplete-upload-detail' ).html( uploadIncompleteTemplate( { upload: upload, monument: monument, photo: photo } ) ).localize();
 						$( '#incomplete-upload-detail .monumentLink' ).
@@ -733,6 +740,17 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 						showPage( 'incomplete-upload-detail-page' );
 					} );
 					$list.append( $uploadItem );
+					
+					// Create thumbnails from the originals so we don't have to keep them all in RAM
+					var img = new Image(),
+						$img = $( img );
+					$img.attr( 'src', photo.data.contentURL ).load( function() {
+						var $canvas = $( '<canvas width=64 height=64>' ),
+							ctx = $canvas[0].getContext( '2d' );
+						// @fixme fix the aspect ratio
+						ctx.drawImage( img, 0, 0, 64, 64 );
+						$uploadItem.find('img.monument-thumbnail').replaceWith( $canvas );
+					} );
 				} );
 			} else {
 				var emptyUploadTemplate = templates.getTemplate( 'upload-list-empty-template' );
