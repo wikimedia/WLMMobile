@@ -1,5 +1,5 @@
 define([ 'jquery', 'monument' ], function( $, Monument ) {
-	function MonumentsApi(url, mwApi, lang) {
+	function MonumentsApi( url, mwApi, lang ) {
 		this.url = url;
 		this.mwApi = mwApi;
 		this.lang = lang || 'en';
