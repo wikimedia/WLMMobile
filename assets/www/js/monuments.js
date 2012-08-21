@@ -33,13 +33,17 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 		var d = $.Deferred();
 		return this.request({
 			action: 'search',
+			limit: WLMConfig.MONUMENT_SEARCH_LIMIT,
 			srcountry: country
 		});
 	};
 
 	MonumentsApi.prototype.getForAdminLevel = function( tree, str ) {
 		var d = $.Deferred(), i,
-			data = { action: 'search' };
+			data = {
+				action: 'search',
+				limit: WLMConfig.MONUMENT_SEARCH_LIMIT
+			};
 		for( i = 0; i < tree.length; i++ ) {
 			data[ 'sradm' + i ] = tree[ i ];
 		}
@@ -54,6 +58,7 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 		var d = $.Deferred();
 		return this.request( {
 			action: 'search',
+			limit: WLMConfig.MONUMENT_SEARCH_LIMIT,
 			srcountry: country,
 			srname: '~' + str + '*'
 		} );
@@ -83,7 +88,8 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 			bboxString = bb.join( ',' ),
 			data = {
 				action: 'search',
-				bbox: bboxString
+				bbox: bboxString,
+				limit: WLMConfig.MONUMENT_SEARCH_LIMIT
 			};
 		if( str ) {
 			data.srname = '~' + str + '*';
