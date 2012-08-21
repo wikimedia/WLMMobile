@@ -48,6 +48,11 @@
 			<msg key="no-uploads" />
 		</li>
 	</script>
+	<script type="text/html" id="upload-incomplete-list-empty-template">
+		<li>
+			<msg key="no-incomplete-uploads" />
+		</li>
+	</script>
 	<script type='text/html' id='upload-completed-item-detail-template'>
 		<h3><%= monument.name %></h3>
 		<p>
@@ -263,15 +268,31 @@
 		<header class='actionbar'>
 			<a class='back' href="#"></a>
 			<h2>
-			<select id="toggle-uploads-view">
-				<option value="complete-view" selected data-msg-text="uploads-completed"></option>
-				<option value="incomplete-view" data-msg-text="uploads-incomplete"></option>
+			<select class="toggle-page">
+				<option value="uploads-page" selected data-msg-text="uploads-completed"></option>
+				<option value="incomplete-uploads-page" data-msg-text="uploads-incomplete"></option>
 			</select>
 			</h2>
 			<a class='page-link' data-page='settings-page'><img src='images/2-action-settings.png' /></a>
 		</header>
 		<div class="content">
-			<ul class="monuments-list" id="uploads-list"></ul>
+			<ul class="monuments-list"></ul>
+		</div>
+	</div>
+
+	<div class="page" id="incomplete-uploads-page">
+		<header class='actionbar'>
+			<a class='back' href="#"></a>
+			<h2>
+			<select class="toggle-page">
+				<option value="incomplete-uploads-page" selected data-msg-text="uploads-incomplete"></option>
+				<option value="uploads-page" data-msg-text="uploads-completed"></option>
+			</select>
+			</h2>
+			<a class='page-link' data-page='settings-page'><img src='images/2-action-settings.png' /></a>
+		</header>
+		<div class="content">
+			<ul class="monuments-list"></ul>
 		</div>
 	</div>
 
