@@ -38,7 +38,12 @@
 		<li>
 			<a class='monument-detail' href="#">
 				<div class='monument-name'> <%= monument.name %> </div>
-				<small class='monument-address'> <%= monument.address %> </small>
+				<div class='monument-location'>
+					<%= monument.adm0 %><% if (monument.adm1) { %>,<% } %>
+					<%= monument.adm1 %><% if (monument.adm2) { %>,<% } %>
+					<%= monument.adm2 %><% if (monument.adm3) { %>,<% } %>
+					<%= monument.adm3 %>
+				</div>
 			</a>
 			<img class='monument-thumbnail' width="64" src="images/loader.gif"/>
 		</li>

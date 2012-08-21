@@ -727,6 +727,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				var uploadsTemplate = templates.getTemplate( 'upload-list-item-template' );
 				var uploadIncompleteTemplate = templates.getTemplate( 'upload-incomplete-item-detail-template' );
 				$.each( uploads, function( i, upload ) {
+					// @todo translate administrative zone names
 					var monument = JSON.parse( upload.monument );
 					var photo = JSON.parse( upload.photo );
 					var $uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
