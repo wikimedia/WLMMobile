@@ -285,6 +285,10 @@ header .back {
 	width: 100%;
 }
 
+.monuments-sorter .header {
+	border: none;
+}
+
 .monuments-sorter li button {
 	width: auto;
 	font-size: 0.7em;
