@@ -98,29 +98,36 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		trimRepeats();
 	}
 	
+	function goBackHooks( pageName ) {
+		var data, campaigns = [];
+		if( pageName === 'login-page' && api.loggedIn ) {
+			pageName = pageHistory.pop(); // skip the login screen as user is logged in
+		}
+		data = pageName.split( '/' );
+		showPage( pageName );
+
+		// special casing for specific pages
+		// TODO: provide generic mechanism for this
+		if( data[ 0 ] === 'campaign-page' ) {
+			campaigns = data.slice( 1 );
+			// campaigns are currently url encoded so we must decode
+			campaigns.forEach( function( el, i ) {
+				campaigns[ i ] = decodeURIComponent( el );
+			} );
+			listCampaigns( campaigns );
+		}
+		return pageName;
+	}
+
 	function goBack() {
-		var pageName, data, campaigns = [];
+		var pageName;
 		if( blacklist.indexOf( curPageName ) > -1 ) {
-			return curPageName;
+			pageName = pageHistory.pop(); // go back one page
+			pageName = goBackHooks( pageName );
 		} else if( pageHistory.length > 1 ) {
 			pageName = pageHistory.pop(); // this is the current page
 			pageName = pageHistory.pop(); // this is the previous page
-			if( pageName === 'login-page' && api.loggedIn ) {
-				pageName = pageHistory.pop(); // skip the login screen as user is logged in
-			}
-			data = pageName.split( '/' );
-			showPage( pageName );
-
-			// special casing for specific pages
-			// TODO: provide generic mechanism for this
-			if( data[ 0 ] === 'campaign-page' ) {
-				campaigns = data.slice( 1 );
-				// campaigns are currently url encoded so we must decode
-				campaigns.forEach( function( el, i ) {
-					campaigns[ i ] = decodeURIComponent( el );
-				} );
-				listCampaigns( campaigns );
-			}
+			pageName = goBackHooks( pageName );
 		} else {
 			console.log( 'Nothing in pageHistory to go back to. Quitting :(' );
 			navigator.app.exitApp();
@@ -466,13 +473,16 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					$( 'a.logout', container ).click( function() {
 						showPage( 'logout-progress-page' );
 						api.logout().done(function() {
-							prefs.clear( 'username' );
-							prefs.clear( 'password' );
-							doLogin( function() {
-								goBack(); // escape error popup
-								goBack(); // escape progress bar
-								showPage( 'detail-page' );
-							});
+							var noPageChange = getCurrentPage() === 'logout-progress-page';
+							if ( noPageChange ) {
+								prefs.clear( 'username' );
+								prefs.clear( 'password' );
+								doLogin( function() {
+									goBack(); // escape error popup
+									goBack(); // escape progress bar
+									showPage( 'detail-page' );
+								});
+							}
 						} );
 					} );
 					console.log( 'Upload failed: ' + code );
@@ -516,7 +526,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			$( "#login-user, #login-pass" ).removeClass( 'error-input-field' );
 			$( "#login-page input" ).attr( 'disabled', true );
 			api.login( username, password ).done( function( status ) {
-				if( status === "Success" )  {
+				var noPageChange = getCurrentPage() === 'login-progress-page';
+				if ( status === "Success" && noPageChange )  {
 					prefs.set( 'username', username );
 					prefs.set( 'password', password );
 
@@ -524,7 +535,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					$( "#settings-user-name" ).html( mw.msg( 'settings-user-name', username ) );
 
 					success();
-				} else {
+				} else if ( noPageChange ) {
 					var errMsg;
 					// handle login API errors
 					// http://www.mediawiki.org/wiki/API:Login#Errors
@@ -561,9 +572,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					fail( status );
 				}
 			}).fail( function( err, textStatus ) {
-				$( "#login-status-message" ).empty();
-				displayError( mw.msg( 'login-failed' ), textStatus );
-				fail( textStatus );
+				var noPageChange = getCurrentPage() === 'login-progress-page';
+				if ( noPageChange ) {
+					$( "#login-status-message" ).empty();
+					displayError( mw.msg( 'login-failed' ), textStatus );
+					fail( textStatus );
+				}
 			}).always( function() {
 				$( "#login-status-spinner" ).hide();
 				$( "#login-page input" ).attr( 'disabled', false );
@@ -953,9 +967,13 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				userLocation = pos;
 				currentSortMethod = 'distance';
 				$( 'html' ).addClass( 'locationAvailable' );
-				showMonumentsForPosition( pos.coords.latitude, pos.coords.longitude );
+				if ( getCurrentPage() === 'locationlookup-page' ) { // check user didn't escape page
+					showMonumentsForPosition( pos.coords.latitude, pos.coords.longitude );
+				}
 			}, function(err) {
-				displayError( mw.msg( 'geolocating-failed-heading') , mw.msg( 'geolocating-failed-text' ) );
+				if ( getCurrentPage() === 'locationlookup-page' ) { // check user didn't escape page
+					displayError( mw.msg( 'geolocating-failed-heading') , mw.msg( 'geolocating-failed-text' ) );
+				}
 			},{
 				enableHighAccuracy: true,
 				timeout: 20000 // give up looking up location.. maybe they are in airplane mode
