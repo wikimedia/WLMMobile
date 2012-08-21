@@ -60,7 +60,7 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 			data[ 'sradm' + i ] = tree[ i ];
 		}
 		if( str ) {
-			data.srname = '~' + str + '*';
+			data.srquery = str + '*';
 		}
 		return this.request( data );
 	};
@@ -72,7 +72,7 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 			action: 'search',
 			limit: WLMConfig.MONUMENT_SEARCH_LIMIT,
 			srcountry: country,
-			srname: '~' + str + '*',
+			srquery: str + '*',
 			uselang: this.lang
 		} );
 	};
@@ -106,7 +106,7 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 				uselang: this.lang
 			};
 		if( str ) {
-			data.srname = '~' + str + '*';
+			data.srquery = str + '*';
 		}
 		return this.request( data );
 		
