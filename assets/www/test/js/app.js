@@ -23,7 +23,7 @@ test( 'back button on geolookup-page', function() {
 	app.showPage( 'welcome-page' );
 	app.showPage( 'locationlookup-page' );
 	var page = app.goBack();
-	strictEqual( page, 'locationlookup-page', 'back button should have no effect' );
+	strictEqual( page, 'welcome-page', 'back button should escape location page' );
 } );
 
 test( 'Skip login page on a back button press when user is authenticated', function() {
