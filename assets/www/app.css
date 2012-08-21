@@ -380,8 +380,9 @@ button.requires-location {
 	font-size: 14px;
 }
 
-.monuments-list .monument-address {
+.monuments-list .monument-location {
 	color: #999;
+	font-size: 12px;
 }
 .monuments-list .monument-thumbnail {
 	width: 64px;

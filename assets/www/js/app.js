@@ -703,6 +703,38 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		}
 		return $stub.html();
 	}
+	
+	function translateLevelsForMonument( monument ) {
+		var levels = [];
+		if ( monument.adm0 ) {
+			levels.push( monument.adm0 );
+		}
+		if ( monument.adm1 ) {
+			levels.push( monument.adm1 );
+		}
+		if ( monument.adm2 ) {
+			levels.push( monument.adm2 );
+		}
+		if ( monument.adm3 ) {
+			levels.push( monument.adm3 );
+		}
+		return admintree.getLeaves( levels, 'en', /* translate */ true ).pipe( function( tree ) {
+			var names = [];
+			$.each( tree, function( i, level ) {
+				var name = stripWikiText( level.name );
+				names.push(name);
+			} );
+			return names;
+		});
+	}
+
+	function translateAdminLevels( $uploadItem, monument ) {
+		// Translate administrative level codes into proper text
+		var $name = $uploadItem.find( '.monument-location' );
+		translateLevelsForMonument( monument ).done( function( names ) {
+			$name.text( names.join( ' > ' ) );
+		} );
+	}
 
 	// Expects user to be logged in
 	function showUploads() {
@@ -736,6 +768,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 						$thumb.attr( 'src', 'images/placeholder-thumb.png' );
 					} );
 					$list.append( $uploadItem );
+					translateAdminLevels( $uploadItem, monument );
 				} );
 				thumbFetcher.send();
 			} else {
@@ -781,6 +814,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 						ctx.drawImage( img, 0, 0, 64, 64 );
 						$uploadItem.find('img.monument-thumbnail').replaceWith( $canvas );
 					} );
+
+					// Translate administrative level codes into proper text
+					translateAdminLevels( $uploadItem, monument );
 				} );
 			} else {
 				var emptyUploadTemplate = templates.getTemplate( 'upload-incomplete-list-empty-template' );
