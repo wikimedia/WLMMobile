@@ -284,13 +284,24 @@ define(['jquery'], function() {
 					console.log('Normalizing title');
 					title = origName[title];
 				}
+				var deferred = that.getDeferred( title );
 				if(page.imageinfo) {
 					var imageinfo = page.imageinfo[0];
-					deferred = that.getDeferred( title );
 					if( deferred ) {
-						deferred.resolve( imageinfo );
+						// Preload the thumbnail image before resolving the deferred.
+						// This avoids delays between returning the imageinfo and showing the image.
+						var img = new Image(),
+							$img = $( img );
+						$img.attr( 'src', imageinfo.thumburl ).one( 'load', function() {
+							deferred.resolve( imageinfo );
+						} );
 					} else {
 						console.log( 'Failed to locate deferred image with title ' + title );
+					}
+				} else {
+					if( deferred ) {
+						// Sorry, no image data available.
+						deferred.reject();
 					}
 				}
 			});
