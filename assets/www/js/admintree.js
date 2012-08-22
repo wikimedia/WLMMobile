@@ -25,9 +25,13 @@ define( [ 'jquery' ], function() {
 	}
 
 	AdminTreeApi.prototype = {
-		getLeaves: function( tree, lang ) {
+		getLeaves: function( tree, lang, translate ) {
 			var data = { action: 'adminlevels', format: 'json', uselang: lang }, i, admtree = [],
 				cacheKey = 'root', d = new $.Deferred();
+			if ( translate ) {
+				data.admtranslate = 1;
+				cacheKey += ':translate';
+			}
 			if( tree ) {
 				for( i = 0; i < tree.length; i++ ) {
 					admtree.push( tree[ i ] );
@@ -56,7 +60,15 @@ define( [ 'jquery' ], function() {
 				} );
 			}
 			return d;
+		},
+
+		stripName: function( name ) {
+			name = name.replace( /^\[\[(.*)\|(.*)\]\]$/, '$2' );
+			name = name.replace( /^\[\[(.*),(.*)\]\]$/, '$1' );
+			name = name.replace( /^\[\[(.*)\]\]$/, '$1' );
+			return name;
 		}
+
 	};
 
 	return AdminTreeApi;
