@@ -807,7 +807,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					} );
 				} );
 			} else {
-				var emptyUploadTemplate = templates.getTemplate( 'upload-list-empty-template' );
+				var emptyUploadTemplate = templates.getTemplate( 'upload-incomplete-list-empty-template' );
 				$list.html( emptyUploadTemplate() ).localize();
 			}
 		} );
