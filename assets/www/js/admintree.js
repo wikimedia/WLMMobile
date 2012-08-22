@@ -3,12 +3,7 @@ define( [ 'jquery', 'utils' ], function() {
 
 	function translateCode( code ) {
 		// TODO: i18n complete translations of code
-		var name = code;
-		if( CAMPAIGNS[ code ] ) {
-			name = CAMPAIGNS[ code ].desc;
-		} else {
-			name = stripWikiText( name );
-		}
+		var name = stripWikiText( code );
 		return name;
 	}
 

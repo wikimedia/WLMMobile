@@ -200,8 +200,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	function showMonumentDetail(monument) {
 		var monumentTemplate = templates.getTemplate('monument-details-template');
 		var imageFetcher = commonsApi.getImageFetcher(300, 240);
-		var campaign = CAMPAIGNS[ monument.country ] ? CAMPAIGNS[ monument.country ].desc : monument.country;
-		var $monumentDetail = $( monumentTemplate( { monument: monument, campaign: campaign } ) );
+		var $monumentDetail = $( monumentTemplate( { monument: monument } ) );
+		admintree.getLeaves( [ monument.adm0 ], 'en', /* translate */ true ).pipe( function( tree ) {
+			if ( tree[ 0 ] ) {
+				$monumentDetail.find( '.loading.campaign' ).text( tree[ 0 ].name ).removeClass( 'loading' );
+			}
+		} );
 		$("#monument-detail").html($monumentDetail).localize();
 		if ( monument.image ) {
 			$( '#monument-detail' ).find( 'img.monument-thumbnail' ).removeAttr( 'src' );
