@@ -195,8 +195,14 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		var campaign = CAMPAIGNS[ monument.country ] ? CAMPAIGNS[ monument.country ].desc : monument.country;
 		var $monumentDetail = $( monumentTemplate( { monument: monument, campaign: campaign } ) );
 		$("#monument-detail").html($monumentDetail).localize();
+		if ( monument.image ) {
+			$( '#monument-detail' ).find( 'img.monument-thumbnail' ).removeAttr( 'src' );
+			$( '#monument-detail' ).addClass( 'loading' );
+		}
 		monument.requestThumbnail(imageFetcher).done(function(imageinfo) {
-			$('#monument-detail').find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
+			$( '#monument-detail' ).find( 'img.monument-thumbnail' ).
+				attr( 'src', imageinfo.thumburl );
+			$( '#monument-detail' ).removeClass( 'loading' );
 		});
 		imageFetcher.send();
 		
@@ -316,8 +322,14 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		$.each( monuments.sort( sortAlgorithm ), function( i, monument ) {
 			var distance, msg;
 			var $monumentItem = $(monumentTemplate({monument: monument}));
+			if ( monument.image ) {
+				$monumentItem.find( 'img.monument-thumbnail' ).removeAttr( 'src' );
+				$monumentItem.addClass( 'loading' );
+			}
 			monument.requestThumbnail(listThumbFetcher).done(function(imageinfo) {
-				$monumentItem.find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
+				$monumentItem.find( 'img.monument-thumbnail' ).
+					attr( 'src', imageinfo.thumburl );
+				$monumentItem.removeClass( 'loading' );
 			});
 			
 			if( monument.distance ) {
