@@ -301,6 +301,29 @@ header .back {
 	tap-highlight-color: rgba( 0, 0, 0, 0 );
 }
 
+/* upload page */
+#upload-page .popup {
+	text-align: center;
+}
+
+ul.buttons li {
+	margin-top: 12px;
+	border-bottom: none;
+}
+
+ul.buttons li button {
+	border-radius: 5px;
+	border: solid 1px #333;
+}
+
+ul.buttons li.small-button {
+	text-align: center;
+}
+
+ul.buttons li.small-button button {
+	width: 50%;
+}
+
 /* Monuments list styles */
 
 .monuments-list li {

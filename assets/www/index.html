@@ -350,11 +350,23 @@
 					<h2><msg key='add-photo-title' /></h2>
 				</header>
 				<msg key="add-photo-explained"></msg>
-				<ul>
-					<li><a href="#" id="selectphoto"><msg key="add-photo-gallery"></msg></a></li>
-					<li><a href="#" id="takephoto"><msg key="add-photo-camera"></msg></a></li>
+				<ul class="buttons">
+					<li>
+						<button id="selectphoto">
+							<msg key="add-photo-gallery"></msg>
+						</button>
+					</li>
+					<li>
+						<button id="takephoto">
+							<msg key="add-photo-camera"></msg>
+						</button>
+					</li>
+					<li class='small-button'>
+						<button class="back">
+							<msg key='popup-cancel'></msg>
+						</button>
+					</li>
 				</ul>
-				<button class="back"><msg key='popup-cancel' /></button>
 			</div>
 		</div>
 	</div>
