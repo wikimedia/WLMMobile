@@ -862,6 +862,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 
 	function init() {
+		$( '#version' ).text( WLMConfig.VERSION_NUMBER + ' (' + WLMConfig.VERSION_NAME + ')');
 		var timeout, name, lang = prefs.get( 'uiLanguage' );
 		var wikipedia_url = WLMConfig.WIKIPEDIA.replace( '$1', lang );
 		var wlm_url = WLMConfig.WIKI_LOVES_MONUMENTS_HOMEPAGE;
