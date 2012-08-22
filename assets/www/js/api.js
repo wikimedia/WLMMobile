@@ -284,13 +284,18 @@ define(['jquery'], function() {
 					console.log('Normalizing title');
 					title = origName[title];
 				}
+				var deferred = that.getDeferred( title );
 				if(page.imageinfo) {
 					var imageinfo = page.imageinfo[0];
-					deferred = that.getDeferred( title );
 					if( deferred ) {
 						deferred.resolve( imageinfo );
 					} else {
 						console.log( 'Failed to locate deferred image with title ' + title );
+					}
+				} else {
+					if( deferred ) {
+						// Sorry, no image data available.
+						deferred.reject();
 					}
 				}
 			});
