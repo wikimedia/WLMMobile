@@ -464,6 +464,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					console.log( "Upload got aborted." );
 				} else {
 					var code, info, container;
+					// FIXME: remove more horrible hackery around the api
+					if ( data[ "0" ] ) {
+						data = data[ "0" ]; 
+					}
 					if( data.error ) {
 						code = data.error.code;
 						info = data.error.info;
