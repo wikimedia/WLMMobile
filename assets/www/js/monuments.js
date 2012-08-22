@@ -6,13 +6,26 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 	}
 
 	MonumentsApi.prototype.request = function( params ) {
-		var that = this;
-		
+		var that = this, options = {};
+
 		console.log(this.url + ' : ' + JSON.stringify(params));
+
+		// attaches a function to array to query for next set of results
+		// TODO: is there a better way that doesn't rely on an unknown property?
+		function addPointer( monuments, srcontinue ) {
+			var newOptions = $.extend( {}, options );
+			newOptions.data = options.data || {};
+			newOptions.data.srcontinue = srcontinue;
+			monuments.next = function() {
+				console.log( 'run continuing request with srcontinue=' + srcontinue );
+				return $.ajax( newOptions );
+			};
+			return monuments;
+		}
 
 		// Force JSON
 		params.format = 'json';
-		return $.ajax({
+		options = {
 			url: this.url,
 			data: params,
 			dataType: 'text',
@@ -34,9 +47,13 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 						console.log( 'the campaign ' + m.country + ' is not currently supported by app so throwing away ' + m.name );
 					}
 				});
+				if ( data.hasOwnProperty( 'continue' ) ) {
+					monuments = addPointer( monuments,  data[ 'continue' ].srcontinue );
+				}
 				return monuments;
 			}
-		});
+		};
+		return $.ajax( options );
 	};
 
 	MonumentsApi.prototype.getForCountry = function( country ) {

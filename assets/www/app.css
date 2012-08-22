@@ -20,6 +20,7 @@ body {
 }
 
 /* spinner related styles */
+#results .footer.loading,
 .loading #results,
 .loading .content {
 	background-image: url(images/loader.gif);
@@ -38,6 +39,10 @@ body {
 
 .loading#results-page .content {
 	background: none;
+}
+
+#results.incomplete {
+	border-bottom: dotted 10px #ccc;
 }
 
 a {
