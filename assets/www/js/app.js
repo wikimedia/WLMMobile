@@ -441,7 +441,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			db.addUpload( api.userName, curMonument, photo, false );
 			$( '#upload-later .content' ).html( mw.msg( 'saved-later-text' ) );
 			$( '#upload-later .content a.incomplete' ).click( function() {
-				showPage( 'uploads-page' ); // TODO: link to the correct place
+				showPage( 'incomplete-uploads-page' );
 			} );
 			$( '#upload-later .content a.welcome' ).click( function() {
 				showPage( 'welcome-page' );
