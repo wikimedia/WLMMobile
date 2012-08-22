@@ -57,12 +57,14 @@ define( [ 'jquery' ], function( $ ) {
 		execute( insertSQL, [ username, JSON.stringify( monument ), JSON.stringify( photo ), timestamp, completed ] );
 	}
 
-	function requestUploadsForUser( username ) {
-		var querySQL = 'SELECT * FROM completed_uploads WHERE username = ?';
-		return query( querySQL, [ username ] );
+	function requestUploadsForUser( username, completed ) {
+		var querySQL = 'SELECT * FROM completed_uploads WHERE username = ? AND completed = ?';
+		return query( querySQL, [ username, completed ] );
 	}
 
 	return {
+		UPLOAD_COMPLETE: true,
+		UPLOAD_INCOMPLETE: false,
 		init: init,
 		addUpload: addUpload,
 		query: query,

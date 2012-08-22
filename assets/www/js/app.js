@@ -186,6 +186,15 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					showPage( pageName );
 				} );
 			}
+		} else if ( pageName === 'incomplete-uploads-page' ) {
+			if( api.loggedIn ) {
+				showIncompleteUploads();
+			} else {
+				goBack(); // revert history change for login screen
+				doLogin( function() {
+					showPage( pageName );
+				} );
+			}
 		}
 	}
 
@@ -432,7 +441,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			db.addUpload( api.userName, curMonument, photo, false );
 			$( '#upload-later .content' ).html( mw.msg( 'saved-later-text' ) );
 			$( '#upload-later .content a.incomplete' ).click( function() {
-				showPage( 'uploads-page' ); // TODO: link to the correct place
+				showPage( 'incomplete-uploads-page' );
 			} );
 			$( '#upload-later .content a.welcome' ).click( function() {
 				showPage( 'welcome-page' );
@@ -694,53 +703,124 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		}
 		return $stub.html();
 	}
+	
+	function translateLevelsForMonument( monument ) {
+		var levels = [];
+		if ( monument.adm0 ) {
+			levels.push( monument.adm0 );
+		}
+		if ( monument.adm1 ) {
+			levels.push( monument.adm1 );
+		}
+		if ( monument.adm2 ) {
+			levels.push( monument.adm2 );
+		}
+		if ( monument.adm3 ) {
+			levels.push( monument.adm3 );
+		}
+		return admintree.getLeaves( levels, 'en', /* translate */ true ).pipe( function( tree ) {
+			var names = [];
+			$.each( tree, function( i, level ) {
+				var name = stripWikiText( level.name );
+				names.push(name);
+			} );
+			return names;
+		});
+	}
+
+	function translateAdminLevels( $uploadItem, monument ) {
+		// Translate administrative level codes into proper text
+		var $name = $uploadItem.find( '.monument-location' );
+		translateLevelsForMonument( monument ).done( function( names ) {
+			$name.text( names.join( ' > ' ) );
+		} );
+	}
 
 	// Expects user to be logged in
 	function showUploads() {
 		var username = api.userName,
-			showCompleted = ( $( '#toggle-uploads-view' ).val() == 'complete-view' );
-		db.requestUploadsForUser( username ).done( function( uploads ) {
-			$( '#uploads-list' ).empty();
+			$list = $( '#uploads-page .monuments-list' );
+		db.requestUploadsForUser( username, db.UPLOAD_COMPLETE ).done( function( uploads ) {
+			$list.empty();
 			if( uploads.length ) {
+				var thumbFetcher = api.getImageFetcher( 64, 64 ); // important: use same API we upload to!
 				var uploadsTemplate = templates.getTemplate( 'upload-list-item-template' );
 				var uploadCompleteTemplate = templates.getTemplate( 'upload-completed-item-detail-template' );
-				var uploadIncompleteTemplate = templates.getTemplate( 'upload-incomplete-item-detail-template' );
 				$.each( uploads, function( i, upload ) {
-					var completed = ( upload.completed == 'true' );
-					if ( completed != showCompleted ) {
-						// filter for completion status
-						return;
-					}
-					var monument = JSON.parse( upload.monument );
+					var monument = new Monument( JSON.parse( upload.monument ), api );
 					var photo = JSON.parse( upload.photo );
-					$uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
+					var $uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
 					$uploadItem.click( function() {
-						if ( upload.completed === 'true' ) {
-							$( '#completed-upload-detail' ).html( uploadCompleteTemplate( { upload: upload, monument: monument, photo: photo } ) );
-							$( '#completed-upload-detail .monumentLink' ).
-								data( 'monument', new Monument( monument, commonsApi ) ).
-								click( function() {
-									showMonumentDetail( $( this ).data( 'monument' ) );
-								} ).localize();
-							showPage( 'completed-upload-detail-page' );
-						} else {
-							$( '#incomplete-upload-detail' ).html( uploadIncompleteTemplate( { upload: upload, monument: monument, photo: photo } ) ).localize();
-							$( '#incomplete-upload-detail .monumentLink' ).
-								data( 'monument', new Monument( monument, commonsApi ) ).
-								click( function() {
-									showMonumentDetail( $( this ).data( 'monument' ) );
-								} );
-							$( '#incomplete-upload-detail .upload-incomplete' ).click( function() {
-								alert( mw.message( 'upload-incomplete-nyi' ).plain() );
-							} );
-							showPage( 'incomplete-upload-detail-page' );
-						}
+						$( '#completed-upload-detail' ).html( uploadCompleteTemplate( { upload: upload, monument: monument, photo: photo } ) );
+						$( '#completed-upload-detail .monumentLink' ).
+							data( 'monument', new Monument( monument, commonsApi ) ).
+							click( function() {
+								showMonumentDetail( $( this ).data( 'monument' ) );
+							} ).localize();
+						showPage( 'completed-upload-detail-page' );
 					} );
-					$( '#uploads-list' ).append( $uploadItem );
+
+					// Note that items uploaded before addition of the '.jpg' extension will fail here.
+					var $thumb = $uploadItem.find( 'img.monument-thumbnail' );
+					thumbFetcher.request( photo.data.fileTitle ).done( function( imageinfo ) {
+						$thumb.attr( 'src', imageinfo.thumburl );
+					} ).fail( function() {
+						$thumb.attr( 'src', 'images/placeholder-thumb.png' );
+					} );
+					$list.append( $uploadItem );
+					translateAdminLevels( $uploadItem, monument );
 				} );
+				thumbFetcher.send();
 			} else {
 				var emptyUploadTemplate = templates.getTemplate( 'upload-list-empty-template' );
-				$( '#uploads-list' ).html( emptyUploadTemplate() ).localize();
+				$list.html( emptyUploadTemplate() ).localize();
+			}
+		} );
+	}
+
+	function showIncompleteUploads() {
+		var username = api.userName,
+			$list = $( '#incomplete-uploads-page .monuments-list' );
+		db.requestUploadsForUser( username, db.UPLOAD_INCOMPLETE ).done( function( uploads ) {
+			$list.empty();
+			if( uploads.length ) {
+				var uploadsTemplate = templates.getTemplate( 'upload-list-item-template' );
+				var uploadIncompleteTemplate = templates.getTemplate( 'upload-incomplete-item-detail-template' );
+				$.each( uploads, function( i, upload ) {
+					var monument = JSON.parse( upload.monument );
+					var photo = JSON.parse( upload.photo );
+					var $uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
+					$uploadItem.click( function() {
+						$( '#incomplete-upload-detail' ).html( uploadIncompleteTemplate( { upload: upload, monument: monument, photo: photo } ) ).localize();
+						$( '#incomplete-upload-detail .monumentLink' ).
+							data( 'monument', new Monument( monument, commonsApi ) ).
+							click( function() {
+								showMonumentDetail( $( this ).data( 'monument' ) );
+							} );
+						$( '#incomplete-upload-detail .upload-incomplete' ).click( function() {
+							alert( mw.message( 'upload-incomplete-nyi' ).plain() );
+						} );
+						showPage( 'incomplete-upload-detail-page' );
+					} );
+					$list.append( $uploadItem );
+					
+					// Create thumbnails from the originals so we don't have to keep them all in RAM
+					var img = new Image(),
+						$img = $( img );
+					$img.attr( 'src', photo.data.contentURL ).load( function() {
+						var $canvas = $( '<canvas width=64 height=64>' ),
+							ctx = $canvas[0].getContext( '2d' );
+						// @fixme fix the aspect ratio
+						ctx.drawImage( img, 0, 0, 64, 64 );
+						$uploadItem.find('img.monument-thumbnail').replaceWith( $canvas );
+					} );
+
+					// Translate administrative level codes into proper text
+					translateAdminLevels( $uploadItem, monument );
+				} );
+			} else {
+				var emptyUploadTemplate = templates.getTemplate( 'upload-incomplete-list-empty-template' );
+				$list.html( emptyUploadTemplate() ).localize();
 			}
 		} );
 	}
@@ -969,10 +1049,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			}, 400);
 		};
 		$( "#filter-campaign" ).on( 'input', filterCampaigns );
-
-		$( '#toggle-uploads-view' ).change( function() {
-			showUploads();
-		} );
 
 		$('#nearby').click(function() {
 			showPage( 'locationlookup-page' );
