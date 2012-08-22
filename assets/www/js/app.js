@@ -679,10 +679,18 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	
 	function translateLevelsForMonument( monument ) {
 		var levels = [];
-		if ( monument.adm0 ) levels.push( monument.adm0 );
-		if ( monument.adm1 ) levels.push( monument.adm1 );
-		if ( monument.adm2 ) levels.push( monument.adm2 );
-		if ( monument.adm3 ) levels.push( monument.adm3 );
+		if ( monument.adm0 ) {
+			levels.push( monument.adm0 );
+		}
+		if ( monument.adm1 ) {
+			levels.push( monument.adm1 );
+		}
+		if ( monument.adm2 ) {
+			levels.push( monument.adm2 );
+		}
+		if ( monument.adm3 ) {
+			levels.push( monument.adm3 );
+		}
 		return admintree.getLeaves( levels, 'en', /* translate */ true ).pipe( function( tree ) {
 			var names = [];
 			$.each( tree, function( i, level ) {

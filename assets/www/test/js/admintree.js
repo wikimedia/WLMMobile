@@ -11,10 +11,10 @@ test( 'getLeaves', function() {
 
 test( 'stripName', function() {
 	var strip = WLMMobile.admintree.stripName;
-	strictEqual( strip( 'United States'), 'United States' );
-	strictEqual( strip( '[[District of Columbia]]'), 'District of Columbia' );
-	strictEqual( strip( '[[San Francisco County, California]]'), 'San Francisco County' );
-	strictEqual( strip( '[[Blah|Test]]'), 'Test' );
+	strictEqual( strip( 'United States' ), 'United States' );
+	strictEqual( strip( '[[District of Columbia]]' ), 'District of Columbia' );
+	strictEqual( strip( '[[San Francisco County, California]]' ), 'San Francisco County' );
+	strictEqual( strip( '[[Blah|Test]]' ), 'Test' );
 });
 
 }());
