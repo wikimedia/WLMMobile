@@ -19,7 +19,6 @@ define(['jquery'], function() {
 	Api.prototype.request = function(method, params) {
 		// Force JSON
 		params.format = 'json';
-		//console.log( this.url + ' ' + JSON.stringify(params));
 		this.lastRequest = $.ajax({
 			url: this.url,
 			data: params,
