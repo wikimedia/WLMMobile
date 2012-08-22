@@ -20,12 +20,27 @@ body {
 }
 
 /* spinner related styles */
+#monument-detail.loading img,
+#results li.loading img {
+	visibility: hidden;
+}
+
+#monument-detail.loading,
+#results li.loading,
 .loading #results,
 .loading .content {
 	background-image: url(images/loader.gif);
 	background-position: center center;
 	background-repeat: no-repeat;
 	min-height: 50px;
+}
+
+#results li.loading {
+	background-position: right center;
+}
+
+#monument-detail.loading {
+	background-position: left center;
 }
 
 #campaign-page.loading h3 {
