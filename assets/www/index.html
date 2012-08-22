@@ -90,13 +90,13 @@
 		</li>
 	</script>
 	<script type="text/html" id="monument-details-template">
+	<h3 class='monument-name'> 
+		<%= monument.name %> 
+	</h3>
 		<img class='monument-thumbnail' src="images/placeholder-full-photo.png" />
-		<div class='monument-name'> 
-			<%= monument.name %> 
-		</div>
-		<span class='monument-country'> 
+		<div class='monument-country'> 
 			<strong> <msg key='monument-country' / > </strong>
-			<%= monument.country %> 
+			<%= campaign %> 
 		</span>
 		<div class='monument-sub-details'>
 			<% if(monument.address) { %>
@@ -309,7 +309,8 @@
 		<header class="actionbar">
 			<a class='back' href="#"> </a>
 			<h2><msg key="detail-title"></msg></h2>
-			<a class='page-link' data-login='required' data-page="upload-page">
+			<a class='page-link upload' data-login='required' data-page="upload-page">
+				<msg key="submit-photo"></msg><br/>
 				<img src='images/5-content-new-picture.png' />
 			</a>
 		</header>
@@ -365,11 +366,23 @@
 					<h2><msg key='add-photo-title' /></h2>
 				</header>
 				<msg key="add-photo-explained"></msg>
-				<ul>
-					<li><a href="#" id="selectphoto"><msg key="add-photo-gallery"></msg></a></li>
-					<li><a href="#" id="takephoto"><msg key="add-photo-camera"></msg></a></li>
+				<ul class="buttons">
+					<li>
+						<button id="selectphoto">
+							<msg key="add-photo-gallery"></msg>
+						</button>
+					</li>
+					<li>
+						<button id="takephoto">
+							<msg key="add-photo-camera"></msg>
+						</button>
+					</li>
+					<li class='small-button'>
+						<button class="back">
+							<msg key='popup-cancel'></msg>
+						</button>
+					</li>
 				</ul>
-				<button class="back"><msg key='popup-cancel' /></button>
 			</div>
 		</div>
 	</div>

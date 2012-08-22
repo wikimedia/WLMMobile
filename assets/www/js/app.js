@@ -20,7 +20,7 @@ function handleOpenURL(url)
 }
 */
 require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument', 'preferences', 'database', 'admintree', 'photo',
-		'jquery.localize', 'campaigns-data', 'licenses-data' ],
+		'jquery.localize', 'campaigns-data', 'licenses-data', 'utils' ],
 	function( $, l10n, geo, Api, templates, MonumentsApi, Monument, prefs, db, AdminTreeApi, Photo ) {
 
 	var api = new Api( WLMConfig.WIKI_API, {
@@ -98,29 +98,36 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		trimRepeats();
 	}
 	
+	function goBackHooks( pageName ) {
+		var data, campaigns = [];
+		if( pageName === 'login-page' && api.loggedIn ) {
+			pageName = pageHistory.pop(); // skip the login screen as user is logged in
+		}
+		data = pageName.split( '/' );
+		showPage( pageName );
+
+		// special casing for specific pages
+		// TODO: provide generic mechanism for this
+		if( data[ 0 ] === 'campaign-page' ) {
+			campaigns = data.slice( 1 );
+			// campaigns are currently url encoded so we must decode
+			campaigns.forEach( function( el, i ) {
+				campaigns[ i ] = decodeURIComponent( el );
+			} );
+			listCampaigns( campaigns );
+		}
+		return pageName;
+	}
+
 	function goBack() {
-		var pageName, data, campaigns = [];
+		var pageName;
 		if( blacklist.indexOf( curPageName ) > -1 ) {
-			return curPageName;
+			pageName = pageHistory.pop(); // go back one page
+			pageName = goBackHooks( pageName );
 		} else if( pageHistory.length > 1 ) {
 			pageName = pageHistory.pop(); // this is the current page
 			pageName = pageHistory.pop(); // this is the previous page
-			if( pageName === 'login-page' && api.loggedIn ) {
-				pageName = pageHistory.pop(); // skip the login screen as user is logged in
-			}
-			data = pageName.split( '/' );
-			showPage( pageName );
-
-			// special casing for specific pages
-			// TODO: provide generic mechanism for this
-			if( data[ 0 ] === 'campaign-page' ) {
-				campaigns = data.slice( 1 );
-				// campaigns are currently url encoded so we must decode
-				campaigns.forEach( function( el, i ) {
-					campaigns[ i ] = decodeURIComponent( el );
-				} );
-				listCampaigns( campaigns );
-			}
+			pageName = goBackHooks( pageName );
 		} else {
 			console.log( 'Nothing in pageHistory to go back to. Quitting :(' );
 			navigator.app.exitApp();
@@ -130,7 +137,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 	var translatedPageNames = {};
 	function translatePageName( name ) {
-		return translatedPageNames[ name ] || name;
+		return translatedPageNames[ name ] || stripWikiText( name );
 	}
 
 	function showPage( pageName, deferred ) {
@@ -167,7 +174,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			$( '#results' ).data( 'monuments', [] ).empty();
 		} else if( pageName === 'campaign-page' ) {
 			// TODO: translate subpage
-			heading = subPage ? mw.msg( 'choose-campaign' ) + ' (' + decodeURIComponent( translatePageName( subPage ) ) + ')' :
+			heading = subPage ? mw.msg( 'choose-campaign' ) + ' (' + translatePageName( decodeURIComponent( subPage ) ) + ')' :
 				mw.msg( 'choose-campaign' );
 			$page.find( 'h3' ).text( heading );
 		} else if ( pageName === 'uploads-page' ) {
@@ -194,7 +201,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	function showMonumentDetail(monument) {
 		var monumentTemplate = templates.getTemplate('monument-details-template');
 		var imageFetcher = commonsApi.getImageFetcher(300, 240);
-		var $monumentDetail = $(monumentTemplate({monument: monument}));
+		var campaign = CAMPAIGNS[ monument.country ] ? CAMPAIGNS[ monument.country ].desc : monument.country;
+		var $monumentDetail = $( monumentTemplate( { monument: monument, campaign: campaign } ) );
 		$("#monument-detail").html($monumentDetail).localize();
 		monument.requestThumbnail(imageFetcher).done(function(imageinfo) {
 			$('#monument-detail').find('img.monument-thumbnail').attr('src', imageinfo.thumburl);
@@ -475,13 +483,16 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					$( 'a.logout', container ).click( function() {
 						showPage( 'logout-progress-page' );
 						api.logout().done(function() {
-							prefs.clear( 'username' );
-							prefs.clear( 'password' );
-							doLogin( function() {
-								goBack(); // escape error popup
-								goBack(); // escape progress bar
-								showPage( 'detail-page' );
-							});
+							var noPageChange = getCurrentPage() === 'logout-progress-page';
+							if ( noPageChange ) {
+								prefs.clear( 'username' );
+								prefs.clear( 'password' );
+								doLogin( function() {
+									goBack(); // escape error popup
+									goBack(); // escape progress bar
+									showPage( 'detail-page' );
+								});
+							}
 						} );
 					} );
 					console.log( 'Upload failed: ' + code );
@@ -525,7 +536,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			$( "#login-user, #login-pass" ).removeClass( 'error-input-field' );
 			$( "#login-page input" ).attr( 'disabled', true );
 			api.login( username, password ).done( function( status ) {
-				if( status === "Success" )  {
+				var noPageChange = getCurrentPage() === 'login-progress-page';
+				if ( status === "Success" && noPageChange )  {
 					prefs.set( 'username', username );
 					prefs.set( 'password', password );
 
@@ -533,7 +545,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					$( "#settings-user-name" ).html( mw.msg( 'settings-user-name', username ) );
 
 					success();
-				} else {
+				} else if ( noPageChange ) {
 					var errMsg;
 					// handle login API errors
 					// http://www.mediawiki.org/wiki/API:Login#Errors
@@ -570,9 +582,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					fail( status );
 				}
 			}).fail( function( err, textStatus ) {
-				$( "#login-status-message" ).empty();
-				displayError( mw.msg( 'login-failed' ), textStatus );
-				fail( textStatus );
+				var noPageChange = getCurrentPage() === 'login-progress-page';
+				if ( noPageChange ) {
+					$( "#login-status-message" ).empty();
+					displayError( mw.msg( 'login-failed' ), textStatus );
+					fail( textStatus );
+				}
 			}).always( function() {
 				$( "#login-status-spinner" ).hide();
 				$( "#login-page input" ).attr( 'disabled', false );
@@ -916,6 +931,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 	function init() {
 		var timeout, name, lang = prefs.get( 'uiLanguage' );
+		var wikipedia_url = WLMConfig.WIKIPEDIA.replace( '$1', lang );
+		var wlm_url = WLMConfig.WIKI_LOVES_MONUMENTS_HOMEPAGE;
 
 		var monumentSearchTimeout = null;
 		var monumentSearchReq = null;
@@ -1027,9 +1044,13 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				userLocation = pos;
 				currentSortMethod = 'distance';
 				$( 'html' ).addClass( 'locationAvailable' );
-				showMonumentsForPosition( pos.coords.latitude, pos.coords.longitude );
+				if ( getCurrentPage() === 'locationlookup-page' ) { // check user didn't escape page
+					showMonumentsForPosition( pos.coords.latitude, pos.coords.longitude );
+				}
 			}, function(err) {
-				displayError( mw.msg( 'geolocating-failed-heading') , mw.msg( 'geolocating-failed-text' ) );
+				if ( getCurrentPage() === 'locationlookup-page' ) { // check user didn't escape page
+					displayError( mw.msg( 'geolocating-failed-heading') , mw.msg( 'geolocating-failed-text' ) );
+				}
 			},{
 				enableHighAccuracy: true,
 				timeout: 20000 // give up looking up location.. maybe they are in airplane mode
@@ -1066,7 +1087,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		});
 
 		$(document).localize();
-		$( '#about-page-text' ).html( mw.msg( 'about-wlm-p1' ) );
+		$( '#about-page-text' ).html( mw.msg( 'about-wlm-p1', wlm_url, wikipedia_url ) );
 		initMap();
 		clearHistory();
 		showPage('welcome-page');
@@ -1094,7 +1115,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 
 	l10n.init().done( function() {
-		prefs.init().done( function() { db.init().done( init ); } );
+		prefs.init().done( function() {
+			db.init().done( init );
+			monuments.lang = prefs.get( 'uiLanguage' );
+		} );
 	});
 	window.WLMMobile = {
 		admintree: admintree,

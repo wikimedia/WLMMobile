@@ -1,11 +1,14 @@
 define([ 'jquery', 'monument' ], function( $, Monument ) {
-	function MonumentsApi( url, mwApi ) {
+	function MonumentsApi( url, mwApi, lang ) {
 		this.url = url;
 		this.mwApi = mwApi;
+		this.lang = lang || 'en';
 	}
 
 	MonumentsApi.prototype.request = function( params ) {
 		var that = this;
+		
+		console.log(this.url + ' : ' + JSON.stringify(params));
 
 		// Force JSON
 		params.format = 'json';
@@ -41,7 +44,8 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 		return this.request({
 			action: 'search',
 			limit: WLMConfig.MONUMENT_SEARCH_LIMIT,
-			srcountry: country
+			srcountry: country,
+			uselang: this.lang
 		});
 	};
 
@@ -49,13 +53,14 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 		var d = $.Deferred(), i,
 			data = {
 				action: 'search',
-				limit: WLMConfig.MONUMENT_SEARCH_LIMIT
+				limit: WLMConfig.MONUMENT_SEARCH_LIMIT,
+				uselang: this.lang
 			};
 		for( i = 0; i < tree.length; i++ ) {
 			data[ 'sradm' + i ] = tree[ i ];
 		}
 		if( str ) {
-			data.srname = '~' + str + '*';
+			data.srquery = str + '*';
 		}
 		return this.request( data );
 	};
@@ -67,7 +72,8 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 			action: 'search',
 			limit: WLMConfig.MONUMENT_SEARCH_LIMIT,
 			srcountry: country,
-			srname: '~' + str + '*'
+			srquery: str + '*',
+			uselang: this.lang
 		} );
 	};
 
@@ -96,10 +102,11 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 			data = {
 				action: 'search',
 				bbox: bboxString,
-				limit: WLMConfig.MONUMENT_SEARCH_LIMIT
+				limit: WLMConfig.MONUMENT_SEARCH_LIMIT,
+				uselang: this.lang
 			};
 		if( str ) {
-			data.srname = '~' + str + '*';
+			data.srquery = str + '*';
 		}
 		return this.request( data );
 		

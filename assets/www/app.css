@@ -97,12 +97,34 @@ header.actionbar.hidden {
 	z-index: 200;
 	padding: 4px 5px;
 	top: 0;
+	border-bottom: solid 1px black;
+}
+
+.detail-page.page header.actionbar {
+	border-right: solid 1px black;
 }
 
 .page header.actionbar img {
 	height: 100%;
 	width: auto;
 	padding: 4px;
+}
+
+a.upload {
+	display: block;
+	text-align: center;
+	background-color: #F2F2F2;
+	padding: 10px 20px 10px 20px;
+	margin-top: -4px;
+	margin-right: -5px;
+	cursor: pointer;
+	text-transform: uppercase;
+	width: 104px;
+	font-size: 12px;
+}
+
+.page header.actionbar a.upload img {
+	height: auto;
 }
 
 .page header.tabbar {
@@ -169,6 +191,10 @@ header.actionbar.hidden {
 	font-size: 14px;
 	font-weight: bold;
 	text-transform: uppercase;
+}
+
+#detail-page .content h3 {
+	margin-right: 92px;
 }
 
 ul {
@@ -264,14 +290,38 @@ header h2 input[type='text'] {
 header .back {
 	display: block;
 	background: url('images/button-dark-back.png') no-repeat;
-	width: 24px;
+	width: 36px;
 	height: 48px;
 	margin-left: 5px;
+	background-position: left center;
 }
 
 .back {
 	-webkit-tap-highlight-color: rgba( 0, 0, 0, 0 );
 	tap-highlight-color: rgba( 0, 0, 0, 0 );
+}
+
+/* upload page */
+#upload-page .popup {
+	text-align: center;
+}
+
+ul.buttons li {
+	margin-top: 12px;
+	border-bottom: none;
+}
+
+ul.buttons li button {
+	border-radius: 5px;
+	border: solid 1px #333;
+}
+
+ul.buttons li.small-button {
+	text-align: center;
+}
+
+ul.buttons li.small-button button {
+	width: 50%;
 }
 
 /* Monuments list styles */

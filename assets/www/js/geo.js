@@ -144,11 +144,13 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 			 iconOptions = url;
 		} else {
 			iconOptions = {
-				iconUrl: url,
-				iconSize: [ 30, 50 ]
+				iconUrl: url
 			};
 		}
 		var markerIcon = new L.Icon( iconOptions );
+		markerIcon.shadowUrl = monument.image ? 'images/pin-shadow.png' : 'images/pin-no-photos-shadow.png';
+		markerIcon.shadowSize = new L.Point( 45, 47 );
+		markerIcon.iconSize = new L.Point( 45, 47 );
 		var marker = new L.Marker( new L.LatLng( monument.lat, monument.lon ), { icon: markerIcon } );
 		var popup = "<div><strong>" + monument.name + "</strong></div>";
 		var popupDOM = $(popup).click(function() {

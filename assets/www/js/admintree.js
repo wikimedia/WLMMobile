@@ -1,4 +1,4 @@
-define( [ 'jquery' ], function() {
+define( [ 'jquery', 'utils' ], function() {
 	var cache = {};
 
 	function translateCode( code ) {
@@ -6,6 +6,8 @@ define( [ 'jquery' ], function() {
 		var name = code;
 		if( CAMPAIGNS[ code ] ) {
 			name = CAMPAIGNS[ code ].desc;
+		} else {
+			name = stripWikiText( name );
 		}
 		return name;
 	}

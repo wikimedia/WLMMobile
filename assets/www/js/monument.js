@@ -1,13 +1,6 @@
 /*global define,$,platform */
 /*jslint sloppy: true, white:true, maxerr: 50, indent: 4, plusplus: true, vars:true */
-define( [ 'jquery' ], function() {
-	function stripWikiText(str) {
-		str = str.replace( /\[\[[^\|]+\|([^\]]+)\]\]/g, '$1' );
-		str = str.replace( /\[\[([^\]]+)\]\]/g, '$1' );
-		str = str.replace( /\{\{([^\]]+)\}\}/g, '' );
-		return str;
-	}
-
+define( [ 'jquery', 'utils' ], function() {
 	function Monument( data, mwApi ) {
 		// Sanitize and transform data to be cleaner and more useful
 		var stripFields = [ 'name', 'address' ];

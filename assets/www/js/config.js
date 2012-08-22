@@ -5,5 +5,7 @@ var WLMConfig = {
 	MONUMENT_SEARCH_LIMIT: 50, // amount of monuments to request in a single query (see bug 39182 for more context)
 	SIGNUP_PAGE: 'http://commons.wikimedia.org/w/index.php?title=Special:UserLogin&type=signup&uselang=$1',
 	WIKI_API: 'https://test.wikipedia.org/w/api.php',
+	WIKI_LOVES_MONUMENTS_HOMEPAGE: 'http://www.wikilovesmonuments.org/',
+	WIKIPEDIA: 'https://$1.wikipedia.org',
 	WIKIPEDIA_API: 'https://$1.wikipedia.org/w/api.php'
 };
