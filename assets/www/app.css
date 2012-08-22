@@ -369,6 +369,10 @@ button.requires-location {
 	color: #999;
 	font-size: 12px;
 }
+.monuments-list .monument-thumbnail {
+	width: 64px;
+	height: 64px;
+}
 
 .monuments-list .distance {
 	color: #B0B0B0;
