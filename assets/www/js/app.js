@@ -377,8 +377,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			});
 			
 			if( monument.distance ) {
+				msg = monument.distance > 200 ? mw.msg( 'monument-distance-tofar' ) : mw.msg( 'monument-distance-km', this.distance );
 				$( '<div class="distance" />' ).
-					text( mw.msg( 'monument-distance-km', this.distance ) ).appendTo( $( 'a', $monumentItem ) );
+					text( msg ).appendTo( $( 'a', $monumentItem ) );
 			}
 			$monumentItem.appendTo('#results').click(function() {
 				showMonumentDetail(monument);
