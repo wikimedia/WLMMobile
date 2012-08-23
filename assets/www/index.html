@@ -190,7 +190,7 @@
 		</header>
 		<div class="content">
 			<h3><msg key="welcome-title"></msg></h3>
-			<p id="about-page-text"></p>
+			<p id="about-page-text" data-msg-html="about-wlm-p1"></p>
 			<h3>
 				<msg key="about-app-header"></msg>
 			</h3>
@@ -337,7 +337,7 @@
 					</button>
 				</li>
 			</ul>
-			<div id="login-create-account-msg"></div>
+			<div id="login-create-account-msg" data-msg-html="login-create-account"></div>
 			<div class="center hidden" id="login-status">
 				<img id="login-status-spinner" src="images/loader.gif" />
 				<div id="login-status-message">
@@ -381,8 +381,7 @@
 				<header>
 					<h2><msg key='saved-later-title' /></h2>
 				</header>
-				<div class="content visibleLinks">
-					<msg key="saved-later-text"></msg>
+				<div class="content visibleLinks" data-msg-html="saved-later-text">
 				</div>
 				<button class="back">
 					<msg key='popup-ok'></msg>
@@ -464,9 +463,7 @@
 			<p>
 				<msg key="upload-progress-done"></msg>
 			</p>
-			<p class="share">
-				<msg key="upload-latest-view"></msg>
-			</p>
+			<p class="share" data-msg-html="upload-latest-view"></p>
 			<p>
 				<img src='images/loader.gif'>
 			</p>

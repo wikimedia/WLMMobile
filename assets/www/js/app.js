@@ -430,7 +430,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		} );
 		$( '#upload-later-button' ).click( function() {
 			db.addUpload( api.userName, curMonument, photo, false );
-			$( '#upload-later .content' ).html( mw.msg( 'saved-later-text' ) );
 			$( '#upload-later .content a.incomplete' ).click( function() {
 				showPage( 'uploads-page' ); // TODO: link to the correct place
 			} );
@@ -444,7 +443,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			// reset status message for any previous uploads
 			photo.uploadTo( api, comment ).done( function( imageinfo ) {
 				$( '#upload-latest-page img' ).attr( 'src', resolveImageThumbnail( imageinfo.url ) );
-				$( '#upload-latest-page .share' ).html( mw.msg( 'upload-latest-view' ) );
 				$( '#upload-latest-page .share a' ).attr( 'href', imageinfo.descriptionurl );
 
 				db.addUpload( api.userName,curMonument, photo, true );
@@ -1024,7 +1022,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		});
 
 		$(document).localize();
-		$( '#about-page-text' ).html( mw.msg( 'about-wlm-p1', wlm_url, wikipedia_url ) );
+		$( '#about-page-text a' ).eq( 0 ).attr( 'href', wlm_url );
+		$( '#about-page-text a' ).eq( 1 ).attr( 'href', wikipedia_url );
 		initMap();
 		clearHistory();
 		showPage('welcome-page');
@@ -1044,8 +1043,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		// Display the translated account creation message this way since the
 		// HTML in the message can't be rendered via jquery.localize.js
-		$( '#login-create-account-msg' ).html(
-			mw.msg( 'login-create-account', WLMConfig.SIGNUP_PAGE.replace( '$1', lang ) ) );
+		$( '#login-create-account-msg a' ).attr( 'href', WLMConfig.SIGNUP_PAGE.replace( '$1', lang ) );
 
 		// Everything has been initialized, so let's show them the UI!
 		$( 'body' ).removeClass( 'hidden' );
