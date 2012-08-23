@@ -572,6 +572,35 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			});
 		}
 	});
+	
+	$( '#select-all' ).click( function() {
+		$( '#incomplete-uploads-page .monuments-list input[type=checkbox]' ).each( function( i, item ) {
+			var $item = $( item );
+			$item.attr( 'checked', 'checked' );
+		} );
+	} );
+	
+	$( '#delete-all' ).click( function() {
+		var queue = [];
+		$( '#incomplete-uploads-page .monuments-list input[type=checkbox]:checked' ).each( function( i, item ) {
+			var $item = $( item ),
+				photo = $item.data( 'photo' );
+			queue.push( photo );
+		} );
+
+		// Delete in sequence!
+		function iter() {
+			if ( queue.length > 0 ) {
+				var photo = queue.pop();
+				db.deleteUpload( photo ).then( function() {
+					iter();
+				} );
+			} else {
+				showIncompleteUploads();
+			}
+		}
+		iter();
+	} );
 
 	// Need to use callbacks instead of deferreds
 	// since callbacks need to be called multiple times
@@ -796,6 +825,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					var monument = new Monument( JSON.parse( upload.monument ), api );
 					var photo = JSON.parse( upload.photo );
 					var $uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
+
 					$uploadItem.click( function() {
 						$( '#completed-upload-detail' ).html( uploadCompleteTemplate( { upload: upload, monument: monument, photo: photo } ) );
 						$( '#completed-upload-detail .monumentLink' ).
@@ -842,6 +872,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					var monument = JSON.parse( upload.monument );
 					var photo = JSON.parse( upload.photo );
 					var $uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
+
+					$uploadItem.find( 'input[type=checkbox]' )
+						.data( 'monument', monument )
+						.data( 'photo', photo );
+
 					$uploadItem.click( function() {
 						$( '#incomplete-upload-detail' ).html( uploadIncompleteTemplate( { upload: upload, monument: monument, photo: photo } ) ).localize();
 						$( '#incomplete-upload-detail .monumentLink' ).
