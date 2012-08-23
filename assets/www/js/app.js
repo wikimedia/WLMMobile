@@ -921,7 +921,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		showPage( pageName, d );
 
 		d.done( function( campaigns ) {
-			if( campaigns.length === 0 ) {
+			if ( getCurrentPage() !== pageName ) { // the user pressed back so abort any further changes
+				console.log( 'silently dying due to a back button press' );
+			} else if ( campaigns.length === 0 ) {
 				goBack(); // kill the last campaign page request (seems hacky...)
 				listMonuments( campaignTree );
 			} else {
