@@ -167,13 +167,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		var monuments = $( "#results" ).data( 'monuments' );
 		if( monuments && pageName === 'results-page' ) {
 			showMonumentsList( monuments );
+			mapFocusNeeded = true; // force a refresh of the map
 		} else if( monuments && pageName === 'map-page' ) {
 			showMonumentsMap( monuments );
-		} else if( pageName === 'country-page' ) { // force a refresh of the map on visiting the country page
-			mapFocusNeeded = true;
-			$( '#results' ).data( 'monuments', [] ).empty();
 		} else if( pageName === 'campaign-page' ) {
 			// TODO: translate subpage
+			mapFocusNeeded = true; // force a refresh of the map on visiting the country page
 			heading = subPage ? mw.msg( 'choose-campaign' ) + ' (' + translatePageName( decodeURIComponent( subPage ) ) + ')' :
 				mw.msg( 'choose-campaign' );
 			$page.find( 'h3' ).text( heading );
@@ -358,6 +357,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		showPage( 'map-page' );
 		var searchTimeout, lastRequest;
 		function ping( ev ) {
+			if ( mapFocusNeeded ) {
+				mapFocusNeeded = false;
+				return;
+			}
 			console.log( 'update map with new monuments' );
 			var pos = ev.target.getBounds(),
 				nw = pos.getNorthWest(),
@@ -384,15 +387,15 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			return;
 		}
 		geo.clear();
-		geo.onResize(); // hack to ensure resize on re-show after orientation change (bug 38933)
 		if( mapFocusNeeded && typeof center === 'undefined' && typeof zoom === 'undefined' ) {
 			var centerAndZoom = geo.calculateCenterAndZoom( monumentList );
 			center = centerAndZoom.center;
 			zoom = centerAndZoom.zoom;
-			mapFocusNeeded = false;
 		}
 		if( center && zoom ) {
 			geo.setCenterAndZoom( center, zoom );
+		} else {
+			geo.onResize(); // hack to ensure resize on re-show after orientation change (bug 38933)
 		}
 		addMonuments( monumentList );
 	}
