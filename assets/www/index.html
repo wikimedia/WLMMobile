@@ -43,6 +43,16 @@
 			<img class='monument-thumbnail' src="images/loader-64.gif"/>
 		</li>
 	</script>
+	<script type="text/html" id="upload-incomplete-list-item-template">
+		<li>
+			<input type="checkbox" />
+			<a class='monument-detail' href="#">
+				<div class='monument-name'> <%= monument.name %> </div>
+				<div class='monument-location'>&nbsp;</div>
+			</a>
+			<img class='monument-thumbnail' src="images/loader-64.gif"/>
+		</li>
+	</script>
 	<script type="text/html" id="upload-list-empty-template">
 		<li>
 			<msg key="no-uploads" />

@@ -821,7 +821,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		db.requestUploadsForUser( username, db.UPLOAD_INCOMPLETE ).done( function( uploads ) {
 			$list.empty();
 			if( uploads.length ) {
-				var uploadsTemplate = templates.getTemplate( 'upload-list-item-template' );
+				var uploadsTemplate = templates.getTemplate( 'upload-incomplete-list-item-template' );
 				var uploadIncompleteTemplate = templates.getTemplate( 'upload-incomplete-item-detail-template' );
 				$.each( uploads, function( i, upload ) {
 					var monument = JSON.parse( upload.monument );
@@ -838,6 +838,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 							alert( mw.message( 'upload-incomplete-nyi' ).plain() );
 						} );
 						showPage( 'incomplete-upload-detail-page' );
+					} );
+					
+					$uploadItem.find( 'input' ).click( function( event ) {
+						// wheeee
+						event.stopPropagation();
 					} );
 					$list.append( $uploadItem );
 					
