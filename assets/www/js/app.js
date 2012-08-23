@@ -289,6 +289,30 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 
 	function showMonumentsList(monuments) {
+
+		var infiniteScrollAjax;
+		function infiniteScroll() {
+			var footer = $( '#results .footer' )[ 0 ];
+			if( footer && monuments.next ) {
+				$( footer ).addClass( 'loading' );
+				if ( infiniteScrollAjax ) {
+					return;
+				} else {
+					infiniteScrollAjax = monuments.next().done( function( newMonuments ) {
+						$( footer ).removeClass( 'loading' );
+						var m = monuments.concat( newMonuments );
+						m.next = newMonuments.next;
+						showMonumentsList( m );
+						infiniteScrollAjax = false;
+					} ).error( function() {
+						infiniteScrollAjax = false;
+					} );
+				}
+			}
+		}
+		// setup scroll to bottom
+		$( '#results' ).unbind( 'hit-bottom' ).bind( 'hit-bottom', infiniteScroll );
+
 		$( '#results' ).empty();
 		var monumentTemplate = templates.getTemplate('monument-list-item-template');	
 		var listThumbFetcher = commonsApi.getImageFetcher(64, 64);
@@ -352,6 +376,13 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		listThumbFetcher.send();
 
 		$( "#results" ).data( 'monuments', monuments );
+		// if next property is set then there are more results so allow access to them
+		if ( monuments.next && currentSortMethod !== 'distance' ) {
+			$( '#results' ).addClass( 'incomplete' );
+			$( '<li class="footer"></li>' ).appendTo( '#results' );
+		} else {
+			$( '#results' ).removeClass( 'incomplete' );
+		}
 		$("#monuments-list").show();
 	}
 
@@ -1133,6 +1164,14 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		// Everything has been initialized, so let's show them the UI!
 		$( 'body' ).removeClass( 'hidden' );
+
+		$( window ).scroll( function() {
+			var max = $( document.body ).height() + $( document.body ).scrollTop();
+			var threshold = 50;
+			if ( document.body.scrollHeight > max - threshold ) {
+				$( '#results' ).trigger( 'hit-bottom' );
+			}
+		} );
 	}
 
 	l10n.init().done( function() {
