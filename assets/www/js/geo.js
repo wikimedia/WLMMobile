@@ -92,14 +92,11 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 				click( function() {
 					var el = this;
 					$( el ).addClass( 'loading' );
-					navigator.geolocation.getCurrentPosition( function( pos ) {
+					WLMMobile.app.getPosition( function( pos ) {
 						map.panTo( new L.LatLng( pos.coords.latitude, pos.coords.longitude ) );
 						$( el ).removeClass( 'loading' );
 					}, function() {
 						$( el ).removeClass( 'loading' );
-					},
-					{
-						enableHighAccuracy: true
 					} );
 				} ).appendTo( '#map' );
 
