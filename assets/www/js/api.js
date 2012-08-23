@@ -287,8 +287,14 @@ define(['jquery'], function() {
 				var deferred = that.getDeferred( title );
 				if(page.imageinfo) {
 					var imageinfo = page.imageinfo[0];
-					if ( deferred ) {
-						deferred.resolve( imageinfo );
+					if( deferred ) {
+						// Preload the thumbnail image before resolving the deferred.
+						// This avoids delays between returning the imageinfo and showing the image.
+						var img = new Image(),
+							$img = $( img );
+						$img.attr( 'src', imageinfo.thumburl ).one( 'load', function() {
+							deferred.resolve( imageinfo );
+						} );
 					} else {
 						console.log( 'Failed to locate deferred image with title ' + title );
 					}
