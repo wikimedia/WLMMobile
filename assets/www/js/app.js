@@ -311,6 +311,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					userLocation.coords,
 					{ latitude: this.lat, longitude: this.lon }
 				).toFixed( 1 ); // distance fixed to 1 decimal place
+				this.distance = parseFloat( this.distance, 10 ); // toFixed returns a string (bug 39475)
 			} );
 		}
 
