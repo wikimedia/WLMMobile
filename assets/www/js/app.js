@@ -48,6 +48,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 	var curPageName = null;
 	var curMonument = null; // Used to store state for take photo, etc
+	
+	var uploadsRendered = 0, // For display caching: compare vs db.dirty
+		incompleteUploadsRendered = 0;
 
 	var pageHistory = []; // TODO: retain history
 	var blacklist = [];
@@ -775,6 +778,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 	// Expects user to be logged in
 	function showUploads() {
+		if ( uploadsRendered > db.dirty ) {
+			// we've already rendered the current display
+			return;
+		}
+		uploadsRendered = Date.now();
+
 		var username = api.userName,
 			$list = $( '#uploads-page .monuments-list' );
 		db.requestUploadsForUser( username, db.UPLOAD_COMPLETE ).done( function( uploads ) {
@@ -816,6 +825,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 
 	function showIncompleteUploads() {
+		if ( incompleteUploadsRendered > db.dirty ) {
+			// we've already rendered the current display
+			return;
+		}
+		incompleteUploadsRendered = Date.now();
+
 		var username = api.userName,
 			$list = $( '#incomplete-uploads-page .monuments-list' );
 		db.requestUploadsForUser( username, db.UPLOAD_INCOMPLETE ).done( function( uploads ) {

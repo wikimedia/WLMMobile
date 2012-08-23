@@ -55,6 +55,13 @@ define( [ 'jquery' ], function( $ ) {
 		var timestamp = ( new Date() ).getTime();
 		var insertSQL = "INSERT INTO completed_uploads ( username, monument, photo, timestamp, completed ) VALUES ( ?, ?, ?, ?, ? );";
 		execute( insertSQL, [ username, JSON.stringify( monument ), JSON.stringify( photo ), timestamp, completed ] );
+		this.dirty = Date.now();
+	}
+	
+	function deleteUpload( photo ) {
+		var deleteSQL = "DELETE FROM completed_uploads WHERE photo=?;";
+		execute( deleteSQL, [ JSON.stringify( photo ) ] );
+		this.dirty = Date.now();
 	}
 
 	function requestUploadsForUser( username, completed ) {
@@ -65,6 +72,7 @@ define( [ 'jquery' ], function( $ ) {
 	return {
 		UPLOAD_COMPLETE: true,
 		UPLOAD_INCOMPLETE: false,
+		dirty: Date.now(),
 		init: init,
 		addUpload: addUpload,
 		query: query,
