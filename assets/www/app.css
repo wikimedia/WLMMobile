@@ -354,11 +354,6 @@ ul.buttons li {
 	border-bottom: none;
 }
 
-ul.buttons li button {
-	border-radius: 5px;
-	border: solid 1px #333;
-}
-
 ul.buttons li.small-button {
 	text-align: center;
 }
