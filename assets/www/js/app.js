@@ -610,10 +610,14 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	});
 	
 	$( '#select-all' ).click( function() {
-		$( '#incomplete-uploads-page .monuments-list input[type=checkbox]' ).each( function( i, item ) {
-			var $item = $( item );
-			$item.attr( 'checked', 'checked' );
-		} );
+		var $items = $( '#incomplete-uploads-page .monuments-list input[type=checkbox]' )
+		if ( $items.length > 0 ) {
+			$items.each( function( i, item ) {
+				var $item = $( item );
+				$item.attr( 'checked', true );
+			} );
+			$( '#upload-all, #delete-all' ).removeAttr( 'disabled' );
+		}
 	} );
 	
 	$( '#delete-all' ).click( function() {
@@ -942,6 +946,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			$list = $( '#incomplete-uploads-page .monuments-list' );
 		db.requestUploadsForUser( username, db.UPLOAD_INCOMPLETE ).done( function( uploads ) {
 			$list.empty();
+			var $buttons = $( '#delete-all, #upload-all' );
+			$buttons.attr( 'disabled', 'disabled' );
+
 			if( uploads.length ) {
 				var uploadsTemplate = templates.getTemplate( 'upload-incomplete-list-item-template' );
 				var uploadIncompleteTemplate = templates.getTemplate( 'upload-incomplete-item-detail-template' );
@@ -952,7 +959,15 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 					$uploadItem.find( 'input[type=checkbox]' )
 						.data( 'monument', monument )
-						.data( 'photo', photo );
+						.data( 'photo', photo )
+						.click( function() {
+							var $checked = $( '#incomplete-uploads-page .monuments-list input[type=checkbox]:checked' );
+							if ( $checked.length > 0 ) {
+								$buttons.removeAttr( 'disabled' );
+							} else {
+								$buttons.attr( 'disabled', 'disabled' );
+							}
+						} );
 
 					$uploadItem.click( function() {
 						$( '#incomplete-upload-detail' ).html( uploadIncompleteTemplate( { upload: upload, monument: monument, photo: photo } ) ).localize();

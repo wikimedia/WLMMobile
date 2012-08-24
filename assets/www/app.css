@@ -243,6 +243,10 @@ button {
 	cursor: pointer;
 	opacity: 0.9;
 }
+button[disabled] {
+	background-color: #6B0000;
+	color: #ccc;
+}
 
 input[type='text'] {
 	-webkit-appearance: none;
