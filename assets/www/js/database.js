@@ -54,19 +54,38 @@ define( [ 'jquery' ], function( $ ) {
 	function addUpload( username, monument, photo, completed ) {
 		var timestamp = ( new Date() ).getTime();
 		var insertSQL = "INSERT INTO completed_uploads ( username, monument, photo, timestamp, completed ) VALUES ( ?, ?, ?, ?, ? );";
-		execute( insertSQL, [ username, JSON.stringify( monument ), JSON.stringify( photo ), timestamp, completed ] );
+		var promise = execute( insertSQL, [ username, JSON.stringify( monument ), JSON.stringify( photo ), timestamp, completed ] );
+		this.dirty = Date.now();
+		return promise;
+	}
+	
+	function deleteUpload( photo ) {
+		var deleteSQL = "DELETE FROM completed_uploads WHERE photo=?;";
+		var promise = execute( deleteSQL, [ JSON.stringify( photo ) ] );
+		this.dirty = Date.now();
+		return promise;
+	}
+
+	function completeUpload( photo ) {
+		var updateSQL = "UPDATE completed_uploads SET completed=? WHERE photo=?;";
+		var promise = execute( updateSQL, [ true, JSON.stringify( photo ) ] );
+		this.dirty = Date.now();
+		return promise;
 	}
 
 	function requestUploadsForUser( username, completed ) {
-		var querySQL = 'SELECT * FROM completed_uploads WHERE username = ? AND completed = ?';
+		var querySQL = 'SELECT * FROM completed_uploads WHERE username = ? AND completed = ? ORDER BY timestamp DESC';
 		return query( querySQL, [ username, completed ] );
 	}
 
 	return {
 		UPLOAD_COMPLETE: true,
 		UPLOAD_INCOMPLETE: false,
+		dirty: Date.now(),
 		init: init,
 		addUpload: addUpload,
+		deleteUpload: deleteUpload,
+		completeUpload: completeUpload,
 		query: query,
 		requestUploadsForUser: requestUploadsForUser
 	};
