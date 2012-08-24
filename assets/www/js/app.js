@@ -637,6 +637,44 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		}
 		iter();
 	} );
+	
+	$( '#upload-all' ).click( function() {
+		var queue = [];
+		$( '#incomplete-uploads-page .monuments-list input[type=checkbox]:checked' ).each( function( i, item ) {
+			var $item = $( item ),
+				monument = $item.data( 'monument' )
+				photo = $item.data( 'photo' );
+			photo = new Photo( photo.data );
+			queue.push( {monument: monument, photo: photo} );
+		} );
+
+		// Upload in sequence!
+		// @todo build a better progress bar
+		function iter() {
+			if ( queue.length > 0 ) {
+				var item = queue.pop(),
+					photo = item.photo,
+					monument = item.monument;
+				// @fixme refactor and share more code -- missing error handling
+				comment = 'Batch upload'; // ????
+				photo.uploadTo( api, comment ).done( function( imageinfo ) {
+					db.completeUpload( photo ).done( function() {
+						iter();
+					} );
+				} ).progress( function( state ) {
+					if( state === 'starting' ) {
+						$( '#upload-progress-state' ).html(mw.msg( 'upload-progress-starting' ));
+						showPage("upload-progress-page");
+					} else if ( state === 'in-progress' ) {
+						$("#upload-progress-state").html(mw.msg("upload-progress-in-progress"));
+					}
+				} );
+			} else {
+				showPage( 'incomplete-uploads-page' );
+			}
+		}
+		iter();
+	} );
 
 	// Need to use callbacks instead of deferreds
 	// since callbacks need to be called multiple times

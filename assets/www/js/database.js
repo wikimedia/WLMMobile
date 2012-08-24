@@ -66,6 +66,13 @@ define( [ 'jquery' ], function( $ ) {
 		return promise;
 	}
 
+	function completeUpload( photo ) {
+		var updateSQL = "UPDATE completed_uploads SET completed=? WHERE photo=?;";
+		var promise = execute( updateSQL, [ true, JSON.stringify( photo ) ] );
+		this.dirty = Date.now();
+		return promise;
+	}
+
 	function requestUploadsForUser( username, completed ) {
 		var querySQL = 'SELECT * FROM completed_uploads WHERE username = ? AND completed = ?';
 		return query( querySQL, [ username, completed ] );
@@ -78,6 +85,7 @@ define( [ 'jquery' ], function( $ ) {
 		init: init,
 		addUpload: addUpload,
 		deleteUpload: deleteUpload,
+		completeUpload: completeUpload,
 		query: query,
 		requestUploadsForUser: requestUploadsForUser
 	};
