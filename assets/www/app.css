@@ -262,6 +262,10 @@ button {
 	cursor: pointer;
 	opacity: 0.9;
 }
+button[disabled] {
+	background-color: #6B0000;
+	color: #ccc;
+}
 
 input[type='text'] {
 	-webkit-appearance: none;
@@ -420,6 +424,12 @@ button.requires-location {
 	color: #B0B0B0;
 	font-size: 0.7em;
 	font-weight: bold;
+}
+
+#incomplete-uploads-page input[type=checkbox] {
+	-webkit-transform: scale(2);
+	padding: 20px;
+	margin-top: 20px;
 }
 
 /* Maps styles */

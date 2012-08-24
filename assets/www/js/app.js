@@ -48,6 +48,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 	var curPageName = null;
 	var curMonument = null; // Used to store state for take photo, etc
+	
+	var uploadsRendered = 0, // For display caching: compare vs db.dirty
+		incompleteUploadsRendered = 0;
 
 	var pageHistory = []; // TODO: retain history
 	var blacklist = [];
@@ -607,6 +610,90 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			});
 		}
 	});
+	
+	$( '#select-all' ).click( function() {
+		var $items = $( '#incomplete-uploads-page .monuments-list input[type=checkbox]' )
+		if ( $items.length > 0 ) {
+			$items.each( function( i, item ) {
+				var $item = $( item );
+				$item.attr( 'checked', true );
+			} );
+			$( '#upload-all, #delete-all' ).removeAttr( 'disabled' );
+		}
+	} );
+	
+	$( '#delete-all' ).click( function() {
+		var queue = [];
+		$( '#incomplete-uploads-page .monuments-list input[type=checkbox]:checked' ).each( function( i, item ) {
+			var $item = $( item ),
+				photo = $item.data( 'photo' );
+			queue.push( photo );
+		} );
+
+		// @todo replace confirm() with a nicer in-app dialog?
+		if ( window.confirm( mw.message( 'delete-selected-prompt', queue.length ).plain() ) ) {
+			// Delete in sequence!
+			function iter() {
+				if ( queue.length > 0 ) {
+					var photo = queue.pop();
+					db.deleteUpload( photo ).then( function() {
+						iter();
+					} );
+				} else {
+					showUploads();
+				}
+			}
+			iter();
+		}
+	} );
+	
+	$( '#upload-all' ).click( function() {
+		var queue = [];
+		$( '#incomplete-uploads-page .monuments-list input[type=checkbox]:checked' ).each( function( i, item ) {
+			var $item = $( item ),
+				monument = $item.data( 'monument' )
+				photo = $item.data( 'photo' );
+			photo = new Photo( photo.data );
+			queue.push( {monument: monument, photo: photo} );
+		} );
+
+		// Upload in sequence!
+		// @todo build a better progress bar
+		function iter() {
+			if ( queue.length > 0 ) {
+				var item = queue.pop(),
+					photo = item.photo,
+					monument = item.monument;
+				comment = 'Batch upload'; // ????
+				photo.uploadTo( api, comment ).done( function( imageinfo ) {
+					db.completeUpload( photo ).done( function() {
+						iter();
+					} );
+				} ).progress( function( state ) {
+					if( state === 'starting' ) {
+						$( '#upload-progress-state' ).html(mw.msg( 'upload-progress-starting' ));
+						showPage("upload-progress-page");
+					} else if ( state === 'in-progress' ) {
+						$("#upload-progress-state").html(mw.msg("upload-progress-in-progress"));
+					}
+				} ).fail( function( data ) {
+					// @todo show error data here
+					if (data == "Aborted") {
+						// no-op
+						console.log( "Upload got aborted." );
+					} else {
+						// @fixme refactor and share more code -- missing error handling
+						alert( 'Error during upload' );
+					}
+					showPage( 'incomplete-uploads-page' );
+				} );
+			} else {
+				// Show your now-completed uploads.
+				showPage( 'uploads-page' );
+			}
+		}
+		iter();
+	} );
 
 	// Need to use callbacks instead of deferreds
 	// since callbacks need to be called multiple times
@@ -813,6 +900,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 	// Expects user to be logged in
 	function showUploads() {
+		if ( uploadsRendered > db.dirty ) {
+			// we've already rendered the current display
+			return;
+		}
+		uploadsRendered = Date.now();
+
 		var username = api.userName,
 			$list = $( '#uploads-page .monuments-list' );
 		db.requestUploadsForUser( username, db.UPLOAD_COMPLETE ).done( function( uploads ) {
@@ -825,6 +918,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					var monument = new Monument( JSON.parse( upload.monument ), api );
 					var photo = JSON.parse( upload.photo );
 					var $uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
+
 					$uploadItem.click( function() {
 						$( '#completed-upload-detail' ).html( uploadCompleteTemplate( { upload: upload, monument: monument, photo: photo } ) );
 						$( '#completed-upload-detail .monumentLink' ).
@@ -854,17 +948,39 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 
 	function showIncompleteUploads() {
+		if ( incompleteUploadsRendered > db.dirty ) {
+			// we've already rendered the current display
+			return;
+		}
+		incompleteUploadsRendered = Date.now();
+
 		var username = api.userName,
 			$list = $( '#incomplete-uploads-page .monuments-list' );
 		db.requestUploadsForUser( username, db.UPLOAD_INCOMPLETE ).done( function( uploads ) {
 			$list.empty();
+			var $buttons = $( '#delete-all, #upload-all' );
+			$buttons.attr( 'disabled', 'disabled' );
+
 			if( uploads.length ) {
-				var uploadsTemplate = templates.getTemplate( 'upload-list-item-template' );
+				var uploadsTemplate = templates.getTemplate( 'upload-incomplete-list-item-template' );
 				var uploadIncompleteTemplate = templates.getTemplate( 'upload-incomplete-item-detail-template' );
 				$.each( uploads, function( i, upload ) {
 					var monument = JSON.parse( upload.monument );
 					var photo = JSON.parse( upload.photo );
 					var $uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
+
+					$uploadItem.find( 'input[type=checkbox]' )
+						.data( 'monument', monument )
+						.data( 'photo', photo )
+						.click( function() {
+							var $checked = $( '#incomplete-uploads-page .monuments-list input[type=checkbox]:checked' );
+							if ( $checked.length > 0 ) {
+								$buttons.removeAttr( 'disabled' );
+							} else {
+								$buttons.attr( 'disabled', 'disabled' );
+							}
+						} );
+
 					$uploadItem.click( function() {
 						$( '#incomplete-upload-detail' ).html( uploadIncompleteTemplate( { upload: upload, monument: monument, photo: photo } ) ).localize();
 						$( '#incomplete-upload-detail .monumentLink' ).
@@ -876,6 +992,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 							alert( mw.message( 'upload-incomplete-nyi' ).plain() );
 						} );
 						showPage( 'incomplete-upload-detail-page' );
+					} );
+					
+					$uploadItem.find( 'input' ).click( function( event ) {
+						// wheeee
+						event.stopPropagation();
 					} );
 					$list.append( $uploadItem );
 					
