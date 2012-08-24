@@ -74,7 +74,7 @@ define( [ 'jquery' ], function( $ ) {
 	}
 
 	function requestUploadsForUser( username, completed ) {
-		var querySQL = 'SELECT * FROM completed_uploads WHERE username = ? AND completed = ?';
+		var querySQL = 'SELECT * FROM completed_uploads WHERE username = ? AND completed = ? ORDER BY timestamp DESC';
 		return query( querySQL, [ username, completed ] );
 	}
 
