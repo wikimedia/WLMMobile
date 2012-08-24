@@ -245,7 +245,11 @@ li {
 
 li a {
 	display: block;
-	padding: 10px 5px;
+	padding: 20px 5px;
+}
+
+li a:hover {
+	opacity: 0.5;
 }
 
 button {
