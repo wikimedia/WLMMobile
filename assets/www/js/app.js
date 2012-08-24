@@ -919,6 +919,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					var photo = JSON.parse( upload.photo );
 					var $uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
 
+					photo.data.fileUrl = WLMConfig.WIKI_BASE + 'File:' + encodeURIComponent( photo.data.fileTitle );
 					$uploadItem.click( function() {
 						$( '#completed-upload-detail' ).html( uploadCompleteTemplate( { upload: upload, monument: monument, photo: photo } ) );
 						$( '#completed-upload-detail .monumentLink' ).
