@@ -365,15 +365,18 @@ ul.buttons li.small-button button {
 }
 
 .monuments-sorter li button.selected {
-	opacity: 0.4;
+	background-color: #DC3838;
+	font-weight: bold;
+	border: solid 1px #222;
 }
 
 button.requires-location {
-	display: none;
+	opacity: 0.1;
 }
 
 .locationAvailable button.requires-location {
 	display: inline-block;
+	opacity: 1;
 }
 
 .monuments-list .monument-detail {

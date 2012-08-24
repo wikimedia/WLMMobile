@@ -291,6 +291,30 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		return distance;
 	}
 
+	function getPosition( callback, errback ) {
+		var page = getCurrentPage();
+		showPage( 'locationlookup-page' );
+		navigator.geolocation.getCurrentPosition( function( pos ) {
+			userLocation = pos;
+			currentSortMethod = 'distance';
+			$( 'html' ).addClass( 'locationAvailable' );
+			if ( getCurrentPage() === 'locationlookup-page' ) { // check user didn't escape page
+				showPage( page );
+				callback( pos );
+			}
+		}, function( err ) {
+			if ( getCurrentPage() === 'locationlookup-page' ) { // check user didn't escape page
+				displayError( mw.msg( 'geolocating-failed-heading') , mw.msg( 'geolocating-failed-text' ) );
+			}
+			if ( errback ) {
+				errback();
+			}
+		}, {
+			enableHighAccuracy: true,
+			timeout: 20000 // give up looking up location.. maybe they are in airplane mode
+		} );
+	}
+
 	function showMonumentsList(monuments) {
 
 		var infiniteScrollAjax;
@@ -327,12 +351,23 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		$( '#monuments-sort' ).html(
 			templates.getTemplate( 'monument-list-heading' )()
 		).localize();
-		$( '#monuments-sort button' ).click( function() {
-			$( '#results' ).empty();
-			currentSortMethod = $( this ).data( 'sortby' );
+
+		function sort() {
 			window.setTimeout( function() { // use timeout for smoother experience
 				showMonumentsList( $( '#results' ).data( 'monuments' ) );
 			}, 0 );
+		}
+
+		$( '#monuments-sort button' ).click( function() {
+			$( '#results' ).empty();
+			currentSortMethod = $( this ).data( 'sortby' );
+			if ( $( this ).hasClass( 'requires-location' ) ) {
+				getPosition( function( pos ) {
+					sort();
+				} );
+			} else {
+				sort();
+			}
 		}).each( function() {
 			if( $( this ).data( 'sortby' ) === currentSortMethod ) {
 				$( this ).addClass( 'selected' );
@@ -369,8 +404,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			});
 			
 			if( monument.distance ) {
+				msg = monument.distance > 200 ? mw.msg( 'monument-distance-tofar' ) : mw.msg( 'monument-distance-km', this.distance );
 				$( '<div class="distance" />' ).
-					text( mw.msg( 'monument-distance-km', this.distance ) ).appendTo( $( 'a', $monumentItem ) );
+					text( msg ).appendTo( $( 'a', $monumentItem ) );
 			}
 			$monumentItem.appendTo('#results').click(function() {
 				showMonumentDetail(monument);
@@ -1145,23 +1181,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		$( "#filter-campaign" ).on( 'input', filterCampaigns );
 
 		$('#nearby').click(function() {
-			showPage( 'locationlookup-page' );
-			navigator.geolocation.getCurrentPosition(function(pos) {
+			getPosition( function( pos ) {
+				showPage( 'map-page' );
 				$("#results").empty();
-				userLocation = pos;
-				currentSortMethod = 'distance';
-				$( 'html' ).addClass( 'locationAvailable' );
-				if ( getCurrentPage() === 'locationlookup-page' ) { // check user didn't escape page
-					showMonumentsForPosition( pos.coords.latitude, pos.coords.longitude );
-				}
-			}, function(err) {
-				if ( getCurrentPage() === 'locationlookup-page' ) { // check user didn't escape page
-					displayError( mw.msg( 'geolocating-failed-heading') , mw.msg( 'geolocating-failed-text' ) );
-				}
-			},{
-				enableHighAccuracy: true,
-				timeout: 20000 // give up looking up location.. maybe they are in airplane mode
-			});
+				showMonumentsForPosition( pos.coords.latitude, pos.coords.longitude );
+			} );
 		});
 
 		// upload-page
@@ -1241,6 +1265,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		app: {
 			clearHistory: clearHistory,
 			getCurrentPage: getCurrentPage,
+			getPosition: getPosition,
 			goBack: goBack,
 			listCampaigns: listCampaigns,
 			showMonumentsForPosition: showMonumentsForPosition,
