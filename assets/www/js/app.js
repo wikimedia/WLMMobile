@@ -144,7 +144,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 
 	function showPage( pageName, deferred ) {
-		$( window ).scroll( 0, 0 ); // scroll to top
 		var subPage, heading;
 		addToHistory( pageName );
 		curPageName = pageName;
@@ -156,7 +155,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		var $page = $("#" + pageName); 
 		$('.page, .popup-container-container').hide(); // hide existing popups
-		$page.show();
+		$page.show()[ 0 ].scrollIntoView();
 		$( 'select', $page ).val( pageName ); // reset to the top item in the list
 		if( deferred ) {
 			$page.addClass( 'loading' );
