@@ -624,18 +624,21 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			queue.push( photo );
 		} );
 
-		// Delete in sequence!
-		function iter() {
-			if ( queue.length > 0 ) {
-				var photo = queue.pop();
-				db.deleteUpload( photo ).then( function() {
-					iter();
-				} );
-			} else {
-				showIncompleteUploads();
+		// @todo replace confirm() with a nicer in-app dialog?
+		if ( window.confirm( mw.message( 'delete-selected-prompt', queue.length ).plain() ) ) {
+			// Delete in sequence!
+			function iter() {
+				if ( queue.length > 0 ) {
+					var photo = queue.pop();
+					db.deleteUpload( photo ).then( function() {
+						iter();
+					} );
+				} else {
+					showIncompleteUploads();
+				}
 			}
+			iter();
 		}
-		iter();
 	} );
 	
 	$( '#upload-all' ).click( function() {
