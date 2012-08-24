@@ -638,7 +638,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 						iter();
 					} );
 				} else {
-					showIncompleteUploads();
+					showUploads();
 				}
 			}
 			iter();
@@ -662,7 +662,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				var item = queue.pop(),
 					photo = item.photo,
 					monument = item.monument;
-				// @fixme refactor and share more code -- missing error handling
 				comment = 'Batch upload'; // ????
 				photo.uploadTo( api, comment ).done( function( imageinfo ) {
 					db.completeUpload( photo ).done( function() {
@@ -675,9 +674,20 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					} else if ( state === 'in-progress' ) {
 						$("#upload-progress-state").html(mw.msg("upload-progress-in-progress"));
 					}
+				} ).fail( function( data ) {
+					// @todo show error data here
+					if (data == "Aborted") {
+						// no-op
+						console.log( "Upload got aborted." );
+					} else {
+						// @fixme refactor and share more code -- missing error handling
+						alert( 'Error during upload' );
+					}
+					showPage( 'incomplete-uploads-page' );
 				} );
 			} else {
-				showPage( 'incomplete-uploads-page' );
+				// Show your now-completed uploads.
+				showPage( 'uploads-page' );
 			}
 		}
 		iter();
