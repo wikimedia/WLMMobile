@@ -438,6 +438,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				mapFocusNeeded = false;
 				return;
 			}
+			$( '#map-page .mapLoader' ).addClass( 'loading' );
 			console.log( 'update map with new monuments' );
 			var pos = ev.target.getBounds(),
 				nw = pos.getNorthWest(),
@@ -448,6 +449,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			window.clearTimeout( searchTimeout );
 			searchTimeout = window.setTimeout( function() {
 				lastRequest = monuments.getInBoundingBox( nw.lng, se.lat, se.lng, nw.lat ).done( function( monuments ) {
+					$( '#map-page .mapLoader' ).removeClass( 'loading' );
 					geo.clear();
 					if ( monuments.length > 0 ) {
 						addMonuments( monuments );
