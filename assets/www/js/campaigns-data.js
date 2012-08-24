@@ -102,23 +102,61 @@ window.CAMPAIGNS = {
         "isenabled": 1, 
         "desc": "Estonia", 
         "config": {
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-ee-id/$1", 
+            "idField2Label": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "idField2LabelPage": "", 
             "defaultLon": "", 
-            "idFieldLabel": "", 
-            "idField": "{{Kultuurim\u00e4lestis|$1}}", 
-            "defaultAlt": "", 
             "defaultCategories": [
                 "Cultural heritage monuments in Estonia"
             ], 
-            "skipTutorial": "1", 
-            "defaultDescription": "", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0-ee", 
-            "tutorialWidth": "720", 
-            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "idField2InitialValue": "", 
             "licensesOwnWork": [
                 "cc-by-sa-3.0-ee"
             ], 
+            "idField2": "", 
+            "ownWorkOption": "own", 
+            "idFieldMaxLength": "25", 
+            "idField": "{{Kultuurim\u00e4lestis|$1}}", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0-ee", 
+            "tutorialWidth": "720", 
+            "idField2MaxLength": "25", 
+            "idFieldInitialValue": "", 
             "defaultLat": "", 
-            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-ee-id/$1", 
+            "idFieldLabel": "Number kultuurim\u00e4lestiste riiklikus registris", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1", 
+            "defaultAlt": "", 
+            "skipTutorial": "1", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "autoCategories": [], 
+            "autoWikiText": "", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384"
+        }, 
+        "name": "ee", 
+        "id": 15
+    }, 
+    "il": {
+        "isenabled": 0, 
+        "desc": "Israel", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "\u05de\u05e1\u05e4\u05e8 \u05d4\u05d0\u05ea\u05e8", 
+            "idField": "{{National heritage site in Israel|$1}}", 
+            "defaultAlt": "", 
+            "defaultCategories": [
+                "National heritage sites in Israel"
+            ], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "720", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-il-id/$1", 
             "idFieldInitialValue": "", 
             "autoCategories": [], 
             "autoWikiText": "", 
@@ -128,45 +166,8 @@ window.CAMPAIGNS = {
             "idFieldMaxLength": "25", 
             "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
         }, 
-        "name": "ee", 
-        "id": 15
-    }, 
-    "at": {
-        "isenabled": 1, 
-        "desc": "Austria", 
-        "config": {
-            "defaultLon": "", 
-            "idFieldLabel": "Objekt ID", 
-            "idField": "{{Denkmalgesch\u00fctztes Objekt \u00d6sterreich|1=$1}}", 
-            "defaultAlt": "", 
-            "defaultCategories": [
-                "Cultural heritage monuments in Austria"
-            ], 
-            "skipTutorial": "1", 
-            "defaultDescription": "", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0-at", 
-            "tutorialWidth": "720", 
-            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
-            "licensesOwnWork": [
-                "cc-by-sa-3.0", 
-                "cc-by-sa-3.0-at", 
-                "cc-zero"
-            ], 
-            "defaultLat": "", 
-            "idFieldLabelPage": "", 
-            "idFieldInitialValue": "", 
-            "autoCategories": [
-                "Cultural heritage monuments in Austria needing check"
-            ], 
-            "autoWikiText": "", 
-            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
-            "ownWorkOption": "own", 
-            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25", 
-            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
-        }, 
-        "name": "at", 
-        "id": 12
+        "name": "il", 
+        "id": 68
     }, 
     "es": {
         "isenabled": 1, 
@@ -302,6 +303,79 @@ window.CAMPAIGNS = {
         }, 
         "name": "no", 
         "id": 11
+    }, 
+    "cl": {
+        "isenabled": 1, 
+        "desc": "Chile", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "ID del Monumento Nacional", 
+            "idField": "{{Monumento Nacional de Chile|$1}}", 
+            "defaultAlt": "", 
+            "defaultCategories": [
+                "National monuments in Chile"
+            ], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "720", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "Template:Upload campaign id wlm-cl/$1", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [], 
+            "autoWikiText": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+        }, 
+        "name": "cl", 
+        "id": 62
+    }, 
+    "us-ca": {
+        "isenabled": 1, 
+        "desc": "California, United States", 
+        "config": {
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-us-ca-id/$1", 
+            "idField2Label": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "idField2LabelPage": "", 
+            "defaultLon": "", 
+            "defaultCategories": [
+                "California Historical Landmarks"
+            ], 
+            "idField2InitialValue": "", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0", 
+                "cc-by-3.0", 
+                "cc-zero"
+            ], 
+            "idField2": "", 
+            "ownWorkOption": "own", 
+            "idFieldMaxLength": "25", 
+            "idField": "{{US-CHL|$1}}", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "720", 
+            "idField2MaxLength": "25", 
+            "idFieldInitialValue": "", 
+            "defaultLat": "", 
+            "idFieldLabel": "California Historical Landmark listing ID", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1", 
+            "defaultAlt": "", 
+            "skipTutorial": "1", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "autoCategories": [], 
+            "autoWikiText": "", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384"
+        }, 
+        "name": "us-ca", 
+        "id": 77
     }, 
     "pa": {
         "isenabled": 1, 
@@ -602,6 +676,41 @@ window.CAMPAIGNS = {
         "name": "by", 
         "id": 61
     }, 
+    "rs": {
+        "isenabled": 1, 
+        "desc": "Serbia", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "", 
+            "idField": "{{WLM-identifier|rs|$1}}", 
+            "defaultAlt": "", 
+            "defaultCategories": [
+                "Cultural heritage monuments in Serbia"
+            ], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "720", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0", 
+                "cc-by-3.0", 
+                "cc-zero"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-rs-id/$1", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [], 
+            "autoWikiText": "", 
+            "thanksLabelPage": "", 
+            "ownWorkOption": "own", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+        }, 
+        "name": "rs", 
+        "id": 71
+    }, 
     "us": {
         "isenabled": 1, 
         "desc": "United States", 
@@ -739,28 +848,70 @@ window.CAMPAIGNS = {
         "id": 33
     }, 
     "se": {
-        "isenabled": 1, 
+        "isenabled": 0, 
         "desc": "Sweden", 
         "config": {
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-se-id/$1", 
+            "idField2Label": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "idField2LabelPage": "", 
             "defaultLon": "", 
-            "idFieldLabel": "", 
-            "idField": "{{BBR|$1}}", 
-            "defaultAlt": "", 
             "defaultCategories": [
                 "Protected buildings in Sweden"
             ], 
-            "skipTutorial": "1", 
-            "defaultDescription": "", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
-            "tutorialWidth": "720", 
-            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "idField2InitialValue": "", 
             "licensesOwnWork": [
                 "cc-by-sa-3.0"
             ], 
-            "defaultLat": "", 
-            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-se-id/$1", 
+            "idField2": "", 
+            "ownWorkOption": "own", 
+            "idFieldMaxLength": "25", 
+            "idField": "{{BBR|$1}}", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "720", 
+            "idField2MaxLength": "25", 
             "idFieldInitialValue": "", 
+            "defaultLat": "", 
+            "idFieldLabel": "", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1", 
+            "defaultAlt": "", 
+            "skipTutorial": "1", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
             "autoCategories": [], 
+            "autoWikiText": "", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384"
+        }, 
+        "name": "se", 
+        "id": 38
+    }, 
+    "at": {
+        "isenabled": 1, 
+        "desc": "Austria", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "Objekt ID", 
+            "idField": "{{Denkmalgesch\u00fctztes Objekt \u00d6sterreich|1=$1}}", 
+            "defaultAlt": "", 
+            "defaultCategories": [
+                "Cultural heritage monuments in Austria"
+            ], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0-at", 
+            "tutorialWidth": "720", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0", 
+                "cc-by-sa-3.0-at", 
+                "cc-zero"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [
+                "Cultural heritage monuments in Austria needing check"
+            ], 
             "autoWikiText": "", 
             "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
             "ownWorkOption": "own", 
@@ -768,7 +919,7 @@ window.CAMPAIGNS = {
             "idFieldMaxLength": "25", 
             "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
         }, 
-        "name": "se", 
-        "id": 38
+        "name": "at", 
+        "id": 12
     }
 }
