@@ -639,7 +639,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 						iter();
 					} );
 				} else {
-					showUploads();
+					showIncompleteUploads();
 				}
 			}
 			iter();
