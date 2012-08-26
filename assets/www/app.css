@@ -333,6 +333,7 @@ header h2 input[type='text'] {
 header .back {
 	display: block;
 	background: url('images/button-dark-back.png') no-repeat;
+	background-size: 20px 31px;
 	width: 36px;
 	height: 48px;
 	margin-left: 5px;
