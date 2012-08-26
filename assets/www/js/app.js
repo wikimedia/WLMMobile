@@ -987,9 +987,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 							click( function() {
 								showMonumentDetail( $( this ).data( 'monument' ) );
 							} );
-						$( '#incomplete-upload-detail .upload-incomplete' ).click( function() {
-							alert( mw.message( 'upload-incomplete-nyi' ).plain() );
-						} );
 						showPage( 'incomplete-upload-detail-page' );
 					} );
 					
