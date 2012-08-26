@@ -411,8 +411,8 @@ button.requires-location {
 	font-size: 12px;
 }
 .monuments-list .monument-thumbnail {
-	width: 64px;
-	height: 64px;
+	max-width: 64px;
+	max-height: 64px;
 }
 
 .monuments-list .distance {
