@@ -51,6 +51,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	
 	var uploadsRendered = 0, // For display caching: compare vs db.dirty
 		incompleteUploadsRendered = 0;
+	
+	var thumbSize = 64 * window.devicePixelRatio;
 
 	var pageHistory = []; // TODO: retain history
 	var blacklist = [];
@@ -341,7 +343,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		$( '#results' ).empty();
 		var monumentTemplate = templates.getTemplate('monument-list-item-template');	
-		var listThumbFetcher = commonsApi.getImageFetcher(64, 64);
+		var listThumbFetcher = commonsApi.getImageFetcher( thumbSize, thumbSize );
 		$( '#results' ).data( 'monuments', monuments );
 		if( monuments.length === 0 ) {
 			$( templates.getTemplate( 'monument-list-empty-template' )() ).
@@ -910,7 +912,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		db.requestUploadsForUser( username, db.UPLOAD_COMPLETE ).done( function( uploads ) {
 			$list.empty();
 			if( uploads.length ) {
-				var thumbFetcher = api.getImageFetcher( 64, 64 ); // important: use same API we upload to!
+				var thumbFetcher = api.getImageFetcher( thumbSize, thumbSize ); // important: use same API we upload to!
 				var uploadsTemplate = templates.getTemplate( 'upload-list-item-template' );
 				var uploadCompleteTemplate = templates.getTemplate( 'upload-completed-item-detail-template' );
 				$.each( uploads, function( i, upload ) {
@@ -1000,10 +1002,21 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					var img = new Image(),
 						$img = $( img );
 					$img.attr( 'src', photo.data.contentURL ).load( function() {
-						var $canvas = $( '<canvas width=64 height=64>' ),
+						var ratio = img.width / img.height;
+						var thumbWidth, thumbHeight;
+						if ( ratio >= 1 ) {
+							thumbWidth = thumbSize;
+							thumbHeight = Math.floor( thumbSize / ratio );
+						} else {
+							thumbHeight = thumbSize;
+							thumbWidth = Math.floor( thumbSize * ratio );
+						}
+						var $canvas = $( '<canvas>' )
+								.attr( 'width', thumbWidth )
+								.attr( 'height', thumbHeight )
+								.addClass( 'monument-thumbnail' ),
 							ctx = $canvas[0].getContext( '2d' );
-						// @fixme fix the aspect ratio
-						ctx.drawImage( img, 0, 0, 64, 64 );
+						ctx.drawImage( img, 0, 0, thumbWidth, thumbHeight );
 						$uploadItem.find('img.monument-thumbnail').replaceWith( $canvas );
 					} );
 
