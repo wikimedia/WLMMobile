@@ -961,6 +961,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			$buttons.attr( 'disabled', 'disabled' );
 
 			if( uploads.length ) {
+				$( '#select-all' ).removeAttr( 'disabled' );
 				var uploadsTemplate = templates.getTemplate( 'upload-incomplete-list-item-template' );
 				var uploadIncompleteTemplate = templates.getTemplate( 'upload-incomplete-item-detail-template' );
 				$.each( uploads, function( i, upload ) {
@@ -1011,6 +1012,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					translateAdminLevels( $uploadItem, monument );
 				} );
 			} else {
+				$( '#select-all' ).attr( 'disabled', true );
 				var emptyUploadTemplate = templates.getTemplate( 'upload-incomplete-list-empty-template' );
 				$list.html( emptyUploadTemplate() ).localize();
 			}
