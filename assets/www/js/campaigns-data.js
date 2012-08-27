@@ -171,17 +171,48 @@ window.CAMPAIGNS = {
         "name": "ca", 
         "id": 60
     }, 
-    "il": {
-        "isenabled": 0, 
-        "desc": "Israel", 
+    "cz": {
+        "isenabled": 1, 
+        "desc": "Czech Republic", 
         "config": {
             "defaultLon": "", 
-            "idFieldLabel": "\u05de\u05e1\u05e4\u05e8 \u05d4\u05d0\u05ea\u05e8", 
-            "idField": "{{National heritage site in Israel|$1}}", 
+            "idFieldLabel": "Rejst\u0159\u00edkov\u00e9 \u010d\u00edslo pam\u00e1tky dle NP\u00da (v\u010detn\u011b lom\u00edtka) ", 
+            "idField": "{{Cultural Heritage Czech Republic|$1}}", 
             "defaultAlt": "", 
-            "defaultCategories": [
-                "National heritage sites in Israel"
+            "defaultCategories": [], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "720", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0", 
+                "cc-by-3.0", 
+                "cc-zero"
             ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [], 
+            "autoWikiText": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "own", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+        }, 
+        "name": "cz", 
+        "id": 63
+    }, 
+    "ar": {
+        "isenabled": 1, 
+        "desc": "Argentina", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "ID del monumento", 
+            "idField": "{{Monumento Argentino|$1}}", 
+            "defaultAlt": "", 
+            "defaultCategories": [], 
             "skipTutorial": "1", 
             "defaultDescription": "", 
             "defaultOwnWorkLicence": "cc-by-sa-3.0", 
@@ -191,7 +222,7 @@ window.CAMPAIGNS = {
                 "cc-by-sa-3.0"
             ], 
             "defaultLat": "", 
-            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-il-id/$1", 
+            "idFieldLabelPage": "Template:Upload campaign id wlm-ar/$1", 
             "idFieldInitialValue": "", 
             "autoCategories": [], 
             "autoWikiText": "", 
@@ -199,7 +230,45 @@ window.CAMPAIGNS = {
             "ownWorkOption": "own", 
             "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
             "idFieldMaxLength": "25", 
-            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+            "headerLabelPage": "Template:Upload campaign header wlm-ar/$1"
+        }, 
+        "name": "ar", 
+        "id": 72
+    }, 
+    "il": {
+        "isenabled": 1, 
+        "desc": "Israel", 
+        "config": {
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-il-id/$1", 
+            "idField2Label": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "idField2LabelPage": "", 
+            "defaultLon": "", 
+            "defaultCategories": [
+                "National heritage sites in Israel"
+            ], 
+            "idField2InitialValue": "", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0"
+            ], 
+            "idField2": "", 
+            "ownWorkOption": "own", 
+            "idFieldMaxLength": "25", 
+            "idField": "{{National heritage site in Israel|$1}}", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "720", 
+            "idField2MaxLength": "25", 
+            "idFieldInitialValue": "", 
+            "defaultLat": "", 
+            "idFieldLabel": "\u05de\u05e1\u05e4\u05e8 \u05d4\u05d0\u05ea\u05e8", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1", 
+            "defaultAlt": "", 
+            "skipTutorial": "1", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "autoCategories": [], 
+            "autoWikiText": "", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384"
         }, 
         "name": "il", 
         "id": 68
@@ -332,10 +401,12 @@ window.CAMPAIGNS = {
         "config": {
             "idFieldLabelPage": "", 
             "idField2Label": "", 
-            "thanksLabelPage": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/ak", 
             "idField2LabelPage": "", 
             "defaultLon": "", 
-            "defaultCategories": [], 
+            "defaultCategories": [
+                "Ghana Historical Landmarks"
+            ], 
             "idField2InitialValue": "", 
             "licensesOwnWork": [
                 "cc-by-sa-3.0", 
@@ -343,16 +414,16 @@ window.CAMPAIGNS = {
                 "cc-zero"
             ], 
             "idField2": "", 
-            "ownWorkOption": "choice", 
+            "ownWorkOption": "own", 
             "idFieldMaxLength": "25", 
-            "idField": "", 
+            "idField": "{{GH|ak}}", 
             "defaultDescription": "", 
             "defaultOwnWorkLicence": "cc-by-sa-3.0", 
             "tutorialWidth": "720", 
             "idField2MaxLength": "25", 
             "idFieldInitialValue": "", 
             "defaultLat": "", 
-            "idFieldLabel": "", 
+            "idFieldLabel": "Ghana\u2019s material cultural heritage number", 
             "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August", 
             "defaultAlt": "", 
             "skipTutorial": "", 
@@ -1093,6 +1164,37 @@ window.CAMPAIGNS = {
         }, 
         "name": "be-bru", 
         "id": 33
+    }, 
+    "mx": {
+        "isenabled": 1, 
+        "desc": "Mexico", 
+        "config": {
+            "defaultLon": "", 
+            "idFieldLabel": "ID del monumento", 
+            "idField": "{{Monumento de M\u00e9xico|$1}}", 
+            "defaultAlt": "", 
+            "defaultCategories": [], 
+            "skipTutorial": "1", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "720", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0"
+            ], 
+            "defaultLat": "", 
+            "idFieldLabelPage": "Template:Upload campaign id wlm-mx/$1", 
+            "idFieldInitialValue": "", 
+            "autoCategories": [], 
+            "autoWikiText": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "ownWorkOption": "choice", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
+            "idFieldMaxLength": "25", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+        }, 
+        "name": "mx", 
+        "id": 73
     }, 
     "se": {
         "isenabled": 0, 
