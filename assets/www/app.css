@@ -6,6 +6,10 @@
 	box-sizing: border-box;
 }
 
+html {
+	font-size: 100%;
+}
+
 body {
 	font-family: "Roboto", "Droid Sans", "Helvetica";
 	padding: 0;
@@ -191,7 +195,8 @@ a.upload {
 }
 
 .page header h2 {
-	font-size: 18px;
+	margin: 0;
+	font-size: 1.2em;
 	margin-left: 5px;
 	-webkit-box-flex: 1;
 }
@@ -335,7 +340,7 @@ header .back {
 	background: url('images/button-dark-back.png') no-repeat;
 	background-size: 20px 31px;
 	width: 36px;
-	height: 48px;
+	height: 100%;
 	margin-left: 5px;
 	background-position: left center;
 }
