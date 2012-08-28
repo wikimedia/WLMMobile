@@ -966,6 +966,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				$( '#select-all' ).removeAttr( 'disabled' );
 				var uploadsTemplate = templates.getTemplate( 'upload-incomplete-list-item-template' );
 				var uploadIncompleteTemplate = templates.getTemplate( 'upload-incomplete-item-detail-template' );
+				var thumbQueue = [];
 				$.each( uploads, function( i, upload ) {
 					var monument = JSON.parse( upload.monument );
 					var photo = JSON.parse( upload.photo );
@@ -998,32 +999,48 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 						event.stopPropagation();
 					} );
 					$list.append( $uploadItem );
-					
+
 					// Create thumbnails from the originals so we don't have to keep them all in RAM
-					var img = new Image(),
-						$img = $( img );
-					$img.attr( 'src', photo.data.contentURL ).load( function() {
-						var ratio = img.width / img.height;
-						var thumbWidth, thumbHeight;
-						if ( ratio >= 1 ) {
-							thumbWidth = thumbSize;
-							thumbHeight = Math.floor( thumbSize / ratio );
-						} else {
-							thumbHeight = thumbSize;
-							thumbWidth = Math.floor( thumbSize * ratio );
-						}
-						var $canvas = $( '<canvas>' )
-								.attr( 'width', thumbWidth )
-								.attr( 'height', thumbHeight )
-								.addClass( 'monument-thumbnail' ),
-							ctx = $canvas[0].getContext( '2d' );
-						ctx.drawImage( img, 0, 0, thumbWidth, thumbHeight );
-						$uploadItem.find('img.monument-thumbnail').replaceWith( $canvas );
+					// Serialize loads & draws in a queue so we don't freeze the screen drawing them all at once. 
+					thumbQueue.push( function() {
+						var img = new Image(),
+							$img = $( img ),
+							d = $.Deferred();
+						$img.attr( 'src', photo.data.contentURL ).load( function() {
+							var ratio = img.width / img.height;
+							var thumbWidth, thumbHeight;
+							if ( ratio >= 1 ) {
+								thumbWidth = thumbSize;
+								thumbHeight = Math.floor( thumbSize / ratio );
+							} else {
+								thumbHeight = thumbSize;
+								thumbWidth = Math.floor( thumbSize * ratio );
+							}
+							var $canvas = $( '<canvas>' )
+									.attr( 'width', thumbWidth )
+									.attr( 'height', thumbHeight )
+									.addClass( 'monument-thumbnail' ),
+								ctx = $canvas[0].getContext( '2d' );
+							ctx.drawImage( img, 0, 0, thumbWidth, thumbHeight );
+							$uploadItem.find('img.monument-thumbnail').replaceWith( $canvas );
+							d.resolve();
+						} );
+						return d.promise();
 					} );
 
 					// Translate administrative level codes into proper text
 					translateAdminLevels( $uploadItem, monument );
 				} );
+				
+				function iterThumbQueue() {
+					if ( thumbQueue.length > 0 ) {
+						var func = thumbQueue.shift();
+						func().done( function() {
+							window.setTimeout( iterThumbQueue, 0 );
+						} );
+					}
+				}
+				iterThumbQueue();
 			} else {
 				$( '#select-all' ).attr( 'disabled', true );
 				var emptyUploadTemplate = templates.getTemplate( 'upload-incomplete-list-empty-template' );
