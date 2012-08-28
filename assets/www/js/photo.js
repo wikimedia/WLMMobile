@@ -26,12 +26,12 @@ define( [ 'jquery' ], function( $ ) {
 			mwApi.finishUpload( fileKey, data.fileTitle, comment, data.fileContent, token ).done( function( imageinfo ) {
 
 				d.resolve( imageinfo );
-			} ).fail( function() {
-				d.reject( arguments );
+			} ).fail( function( errorMsg ) {
+				d.reject( errorMsg );
 			} );
 
-		} ).fail( function() {
-			d.reject( arguments );
+		} ).fail( function( errorMsg ) {
+			d.reject( errorMsg );
 		} );
 		return d;
 	};

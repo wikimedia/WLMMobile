@@ -219,7 +219,11 @@ define(['jquery'], function() {
 				window.clearTimeout( progressTimeout );
 				console.log("upload error source " + error.source);
 				console.log("upload error target " + error.target);
-				d.reject("HTTP error");
+				if ( xhr.statusText === 'abort' ) {
+					d.reject( 'Aborted' );
+				} else {
+					d.reject( 'HTTP error' );
+				}
 			});
 		}
 		if( token ) {
