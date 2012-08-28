@@ -215,11 +215,13 @@ define(['jquery'], function() {
 				} else {
 					d.reject("Upload did not succeed");
 				}
-			}).fail(function(xhr, error) {
+			} ).fail( function( xhr ) {
 				window.clearTimeout( progressTimeout );
-				console.log("upload error source " + error.source);
-				console.log("upload error target " + error.target);
-				d.reject("HTTP error");
+				if ( xhr.statusText === 'abort' ) {
+					d.reject( 'Aborted' );
+				} else {
+					d.reject( 'HTTP error' );
+				}
 			});
 		}
 		if( token ) {
