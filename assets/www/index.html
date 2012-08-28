@@ -72,7 +72,7 @@
 		</p>
 		<img class='uploaded-image-full' src='<%= photo.data.contentURL %>' />
 		<div class='uploaded-image-details'>
-			<a><%= photo.data.fileTitle %></a>
+			<a href="<%= photo.data.fileUrl %>"><%= photo.data.fileTitle %></a>
 		</div>
 	</script>
 	<script type='text/html' id='upload-incomplete-item-detail-template'>
@@ -84,7 +84,7 @@
 		</p>
 		<img class='uploaded-image-full' width='320' src='<%= photo.data.contentURL %>' />
 		<div class='uploaded-image-details'>
-			<a><%= photo.data.fileTitle %></a>
+			<span><%= photo.data.fileTitle %></span>
 		</div>
 	</script>
 	<script type="text/html" id="monument-list-item-template">
