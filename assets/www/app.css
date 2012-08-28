@@ -465,16 +465,16 @@ button.myLocation,
 button.myLocation {
 	position: absolute;
 	z-index: 6;
-	width: 20px;
-	height: 20px;
+	width: 30px;
+	height: 30px;
 	overflow: hidden;
 	text-indent: -999px;
 	border: solid 1px #AAA;
 	background-color: white;
 	border-radius: 2px;
 	padding: 0;
-	top: 100px;
-	left: 14px;
+	top: 120px;
+	left: 24px;
 	background-repeat: no-repeat;
 	background-image: url(images/dot.png);
 	background-position: center center;
@@ -486,6 +486,15 @@ button.myLocation.loading {
 	background-size: 12px 12px;
 	background-repeat: no-repeat;
 	background-position: center;
+}
+
+.leaflet-control-zoom {
+	padding: 8px;
+}
+
+.leaflet-control-zoom a {
+	width: 40px !important;
+	height: 40px !important;
 }
 
 /* Monument details styles */
