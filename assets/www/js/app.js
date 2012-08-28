@@ -1295,7 +1295,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				// Do nothing.
 			}, {
 				// options
-				destinationType: Camera.DestinationType.FILE_URI
+				destinationType: Camera.DestinationType.FILE_URI,
+				saveToPhotoAlbum: true
 			});
 		});
 		$('#selectphoto').click(function() {
