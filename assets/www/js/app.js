@@ -683,11 +683,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					if (data == "Aborted") {
 						// no-op
 						console.log( "Upload got aborted." );
+						showPage( 'incomplete-uploads-page' );
 					} else {
-						// @fixme refactor and share more code -- missing error handling
-						alert( 'Error during upload' );
+						uploadErrorHandler( data );
 					}
-					showPage( 'incomplete-uploads-page' );
 				} );
 			} else {
 				// Show your now-completed uploads.
