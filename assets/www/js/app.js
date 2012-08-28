@@ -515,9 +515,15 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				code = mw.msg( 'failure-upload-token-heading' );
 				info = mw.msg( 'failure-upload-token-text' );
 				break;
+			case 'verification-error':
+				if ( data.error.details && data.error.details[ 0 ] === 'filetype-mime-mismatch' ) {
+					code = mw.msg( 'failure-upload-filetype-heading' );
+					info = mw.msg( 'failure-upload-filetype-text' );
+				}
+				break;
 		}
-		$( '#upload-progress-state' ).html( mw.msg( 'upload-progress-failed' ) );
-		return displayError( code, info );
+		goBack(); // exit upload progress bar screen
+		return displayError( code, info, info ? true : false );
 	}
 
 	function showPhotoConfirmation(fileUrl) {
