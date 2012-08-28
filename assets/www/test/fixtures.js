@@ -22,7 +22,15 @@ var DUMMY_TEMPLATES = {
 	'monument-list-heading': '<div></div>',
 	'upload-list-empty-template': EMPTY_TEMPLATE,
 	'results-page': [ '<select class="toggle-page"><option value="results-page">list</option>',
-	 	'<option value="map-page-stub">map</option></select>' ].join( '' )
+	 	'<option value="map-page-stub">map</option></select>' ].join( '' ),
+	'welcome-page': EMPTY_TEMPLATE,
+	'country-page': EMPTY_TEMPLATE,
+	'detail-page' : EMPTY_TEMPLATE,
+	'map-page': EMPTY_TEMPLATE,
+	'upload-page': EMPTY_TEMPLATE,
+	'uploads-page': EMPTY_TEMPLATE,
+	'campaign-page': EMPTY_TEMPLATE,
+	'login-page': EMPTY_TEMPLATE
 };
 var DUMMY_TEMPLATE_SCRIPTS = [ 'country-list-template' ]
 
