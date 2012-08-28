@@ -30,7 +30,7 @@ body {
 }
 
 .mapLoader.loading,
-#monument-detail.loading,
+#monument-detail.loading .photo,
 #results li.loading,
 #results .footer.loading,
 .loading #results,
@@ -59,7 +59,7 @@ body {
 	background-position: right center;
 }
 
-#monument-detail.loading {
+#monument-detail.loading .photo {
 	background-position: left center;
 }
 
@@ -71,6 +71,7 @@ body {
 	display: none;
 }
 
+#monument-detail .photo,
 .loading#results-page .content {
 	background: none;
 }
