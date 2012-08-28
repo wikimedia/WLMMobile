@@ -417,7 +417,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		$( "#results" ).data( 'monuments', monuments );
 		// if next property is set then there are more results so allow access to them
-		if ( monuments.next && currentSortMethod !== 'distance' ) {
+		if ( monuments.next && monuments.length > 0 && currentSortMethod !== 'distance' ) {
 			$( '#results' ).addClass( 'incomplete' );
 			$( '<li class="footer"></li>' ).appendTo( '#results' );
 		} else {
