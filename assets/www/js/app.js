@@ -483,11 +483,17 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		addMonuments( monumentList );
 	}
 
-	function displayError( heading, text ) {
+	function displayError( heading, text, hidePreamble ) {
 		showPage( 'error-page' );
 		var info = $( '.error-information' ).empty()[ 0 ];
+		var $preamble = $( '#error-page .generic-error-msg' );
 		$( '<h3 />' ).text( heading ).appendTo( info );
 		$( '<p />' ).html( text ).appendTo( info );
+		if ( hidePreamble ) {
+			$preamble.hide();
+		} else {
+			$preamble.show();
+		}
 		return info;
 	}
 
@@ -753,7 +759,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 							break;
 					}
 					$( "#login-status-message" ).empty();
-					displayError( mw.msg( 'login-failed'), errMsg );
+					displayError( mw.msg( 'login-failed'), errMsg, errMsg ? true : false );
 					fail( status );
 				}
 			}).fail( function( err, textStatus ) {
