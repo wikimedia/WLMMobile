@@ -177,9 +177,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		} else if( pageName === 'campaign-page' ) {
 			// TODO: translate subpage
 			mapFocusNeeded = true; // force a refresh of the map on visiting the country page
-			heading = subPage ? mw.msg( 'choose-campaign' ) + ' (' + translatePageName( decodeURIComponent( subPage ) ) + ')' :
-				mw.msg( 'choose-campaign' );
+			heading = subPage ? mw.msg( 'choose-region' ) + ' (' + translatePageName( decodeURIComponent( subPage ) ) + ')' :
+				mw.msg( 'choose-country' );
 			$page.find( 'h3' ).text( heading );
+			$( '#filter-campaign' ).attr( 'placeholder', subPage ?
+				mw.msg( 'search-region-placeholder' ) : mw.msg( 'search-country-placeholder' ) );
 		} else if ( pageName === 'uploads-page' ) {
 			if( api.loggedIn ) {
 				showUploads();
