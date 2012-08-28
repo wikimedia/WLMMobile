@@ -1201,7 +1201,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 				if ( args.length === 5 ) {
 					console.log( 'searching with bounding box: ' + args.join( ',' ) );
-					monumentSearchReq = monuments.getInBoundingBox.apply( this, args );
+					monumentSearchReq = monuments.getInBoundingBox.apply( monuments, args );
 				} else {
 					console.log( 'searching with campaign ' + campaign.join( ',' ) );
 					monumentSearchReq = monuments.getForAdminLevel( campaign, value );
