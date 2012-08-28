@@ -497,6 +497,29 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		return parts.slice(0, 5).join( '/' ) + '/thumb/'  + parts.slice( 5 ).join( '/' ) + '/180px-' + parts[ parts.length - 1 ];
 	}
 
+	function uploadErrorHandler( data ) {
+		console.log( 'Run error handler on ' + JSON.stringify( data ) );
+		if( data.error ) {
+			code = data.error.code;
+			info = data.error.info;
+		}
+		/*
+		error codes: http://www.mediawiki.org/wiki/API:Errors_and_warnings
+		*/
+		switch ( code ) {
+			case 'permissiondenied':
+				code = mw.msg( 'failure-upload-permissiondenied-heading' );
+				info = mw.msg( 'failure-upload-permissiondenied-text' );
+				break;
+			case 'badtoken':
+				code = mw.msg( 'failure-upload-token-heading' );
+				info = mw.msg( 'failure-upload-token-text' );
+				break;
+		}
+		$( '#upload-progress-state' ).html( mw.msg( 'upload-progress-failed' ) );
+		return displayError( code, info );
+	}
+
 	function showPhotoConfirmation(fileUrl) {
 		var comment = 'Uploaded via WLM Mobile App';
 		var uploadConfirmTemplate = templates.getTemplate('upload-confirm-template');
@@ -548,29 +571,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					console.log( "Upload got aborted." );
 				} else {
 					var code, info, container;
-					// FIXME: remove more horrible hackery around the api
-					if ( data[ "0" ] ) {
-						data = data[ "0" ]; 
-					}
-					if( data.error ) {
-						code = data.error.code;
-						info = data.error.info;
-					}
-					/*
-					error codes: http://www.mediawiki.org/wiki/API:Errors_and_warnings
-					*/
-					switch ( code ) {
-						case 'permissiondenied':
-							code = mw.msg( 'failure-upload-permissiondenied-heading' );
-							info = mw.msg( 'failure-upload-permissiondenied-text' );
-							break;
-						case 'badtoken':
-							code = mw.msg( 'failure-upload-token-heading' );
-							info = mw.msg( 'failure-upload-token-text' );
-							break;
-					}
-					$( '#upload-progress-state' ).html( mw.msg( 'upload-progress-failed' ) );
-					container = displayError( code, info );
+					container = uploadErrorHandler( error );
 					$( 'a.logout', container ).click( function() {
 						showPage( 'logout-progress-page' );
 						api.logout().done(function() {
