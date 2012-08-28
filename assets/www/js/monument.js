@@ -50,11 +50,11 @@ define( [ 'jquery', 'utils' ], function() {
 			return str;
 		}
 		var suffix = ' ' +
-			pad( d.getDate(), 2 ) +
+			pad( d.getFullYear(), 4 ) +
 			'-' +
 			pad( d.getMonth(), 2 ) +
 			'-' +
-			pad( d.getFullYear(), 4 ) +
+			pad( d.getDate(), 2 ) +
 			' ' +
 			pad( d.getHours(), 2 ) +
 			'-' +
