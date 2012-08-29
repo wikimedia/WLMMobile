@@ -42,7 +42,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		title: null
 	};
 	var currentSortMethod = 'name';
+	var watchId;
 	var userLocation; // for keeping track of the user
+	function setUserLocation( pos ) {
+		userLocation = pos;
+		geo.setLocationPointer( pos );
+	}
 
 	var mapFocusNeeded = true; // a global for keeping track of when to auto-focus the map
 
@@ -168,12 +173,29 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		}
 		// special casing for specific pages
 		// TODO: provide generic mechanism for this
+		navigator.geolocation.clearWatch( watchId );
 		var monuments = $( "#results" ).data( 'monuments' );
 		if( monuments && pageName === 'results-page' ) {
 			showMonumentsList( monuments );
 			mapFocusNeeded = true; // force a refresh of the map
-		} else if( monuments && pageName === 'map-page' ) {
-			showMonumentsMap( monuments );
+		} else if ( pageName === 'map-page' ) {
+			// keep an eye on location for the map
+			if ( userLocation ) {
+				watchId = navigator.geolocation.watchPosition(
+					function( pos ) {
+						console.log( 'watching' );
+						setUserLocation( pos );
+					}, function() {
+						console.log( 'issue watching location' );
+					}, {
+						enableHighAccuracy: true,
+						maximumAge: 0
+					} );
+			}
+
+			if ( monuments ) {
+				showMonumentsMap( monuments );
+			}
 		} else if( pageName === 'campaign-page' ) {
 			// TODO: translate subpage
 			mapFocusNeeded = true; // force a refresh of the map on visiting the country page
@@ -298,7 +320,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		var page = getCurrentPage();
 		showPage( 'locationlookup-page' );
 		navigator.geolocation.getCurrentPosition( function( pos ) {
-			userLocation = pos;
+			setUserLocation( pos );
 			currentSortMethod = 'distance';
 			$( 'html' ).addClass( 'locationAvailable' );
 			if ( getCurrentPage() === 'locationlookup-page' ) { // check user didn't escape page

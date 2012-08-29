@@ -4,6 +4,7 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 
 	var map = null;
 	var clusterer = null;
+	var FLASHING_POINTER_INTERVAL = 1000;
 
 	function calculateCenterAndZoom(monuments) {
 		var center = {lat: 0, lon: 0},
@@ -66,6 +67,24 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 		map._onResize();
 	}
 
+	var pointerOptions = { radius: 5, fillColor: '#388BFB', stroke: true,
+		color: '#54ACF8', opacity: 0.9, fillOpacity: 0.9 }, pointer, currentPosition;
+	function createPointer() {
+		// only do this when no popups open - otherwise the popup will close
+		// FIXME: must be a more reliable way to do this!
+		if ( !$( '#map-page .leaflet-popup' )[ 0 ] ) {
+			if ( pointer ) {
+				map.removeLayer( pointer );
+			}
+			pointer = new L.CircleMarker( currentPosition, pointerOptions );
+			map.addLayer( pointer );
+		}
+	}
+	function setLocationPointer( pos ) {
+		currentPosition = new L.LatLng( pos.coords.latitude, pos.coords.longitude );
+		createPointer();
+	}
+
 	function init( onmapchange ) {
 		if (!map) {
 			// Disable webkit 3d CSS transformations for tile positioning
@@ -87,6 +106,16 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 				subdomains: '1234'
 			});
 			map.addLayer(tiles);
+			// setup flashing pointer signalling your location
+			window.setInterval( function() {
+				var opacity = pointerOptions.opacity;
+				opacity = opacity === 1 ? 0.7 : 1;
+				pointerOptions.opacity = opacity;
+				pointerOptions.fillOpacity = opacity;
+				if ( currentPosition ) {
+					createPointer();
+				}
+			}, FLASHING_POINTER_INTERVAL );
 
 			$( '<button>' ).addClass( 'myLocation' ).text( 'center on me' ).
 				click( function() {
@@ -167,6 +196,7 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 		addMonument: addMonument,
 		calculateCenterAndZoom: calculateCenterAndZoom,
 		setCenterAndZoom: setCenterAndZoom,
+		setLocationPointer: setLocationPointer,
 		getMap: getMap,
 		onResize: onResize
 	};
