@@ -33,11 +33,38 @@ define( [ 'jquery', 'utils' ], function() {
 	};
 
 	Monument.prototype.generateFilename = function( date ) {
+		var maxLength = 240; // 240 bytes maximum enforced by MediaWiki
+		maxLength = maxLength / 2 - '/1024px-'.length; // halve space due to current bugs with Swift causing thumbnails to fail
+
 		var name = this.name.replace( String.fromCharCode(27), '-' );
+		name = name.replace( /[\x7f\.\[#<>\[\]\|\{\}/:]/g, '-' );
+
 		var d = date || new Date();
-		var months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec' ];
-		var suffix =  d.getDate() + months[ d.getMonth() ] + d.getFullYear() + ' ' + d.getHours() + 'hrs' + d.getMinutes() + 'mins' + d.getSeconds() + 'secs';
-		return name.replace( /[\x7f\.\[#<>\[\]\|\{\}]/g, '-' ) + ' (taken on ' + suffix + ').jpg';
+		function pad( str, len ) {
+			if ( typeof str !== 'string' ) {
+				str = str + '';
+			}
+			while ( str.length < len ) {
+				str = '0' + str;
+			}
+			return str;
+		}
+		var suffix = ' ' +
+			pad( d.getFullYear(), 4 ) +
+			'-' +
+			pad( d.getMonth(), 2 ) +
+			'-' +
+			pad( d.getDate(), 2 ) +
+			' ' +
+			pad( d.getHours(), 2 ) +
+			'-' +
+			pad( d.getMinutes(), 2 ) +
+			'-' +
+			pad( d.getSeconds(), 2 ) +
+			'.jpg';
+
+		var allowedLength = maxLength - suffix.length;
+		return trimUtf8String( name, allowedLength ) + suffix;
 	};
 	
 	Monument.prototype.processArticleLink = function() {
