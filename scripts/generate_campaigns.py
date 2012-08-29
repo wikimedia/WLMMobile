@@ -17,13 +17,17 @@ campaigns = []
 campaigndict = {}
 
 for camp in campdata:
-	if camp['name'].startswith('wlm'):
+	# get all WLM campaigns that are enabled
+	if camp['name'].startswith('wlm')  and camp['isenabled'] == 1:
 		camp['name'] = camp['name'].replace('wlm-','')
+		campaign = camp
 		if camp['name'] in namesdata:
-			campaign = camp
 			campaign['desc'] = namesdata[campaign['name']]
-			campaigns.append( campaign )
-			print campaign['name'], campaign['desc']
+		else:
+			campaign['desc'] = campaign['name']
+		campaigns.append( campaign )
+		print campaign['name'], campaign['desc']
+
 
 print len(campaigns)
 for campaign in campaigns:
