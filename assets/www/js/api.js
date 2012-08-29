@@ -296,6 +296,11 @@ define(['jquery'], function() {
 							$img = $( img );
 						$img.attr( 'src', imageinfo.thumburl ).one( 'load', function() {
 							deferred.resolve( imageinfo );
+							$img.unbind( 'error' );
+						} ).one( 'error', function() {
+							// Image failed to load -- such as broken thumbnail or 404.
+							deferred.reject();
+							$img.unbind( 'load' );
 						} );
 					} else {
 						console.log( 'Failed to locate deferred image with title ' + title );
