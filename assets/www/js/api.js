@@ -142,9 +142,6 @@ define(['jquery'], function() {
 				var data = JSON.parse(r.response);
 				if( data.error ) {
 					d.reject( data );
-				// FIXME: remove more horrible hackery around the api
-				} else if ( data[ "0" ] && data[ "0" ].error ) {
-					d.reject( data[ "0" ] );
 				} else if ( data && data.upload && data.upload.result === 'Success' ) {
 					d.resolve( data.upload.filekey, token );
 				} else {
