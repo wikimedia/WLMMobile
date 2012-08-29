@@ -582,6 +582,16 @@ button.myLocation.loading {
 	height: 28px; /* height - border top and bottom */
 }
 
+/* Hack to make border look nicer on Android hdpi devices */
+@media screen and (-webkit-device-pixel-ratio: 1.5) {
+	#upload-progress-bar {
+		border: solid 2px black;
+	}
+	#upload-progress-bar div {
+		height: 26px; /* height - border top and bottom */
+	}
+}
+
 /* Recent upload page */
 #upload-latest-page img {
 	max-width: 100%;
