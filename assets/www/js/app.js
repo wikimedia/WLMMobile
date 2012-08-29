@@ -506,6 +506,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 
 	function uploadErrorHandler( data ) {
+		var code, info;
 		console.log( 'Run error handler on ' + JSON.stringify( data ) );
 		if( data.error ) {
 			code = data.error.code;
@@ -580,12 +581,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					$("#upload-progress-state").html(mw.msg("upload-progress-in-progress"));
 				}
 			} ).fail( function( data ) {
+				var container;
 				if (data == "Aborted") {
 					// no-op
 					console.log( "Upload got aborted." );
 				} else {
-					var code, info, container;
-					container = uploadErrorHandler( error );
+					container = uploadErrorHandler( data );
 					$( 'a.logout', container ).click( function() {
 						showPage( 'logout-progress-page' );
 						api.logout().done(function() {
