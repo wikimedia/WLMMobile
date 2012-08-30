@@ -85,6 +85,14 @@ a {
 	color: inherit;
 }
 
+#locationlookup-page .content {
+	background-position: right top;
+	padding-right: 62px;
+	line-height: 32px;
+	margin-right: 8px;
+	margin-top: 8px;
+}
+
 /* At last make external links easy to find? */
 a.external {
 	text-decoration: underline;
