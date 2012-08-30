@@ -9,6 +9,7 @@ UPLOADCAMPAIGN_URL = "http://commons.wikimedia.org/w/api.php?action=uploadcampai
 
 campdata = json.loads(urlopen(UPLOADCAMPAIGN_URL).read())['uploadcampaign']['campaigns']
 # HACK: Bring up display names from separate file on wiki for now. Should be added to UploadCampaign info itself
+# @FIXME remove reliance on this. Currently only used showMonumentDetail() in app.js
 namesdata = campaign_names.getCampaignNames()
 
 campaigns = []
