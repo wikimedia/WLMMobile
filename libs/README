@@ -1,4 +1,4 @@
-This cordova-2.0.0.jar built from https://github.com/wikimedia/incubator-cordova-android/commits/filetransfer-progress 9de1f29546c5d1c332bd46c67ed66bfc04cc134f
+This cordova-2.0.0.jar built from https://github.com/wikimedia/incubator-cordova-android/commits/filetransfer-progress-and-picasa-crash 34a25eb
 
-Has customized FileTransfer with onprogress event and abort method
+Has customized FileTransfer with onprogress event and abort method, and a hack to avoid a crash when loading Picasa photos on some phones.
 
