@@ -30,7 +30,8 @@ var DUMMY_TEMPLATES = {
 	'upload-page': EMPTY_TEMPLATE,
 	'uploads-page': EMPTY_TEMPLATE,
 	'campaign-page': EMPTY_TEMPLATE,
-	'login-page': EMPTY_TEMPLATE
+	'login-page': EMPTY_TEMPLATE,
+	'upload-photo-description': EMPTY_TEMPLATE
 };
 var DUMMY_TEMPLATE_SCRIPTS = [ 'country-list-template' ]
 
