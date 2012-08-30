@@ -888,7 +888,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		var username = api.userName,
 			$list = $( '#uploads-page .monuments-list' );
-		db.requestUploadsForUser( username, db.UPLOAD_COMPLETE ).done( function( uploads ) {
+		db.requestUploads( db.UPLOAD_COMPLETE ).done( function( uploads ) {
 			$list.empty();
 			if( uploads.length ) {
 				var thumbFetcher = api.getImageFetcher( thumbSize, thumbSize ); // important: use same API we upload to!
@@ -937,7 +937,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		var username = api.userName,
 			$list = $( '#incomplete-uploads-page .monuments-list' );
-		db.requestUploadsForUser( username, db.UPLOAD_INCOMPLETE ).done( function( uploads ) {
+		db.requestUploads( db.UPLOAD_INCOMPLETE ).done( function( uploads ) {
 			$list.empty();
 			var $buttons = $( '#delete-all, #upload-all' );
 			$buttons.attr( 'disabled', 'disabled' );
