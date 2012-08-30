@@ -30,7 +30,7 @@ define( [ 'jquery' ], function() {
 					var $uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
 
 					photo.data.fileUrl = WLMConfig.WIKI_BASE + 'File:' + encodeURIComponent( photo.data.fileTitle );
-					$uploadItem.click( function() {
+					$uploadItem.find( 'a' ).click( function() {
 						$( '#completed-upload-detail' ).html( uploadCompleteTemplate( { upload: upload, monument: monument, photo: photo } ) );
 						$( '#completed-upload-detail .monumentLink' ).
 							data( 'monument', new Monument( monument, commonsApi ) ).
