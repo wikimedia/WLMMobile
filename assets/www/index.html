@@ -20,7 +20,7 @@
 		<% _.each( _.sortBy( campaigns, function( campaign ) { return campaign.name } ), function( campaign ) { %>
 			<li>
 				<a class='country-search' href='#'
-					data-campaign='<%= campaign.code %>'><%= campaign.name %></a>
+					data-campaign='<%- campaign.code %>'><%- campaign.name %></a>
 			</li>
 		<% }); %>
 	</script>
@@ -37,7 +37,7 @@
 	<script type="text/html" id="upload-list-item-template">
 		<li>
 			<a class='monument-detail' href="#">
-				<div class='monument-name'> <%= monument.name %> </div>
+				<div class='monument-name'> <%- monument.name %> </div>
 				<div class='monument-location'>&nbsp;</div>
 			</a>
 			<img class='monument-thumbnail' src="images/loader-64.gif"/>
@@ -47,7 +47,7 @@
 		<li>
 			<input type="checkbox" />
 			<a class='monument-detail' href="#">
-				<div class='monument-name'> <%= monument.name %> </div>
+				<div class='monument-name'> <%- monument.name %> </div>
 				<div class='monument-location'>&nbsp;</div>
 			</a>
 			<img class='monument-thumbnail' src="images/loader-64.gif"/>
@@ -64,34 +64,34 @@
 		</li>
 	</script>
 	<script type='text/html' id='upload-completed-item-detail-template'>
-		<h3><%= monument.name %></h3>
+		<h3><%- monument.name %></h3>
 		<p>
 			<a class="monumentLink">
 				<msg key="upload-monument-link-text"></msg>
 			</a>
 		</p>
-		<img class='uploaded-image-full' src='<%= photo.data.contentURL %>' />
+		<img class='uploaded-image-full' src='<%- photo.data.contentURL %>' />
 		<div class='uploaded-image-details'>
-			<a href="<%= photo.data.fileUrl %>"><%= photo.data.fileTitle %></a>
+			<a href="<%- photo.data.fileUrl %>"><%- photo.data.fileTitle %></a>
 		</div>
 	</script>
 	<script type='text/html' id='upload-incomplete-item-detail-template'>
-		<h3><%= monument.name %></h3>
+		<h3><%- monument.name %></h3>
 		<p>
 			<a class="monumentLink">
 				<msg key="upload-monument-link-text"></msg>
 			</a>
 		</p>
-		<img class='uploaded-image-full' width='320' src='<%= photo.data.contentURL %>' />
+		<img class='uploaded-image-full' width='320' src='<%- photo.data.contentURL %>' />
 		<div class='uploaded-image-details'>
-			<span><%= photo.data.fileTitle %></span>
+			<span><%- photo.data.fileTitle %></span>
 		</div>
 	</script>
 	<script type="text/html" id="monument-list-item-template">
 		<li>
 			<a class='monument-detail' href="#">
-				<div class='monument-name'> <%= monument.name %> </div>
-				<small class='monument-address'> <%= monument.address %> </small>
+				<div class='monument-name'> <%- monument.name %> </div>
+				<small class='monument-address'> <%- monument.address %> </small>
 			</a>
 			<img class='monument-thumbnail' src="images/placeholder-thumb.png"/>
 		</li>
@@ -103,23 +103,23 @@
 	</script>
 	<script type="text/html" id="monument-details-template">
 	<h3 class='monument-name'> 
-		<%= monument.name %> 
+		<%- monument.name %> 
 	</h3>
 		<div class="photo">
 			<img class="monument-thumbnail" src="images/placeholder-full-photo.png">
 		</div>
 		<div class='monument-country'> 
 			<strong> <msg key='monument-country' / > </strong>
-			<%= campaign %> 
+			<%- campaign %> 
 		</span>
 		<div class='monument-sub-details'>
 			<% if(monument.address) { %>
 				<div class='monument-address'> 
 					<strong> <msg key='monument-address' / > </strong>
-					<%= monument.address %> 
+					<%- monument.address %> 
 				</div>
 				<div>
-					<a class="external monument-directions" href="<%= monument.addressLink %>">
+					<a class="external monument-directions" href="<%- monument.addressLink %>">
 						<msg key='monument-directions' />
 					</a>
 				</div>
@@ -133,8 +133,8 @@
 		</div>
 	</script>
 	<script type="text/html" id="upload-confirm-template">
-		<h3> <%= monument.name %> </h3>
-		<img class='preview-image' src="<%= fileUrl %>" />
+		<h3> <%- monument.name %> </h3>
+		<img class='preview-image' src="<%- fileUrl %>" />
 
 		<h3><msg key="confirm-license-title" /></h3>
 		<p id="confirm-license-text"></p>
