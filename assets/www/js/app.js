@@ -30,6 +30,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				appendTo( '#upload-progress-bar' );
 		}
 	} );
+	var PHOTO_TEMPLATE = templates.getTemplate( 'upload-photo-description', true );
 	var commonsApi = new Api( WLMConfig.COMMONS_API );
 	var monuments = new MonumentsApi( WLMConfig.MONUMENT_API, commonsApi );
 	var wlmapi = 'http://toolserver.org/~erfgoed/api/api.php';
@@ -549,17 +550,16 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		var uploadConfirmTemplate = templates.getTemplate('upload-confirm-template');
 		var fileName = curMonument.generateFilename();
 		console.log("Filename is " + fileName);
-		var text = formatUploadDescription( curMonument, CAMPAIGNS[ curMonument.country ].config, api.userName );
-		console.log( "Page text is " + text );
 		var licenseText = formatLicenseText( CAMPAIGNS[ curMonument.country ].config );
 
 		$("#upload-confirm").html(uploadConfirmTemplate({monument: curMonument, fileUrl: fileUrl})).localize();
 		$("#confirm-license-text").html(mw.msg('confirm-license-text', api.userName, licenseText));
 
 		var photo = new Photo( {
+			campaignConfig: CAMPAIGNS[ curMonument.country ].config,
 			contentURL: fileUrl,
 			fileTitle: fileName,
-			fileContent: text
+			monument: curMonument
 		} );
 		$( '#upload-later-button' ).click( function() {
 			db.addUpload( api.userName, curMonument, photo, false );
@@ -574,7 +574,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		} );
 		function continueUpload() {
 			// reset status message for any previous uploads
-			photo.uploadTo( api, comment ).done( function( imageinfo ) {
+			photo.uploadTo( api, comment, PHOTO_TEMPLATE ).done( function( imageinfo ) {
 				$( '#upload-latest-page img' ).attr( 'src', resolveImageThumbnail( imageinfo.url ) );
 				$( '#upload-latest-page .share a' ).attr( 'href', imageinfo.descriptionurl );
 
@@ -694,7 +694,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					photo = item.photo,
 					monument = item.monument;
 				comment = 'Batch upload'; // ????
-				photo.uploadTo( api, comment ).done( function( imageinfo ) {
+				photo.uploadTo( api, comment, PHOTO_TEMPLATE ).done( function( imageinfo ) {
 					db.completeUpload( photo ).done( function() {
 						iter();
 					} );
@@ -830,50 +830,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		});
 	}
 
-	// TODO: make this use a template defined in index.html
-	function dateYMD() {
-		var now = new Date(),
-			year = now.getUTCFullYear(),
-			month = now.getUTCMonth() + 1, // 0-based
-			day = now.getUTCDate(),
-			out = '';
-
-		out += year;
-
-		out += '-';
-
-		if (month < 10) {
-			out += '0';
-		}
-		out += month;
-
-		out += '-';
-
-		if (day < 10) {
-			out += '0';
-		}
-		out += day;
-
-		return out;
-	}
-
-	function formatUploadDescription( monument, campaignConfig, username ) {
-		var descData = {
-				idField: campaignConfig.idField.replace( '$1', monument.id ),
-				license: campaignConfig.defaultOwnWorkLicence, // note the typo in the API field
-				username: username,
-				autoWikiText: campaignConfig.autoWikiText,
-				cats: campaignConfig.defaultCategories.
-					concat( campaignConfig.autoCategories ),
-				date: dateYMD(),
-				monument: monument,
-				ua:  navigator.userAgent.match( /Android (.*?)(?=\))/g ),
-				appVersion: WLMConfig.VERSION_NUMBER
-			};
-		var template = templates.getTemplate( 'upload-photo-description', true )( { descData: descData } );
-		return template;
-	}
-	
 	function formatLicenseText( campaignConfig ) {
 		var key = campaignConfig.defaultOwnWorkLicence, // note the typo in the API field
 			text = key,

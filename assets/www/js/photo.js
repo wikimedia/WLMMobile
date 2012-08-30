@@ -17,10 +17,56 @@ define( [ 'jquery' ], function( $ ) {
 		this.data = data;
 	}
 
-	Photo.prototype.uploadTo = function( mwApi, comment ) {
+	// TODO: make this use a template defined in index.html
+	function dateYMD() {
+		var now = new Date(),
+			year = now.getUTCFullYear(),
+			month = now.getUTCMonth() + 1, // 0-based
+			day = now.getUTCDate(),
+			out = '';
+
+		out += year;
+
+		out += '-';
+
+		if (month < 10) {
+			out += '0';
+		}
+		out += month;
+
+		out += '-';
+
+		if (day < 10) {
+			out += '0';
+		}
+		out += day;
+
+		return out;
+	}
+
+	function formatUploadDescription( photo, template, username ) {
+		var monument = photo.data.monument, campaignConfig = photo.data.campaignConfig;
+
+		var descData = {
+				idField: campaignConfig.idField.replace( '$1', monument.id ),
+				license: campaignConfig.defaultOwnWorkLicence, // note the typo in the API field
+				username: username,
+				autoWikiText: campaignConfig.autoWikiText,
+				cats: campaignConfig.defaultCategories.
+					concat( campaignConfig.autoCategories ),
+				date: dateYMD(),
+				monument: monument,
+				ua:  navigator.userAgent.match( /Android (.*?)(?=\))/g ),
+				appVersion: WLMConfig.VERSION_NUMBER
+			};
+		return template( { descData: descData } );
+	}
+
+	Photo.prototype.uploadTo = function( mwApi, comment, template ) {
 		var data = this.data;
 		var d = $.Deferred();
 		d.notify( 'starting' );
+		this.data.fileContent = formatUploadDescription( this, template, mwApi.userName );
 		mwApi.startUpload( data.contentURL, data.fileTitle ).done( function( fileKey, token ) {
 			d.notify( 'in-progress' );
 			mwApi.finishUpload( fileKey, data.fileTitle, comment, data.fileContent, token ).done( function( imageinfo ) {
