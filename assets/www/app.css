@@ -349,6 +349,12 @@ header h2 input[type='text'] {
 	-webkit-box-align: center;
 }
 
+.popup-container a.about-link {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
 .popup {
 	background-color: #eee;
 	padding: 5px 10px;
