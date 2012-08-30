@@ -10,5 +10,5 @@ var WLMConfig = {
 	WIKIPEDIA: 'https://$1.wikipedia.org',
 	WIKIPEDIA_API: 'https://$1.wikipedia.org/w/api.php',
 	VERSION_NUMBER: 1.2,
-	VERSION_NAME: 'Angkor Wat' // famous monument name (next should begin with B)
+	VERSION_NAME: 'Big Ben' // famous monument name (next should begin with C)
 };
