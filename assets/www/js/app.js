@@ -553,7 +553,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		var licenseText = formatLicenseText( CAMPAIGNS[ curMonument.country ].config );
 
 		$("#upload-confirm").html(uploadConfirmTemplate({monument: curMonument, fileUrl: fileUrl})).localize();
-		$("#confirm-license-text").html(mw.msg('confirm-license-text', api.userName, licenseText));
+		$( '#confirm-license-text' ).html(
+			mw.msg( 'confirm-license-text', licenseText )
+		);
 
 		var photo = new Photo( {
 			campaignConfig: CAMPAIGNS[ curMonument.country ].config,
