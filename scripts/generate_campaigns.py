@@ -16,7 +16,7 @@ campaigndict = {}
 
 for camp in campdata:
 	# get all WLM campaigns that are enabled
-	if camp['name'].startswith('wlm')  and camp['isenabled'] == 1:
+	if camp['name'].startswith('wlm') and camp['isenabled'] == 1:
 		camp['name'] = camp['name'].replace('wlm-','')
 		campaign = camp
 		if camp['name'] in namesdata:
