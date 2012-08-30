@@ -847,22 +847,19 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 
 	function formatUploadDescription( monument, campaignConfig, username ) {
-		var ourCategories = [ 
-				'Mobile upload', 
-				'Uploaded with Android WLM App',
-				'UA: ' + navigator.userAgent.match( /Android (.*?)(?=\))/g )
-			],
-			descData = {
+		var  descData = {
 				idField: campaignConfig.idField.replace( '$1', monument.id ),
 				license: campaignConfig.defaultOwnWorkLicence, // note the typo in the API field
 				username: username,
 				autoWikiText: campaignConfig.autoWikiText,
 				cats: campaignConfig.defaultCategories.
-					concat( campaignConfig.autoCategories ).
-					concat( ourCategories ),
+					concat( campaignConfig.autoCategories ),
 				date: dateYMD(),
-				monument: monument
+				monument: monument,
+				ua:  navigator.userAgent.match( /Android (.*?)(?=\))/g ),
+				appVersion: WLMConfig.VERSION_NUMBER
 			};
+		console.log( descData );
 		var template = templates.getTemplate( 'upload-photo-description', true )( { descData: descData } );
 		return template;
 	}
