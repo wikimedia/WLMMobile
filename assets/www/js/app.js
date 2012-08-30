@@ -554,7 +554,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		$("#upload-confirm").html(uploadConfirmTemplate({monument: curMonument, fileUrl: fileUrl})).localize();
 		$( '#confirm-license-text' ).html(
-			mw.msg( 'confirm-license-text', licenseText )
+			mw.msg( 'confirm-license-text', '', licenseText )
 		);
 
 		var photo = new Photo( {
