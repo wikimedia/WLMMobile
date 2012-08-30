@@ -805,33 +805,38 @@ window.CAMPAIGNS = {
         "isenabled": 1, 
         "desc": "Serbia", 
         "config": {
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-rs-id/$1", 
+            "idField2Label": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "idField2LabelPage": "", 
             "defaultLon": "", 
-            "idFieldLabel": "", 
-            "idField": "{{WLM-identifier|rs|$1}}", 
-            "defaultAlt": "", 
             "defaultCategories": [
-                "Cultural heritage monuments in Serbia"
+                "Nepokretna kulturna dobra u Srbiji"
             ], 
-            "skipTutorial": "1", 
-            "defaultDescription": "", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
-            "tutorialWidth": "720", 
-            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "idField2InitialValue": "", 
             "licensesOwnWork": [
                 "cc-by-sa-3.0", 
                 "cc-by-3.0", 
                 "cc-zero"
             ], 
-            "defaultLat": "", 
-            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-rs-id/$1", 
+            "idField2": "", 
+            "ownWorkOption": "own", 
+            "idFieldMaxLength": "25", 
+            "idField": "{{Nepokretna kulturna dobra u Srbiji|$1}}", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "720", 
+            "idField2MaxLength": "25", 
             "idFieldInitialValue": "", 
+            "defaultLat": "", 
+            "idFieldLabel": "ID kulturnog dobra (npr. SK 12)", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1", 
+            "defaultAlt": "", 
+            "skipTutorial": "1", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
             "autoCategories": [], 
             "autoWikiText": "", 
-            "thanksLabelPage": "", 
-            "ownWorkOption": "own", 
-            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25", 
-            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384"
         }, 
         "name": "rs", 
         "id": 71
@@ -975,35 +980,82 @@ window.CAMPAIGNS = {
         "name": "de-nrw-k", 
         "id": 48
     }, 
+    "it": {
+        "isenabled": 1, 
+        "desc": "it", 
+        "config": {
+            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-it-id/$1", 
+            "idField2Label": "", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "idField2LabelPage": "", 
+            "defaultLon": "", 
+            "defaultCategories": [
+                "Wiki Loves Monuments Italia 2012"
+            ], 
+            "idField2InitialValue": "", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0"
+            ], 
+            "idField2": "", 
+            "ownWorkOption": "own", 
+            "idFieldMaxLength": "25", 
+            "idField": "{{Monumento italiano|$1}}", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0", 
+            "tutorialWidth": "720", 
+            "idField2MaxLength": "25", 
+            "idFieldInitialValue": "", 
+            "defaultLat": "", 
+            "idFieldLabel": "", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1", 
+            "defaultAlt": "", 
+            "skipTutorial": "1", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "autoCategories": [
+                "Wiki Loves Monuments Italia 2012 needing check"
+            ], 
+            "autoWikiText": "", 
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384"
+        }, 
+        "name": "it", 
+        "id": 82
+    }, 
     "de-hb": {
         "isenabled": 1, 
         "desc": "de-hb", 
         "config": {
+            "idFieldLabelPage": "", 
+            "idField2Label": "Stadtteil (ohne Stadt-Namen)", 
+            "thanksLabelPage": "{{Upload campaign use Wiki Loves Monuments|$1}}", 
+            "idField2LabelPage": "", 
             "defaultLon": "", 
-            "idFieldLabel": "", 
-            "idField": "{{safesubst:WLM2011-DE-HB|$1}}", 
-            "defaultAlt": "", 
             "defaultCategories": [
-                "Images from Wiki Loves Monuments 2011, DE-HB"
+                "Images from Wiki Loves Monuments 2012, DE-HB"
             ], 
-            "skipTutorial": "", 
+            "idField2InitialValue": "", 
+            "licensesOwnWork": [
+                "cc-by-sa-3.0", 
+                "cc-by-sa-3.0-gfdl", 
+                "own-pd"
+            ], 
+            "idField2": "{{safesubst:WLM2011-DE-HB|$1}}", 
+            "ownWorkOption": "own", 
+            "idFieldMaxLength": "10", 
+            "idField": "{{Kulturdenkmal Bremen|$1}}", 
             "defaultDescription": "", 
             "defaultOwnWorkLicence": "cc-by-sa-3.0", 
             "tutorialWidth": "900", 
-            "tutorialTemplate": "WLM Introscreen UploadWizard-de-hb.png", 
-            "licensesOwnWork": [
-                "cc-by-sa-3.0"
-            ], 
-            "defaultLat": "", 
-            "idFieldLabelPage": "Commons:Wiki Loves Monuments upload/de/label-ortsteil", 
+            "idField2MaxLength": "50", 
             "idFieldInitialValue": "", 
+            "defaultLat": "", 
+            "idFieldLabel": "Denkmalnummer aus der Liste", 
+            "headerLabelPage": "Template:Upload campaign header wlm-de-hb", 
+            "defaultAlt": "", 
+            "skipTutorial": "", 
+            "tutorialTemplate": "WLM Introscreen UploadWizard-de-hb.png", 
             "autoCategories": [], 
             "autoWikiText": "", 
-            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
-            "ownWorkOption": "own", 
-            "tutorialHelpdeskCoords": "", 
-            "idFieldMaxLength": "25", 
-            "headerLabelPage": "Commons:Wiki Loves Monuments upload/de/wizard-intro-de-hb"
+            "tutorialHelpdeskCoords": ""
         }, 
         "name": "de-hb", 
         "id": 14
@@ -1770,29 +1822,34 @@ window.CAMPAIGNS = {
         "isenabled": 1, 
         "desc": "Poland", 
         "config": {
+            "idFieldLabelPage": "", 
+            "idField2Label": "Wojew\u00f3dztwo (nazwa lub kod ISO, np: \"mazowieckie\")", 
+            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
+            "idField2LabelPage": "", 
             "defaultLon": "", 
-            "idFieldLabel": "Nr rejestrowy obiektu", 
-            "idField": "", 
-            "defaultAlt": "", 
             "defaultCategories": [], 
-            "skipTutorial": "1", 
-            "defaultDescription": "", 
-            "defaultOwnWorkLicence": "cc-by-sa-3.0-pl", 
-            "tutorialWidth": "720", 
-            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
+            "idField2InitialValue": "", 
             "licensesOwnWork": [
                 "cc-by-sa-3.0-pl"
             ], 
-            "defaultLat": "", 
-            "idFieldLabelPage": "MediaWiki:Mwe-upwiz-campaigns-wlm-pl-id/$1", 
+            "idField2": "1=$1}}", 
+            "ownWorkOption": "own", 
+            "idFieldMaxLength": "20", 
+            "idField": "{{Zabytek|2=$1|", 
+            "defaultDescription": "", 
+            "defaultOwnWorkLicence": "cc-by-sa-3.0-pl", 
+            "tutorialWidth": "720", 
+            "idField2MaxLength": "25", 
             "idFieldInitialValue": "", 
+            "defaultLat": "", 
+            "idFieldLabel": "Numer inwentarzowy zabytku", 
+            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/pl", 
+            "defaultAlt": "", 
+            "skipTutorial": "1", 
+            "tutorialTemplate": "Licensing_tutorial_$1.svg", 
             "autoCategories": [], 
             "autoWikiText": "", 
-            "thanksLabelPage": "Template:Upload campaign use Wiki Loves Monuments/$1", 
-            "ownWorkOption": "own", 
-            "tutorialHelpdeskCoords": "27, 1319, 691, 1384", 
-            "idFieldMaxLength": "25", 
-            "headerLabelPage": "Template:Upload campaign header Wiki Loves Monuments 2012 August/$1"
+            "tutorialHelpdeskCoords": "27, 1319, 691, 1384"
         }, 
         "name": "pl", 
         "id": 9
