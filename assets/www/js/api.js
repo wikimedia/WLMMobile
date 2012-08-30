@@ -7,10 +7,12 @@ define(['jquery'], function() {
 		onProgressChanged: function() {
 		}
 	};
+	var GUEST_USERNAME = 'GUEST';
 
 	function Api( url, options ) {
 		options = options || defaultOptions;
 
+		this.userName = GUEST_USERNAME;
 		this.options = options;
 		this.options.onProgressChanged = this.options.onProgressChanged || function(){};
 		this.url = url;
@@ -72,7 +74,7 @@ define(['jquery'], function() {
 			action: 'logout'
 		} ).done( function( data ) {
 			that.loggedIn = false;
-			delete that.userName;
+			that.userName = GUEST_USERNAME;
 			d.resolve( data );
 		} ).fail( function( err ) {
 			d.reject( err );

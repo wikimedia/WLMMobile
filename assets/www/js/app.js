@@ -205,23 +205,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			$( '#filter-campaign' ).attr( 'placeholder', subPage ?
 				mw.msg( 'search-region-placeholder' ) : mw.msg( 'search-country-placeholder' ) );
 		} else if ( pageName === 'uploads-page' ) {
-			if( api.loggedIn ) {
-				showUploads();
-			} else {
-				goBack(); // revert history change for login screen
-				doLogin( function() {
-					showPage( pageName );
-				} );
-			}
+			showUploads();
 		} else if ( pageName === 'incomplete-uploads-page' ) {
-			if( api.loggedIn ) {
-				showIncompleteUploads();
-			} else {
-				goBack(); // revert history change for login screen
-				doLogin( function() {
-					showPage( pageName );
-				} );
-			}
+			showIncompleteUploads();
 		}
 	}
 
@@ -586,7 +572,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			goBack(); // escape the confirmation screen
 			showPage( 'upload-later' );
 		} );
-		$("#continue-upload").click(function() {
+		function continueUpload() {
 			// reset status message for any previous uploads
 			photo.uploadTo( api, comment ).done( function( imageinfo ) {
 				$( '#upload-latest-page img' ).attr( 'src', resolveImageThumbnail( imageinfo.url ) );
@@ -628,7 +614,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 					console.log( 'Upload failed: ' + code );
 				}
 			} );
-		});
+		}
+		$('#continue-upload' ).click( function() {
+			doLogin( continueUpload );
+		} );
 		showPage('upload-confirm-page');
 	}
 
@@ -731,7 +720,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				showPage( 'uploads-page' );
 			}
 		}
-		iter();
+		doLogin( iter );
 	} );
 
 	// Need to use callbacks instead of deferreds
