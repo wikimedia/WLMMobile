@@ -66,10 +66,10 @@ define( [ 'jquery' ], function( $ ) {
 		var data = this.data;
 		var d = $.Deferred();
 		d.notify( 'starting' );
-		this.data.fileContent = formatUploadDescription( this, template, mwApi.userName );
+		var fileContent = formatUploadDescription( this, template, mwApi.userName );
 		mwApi.startUpload( data.contentURL, data.fileTitle ).done( function( fileKey, token ) {
 			d.notify( 'in-progress' );
-			mwApi.finishUpload( fileKey, data.fileTitle, comment, data.fileContent, token ).done( function( imageinfo ) {
+			mwApi.finishUpload( fileKey, data.fileTitle, comment, fileContent, token ).done( function( imageinfo ) {
 
 				d.resolve( imageinfo );
 			} ).fail( function( errorMsg ) {
