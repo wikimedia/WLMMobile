@@ -135,6 +135,9 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 	}
 
 	function addMonument(monument, onClick) {
+		if ( typeof monument.lat === 'undefined' || typeof monument.lon === 'undefined' ) {
+			return;
+		}
 		var url = 'images/', iconOptions;
 		url += monument.image ? 'pin.png' : 'pin-no-photos.png';
 		if ( L.VERSION === '0.3' ) { // TODO: upgrade leaflet to 4.0
