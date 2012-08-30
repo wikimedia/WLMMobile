@@ -4,7 +4,7 @@ $('html').addClass('android');
 
 platform.geoUrl = function(lat, lon, address) {
 	var hasLonLat = typeof lat !== 'undefined' && typeof lon !== 'undefined',
-		q = 'geo: ?q=carmen san diego', // should never happen
+		q = 'geo:0,0 ?q=carmen san diego', // should never happen
 		add = address ? encodeURIComponent( address ) : '';
 	if ( hasLonLat && address ) {
 		latlng = lat + ',' + lon;
