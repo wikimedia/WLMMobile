@@ -246,6 +246,32 @@ a.upload {
 	margin-right: 92px;
 }
 
+ol {
+	counter-reset: li;
+}
+
+ol > li {
+	position: relative;
+	padding-left: 30px;
+	display: block;
+	margin-bottom: 8px;
+	border-bottom: none;
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+ol > li::before {
+	content: counter(li);
+	counter-increment: li;
+	position: absolute;
+	left: 0;
+	top: 0;
+	color: #999;
+	font-weight: bold;
+	font-size: 2em;
+}
+
+ol,
 ul {
 	margin: 0px;
 	padding: 0px;
@@ -321,6 +347,12 @@ header h2 input[type='text'] {
 	display: -webkit-box;
 	-webkit-box-pack: center;
 	-webkit-box-align: center;
+}
+
+.popup-container a.about-link {
+	position: absolute;
+	top: 0;
+	right: 0;
 }
 
 .popup {
