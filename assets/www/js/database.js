@@ -73,9 +73,9 @@ define( [ 'jquery' ], function( $ ) {
 		return promise;
 	}
 
-	function requestUploadsForUser( username, completed ) {
-		var querySQL = 'SELECT * FROM completed_uploads WHERE username = ? AND completed = ? ORDER BY timestamp DESC';
-		return query( querySQL, [ username, completed ] );
+	function requestUploads( completed ) {
+		var querySQL = 'SELECT * FROM completed_uploads WHERE completed = ? ORDER BY timestamp DESC';
+		return query( querySQL, [ completed ] );
 	}
 
 	return {
@@ -87,6 +87,6 @@ define( [ 'jquery' ], function( $ ) {
 		deleteUpload: deleteUpload,
 		completeUpload: completeUpload,
 		query: query,
-		requestUploadsForUser: requestUploadsForUser
+		requestUploads: requestUploads
 	};
 });
