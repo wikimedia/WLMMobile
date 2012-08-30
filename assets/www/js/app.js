@@ -206,6 +206,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	function showMonumentDetail(monument) {
 		var monumentTemplate = templates.getTemplate('monument-details-template');
 		var imageFetcher = commonsApi.getImageFetcher(300, 240);
+		// @FIXME remove dependency on CAMPAIGNS[monument.country].desc
 		var campaign = CAMPAIGNS[ monument.country ] ? CAMPAIGNS[ monument.country ].desc : monument.country;
 		var $monumentDetail = $( monumentTemplate( { monument: monument, campaign: campaign } ) );
 		$("#monument-detail").html($monumentDetail).localize();
@@ -846,22 +847,17 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 
 	function formatUploadDescription( monument, campaignConfig, username ) {
-		var ourCategories = [ 
-				'Mobile upload', 
-				'Uploaded with Android WLM App',
-				'UA: ' + navigator.userAgent.match( /Android (.*?)(?=\))/g )
-			],
-			descData = {
+		var  descData = {
 				idField: campaignConfig.idField.replace( '$1', monument.id ),
 				license: campaignConfig.defaultOwnWorkLicence, // note the typo in the API field
 				username: username,
 				autoWikiText: campaignConfig.autoWikiText,
-				cats: campaignConfig.defaultCategories.
-					concat( campaignConfig.autoCategories ).
-					concat( ourCategories ),
 				date: dateYMD(),
-				monument: monument
+				monument: monument,
+				ua:  navigator.userAgent.match( /Android (.*?)(?=\))/g ),
+				appVersion: WLMConfig.VERSION_NUMBER
 			};
+		console.log( descData );
 		var template = templates.getTemplate( 'upload-photo-description', true )( { descData: descData } );
 		return template;
 	}
