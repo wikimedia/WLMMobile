@@ -3,27 +3,30 @@ try:
     import json
 except:
     import simplejson as json
+import campaign_names
 
 UPLOADCAMPAIGN_URL = "http://commons.wikimedia.org/w/api.php?action=uploadcampaign&format=json&ucprop=config"
-NAMES_URL = "http://commons.wikimedia.org/wiki/Commons:Monuments_database/Campaign_names?action=raw"
 
 campdata = json.loads(urlopen(UPLOADCAMPAIGN_URL).read())['uploadcampaign']['campaigns']
-
-# HACK: Bring up display names from separate file on wiki for now. Should be added to UploadCampaign info itself, or surfaced via Admin listings soon
-nametext = urlopen(NAMES_URL).read()
-namesdata = dict([(s.split('=')[0].strip(), s.split('=')[1].strip()) for s in nametext.split("\n")])
+# HACK: Bring up display names from separate file on wiki for now. Should be added to UploadCampaign info itself
+# @FIXME remove reliance on this. Currently only used showMonumentDetail() in app.js
+namesdata = campaign_names.getCampaignNames()
 
 campaigns = []
 campaigndict = {}
 
 for camp in campdata:
-	if camp['name'].startswith('wlm'):
+	# get all WLM campaigns that are enabled
+	if camp['name'].startswith('wlm') and camp['isenabled'] == 1:
 		camp['name'] = camp['name'].replace('wlm-','')
+		campaign = camp
 		if camp['name'] in namesdata:
-			campaign = camp
 			campaign['desc'] = namesdata[campaign['name']]
-			campaigns.append( campaign )
-			print campaign['name'], campaign['desc']
+		else:
+			campaign['desc'] = campaign['name']
+		campaigns.append( campaign )
+		print campaign['name'], campaign['desc']
+
 
 print len(campaigns)
 for campaign in campaigns:

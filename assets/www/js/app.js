@@ -206,6 +206,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	function showMonumentDetail(monument) {
 		var monumentTemplate = templates.getTemplate('monument-details-template');
 		var imageFetcher = commonsApi.getImageFetcher(300, 240);
+		// @FIXME remove dependency on CAMPAIGNS[monument.country].desc
 		var campaign = CAMPAIGNS[ monument.country ] ? CAMPAIGNS[ monument.country ].desc : monument.country;
 		var $monumentDetail = $( monumentTemplate( { monument: monument, campaign: campaign } ) );
 		$("#monument-detail").html($monumentDetail).localize();
