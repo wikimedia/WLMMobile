@@ -3,11 +3,16 @@ $('html').addClass('android');
 // Android opens a.external externally automatically.
 
 platform.geoUrl = function(lat, lon, address) {
-	var latlng = lat + ',' + lon;
-	var q = 'geo:' + latlng;
-    if (address) {
-		q += '?q=' + latlng + ' (' + encodeURIComponent( address ) + ')';
+	var hasLonLat = typeof lat !== 'undefined' && typeof lon !== 'undefined',
+		q = 'geo: ?q=carmen san diego', // should never happen
+		add = address ? encodeURIComponent( address ) : '';
+	if ( hasLonLat && address ) {
+		latlng = lat + ',' + lon;
+		q = 'geo:' + latlng + '?q=' + latlng + ' (' + add + ')';
+	} else if ( address ) {
+		q = 'geo:0,0?q=' + add; // TODO
     }
+console.log( q );
     return q;
 }
 
