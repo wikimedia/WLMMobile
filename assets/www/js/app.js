@@ -1341,6 +1341,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				showPhotoConfirmation(data);
 			}, function(msg) {
 				console.log( "SelectPhoto cancelled because of " + msg );
+				if (msg == 'Cannot read this image type.') {
+					// for our hack around https://issues.apache.org/jira/browse/CB-1293
+					// failure to load picasa images
+					displayError( mw.msg( 'cannot-load-photo' ) , mw.msg( 'cannot-load-photo-text' ) );
+				}
 				// Do nothing.
 			}, {
 				// options
