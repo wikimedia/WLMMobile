@@ -852,6 +852,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				license: campaignConfig.defaultOwnWorkLicence, // note the typo in the API field
 				username: username,
 				autoWikiText: campaignConfig.autoWikiText,
+				cats: campaignConfig.defaultCategories.
+					concat( campaignConfig.autoCategories ),
 				date: dateYMD(),
 				monument: monument,
 				ua:  navigator.userAgent.match( /Android (.*?)(?=\))/g ),

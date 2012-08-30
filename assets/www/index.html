@@ -171,6 +171,10 @@
 {{self|<%= descData.license %>}}
 
 <%= descData.autoWikiText %>
+
+<% _.each( descData.cats, function( cat ) { %>
+[[Category:<%= cat %>]]
+<% }); %>
 	</script>
 
 	<div class="page" id="welcome-page">
