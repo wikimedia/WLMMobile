@@ -213,7 +213,7 @@ define( [ 'jquery' ], function() {
 					var item = queue.pop(),
 						photo = item.photo,
 						monument = item.monument;
-					comment = 'Batch upload'; // ????
+					comment = mw.msg( 'upload-comment', WLMConfig.VERSION_NUMBER );
 					photo.uploadTo( api, comment, templates.getTemplate( 'upload-photo-description', true ) ).done( function( imageinfo ) {
 						db.completeUpload( photo ).done( function() {
 							iter();
