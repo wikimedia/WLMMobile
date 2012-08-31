@@ -151,6 +151,17 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		return translatedPageNames[ name ] || stripWikiText( name );
 	}
 
+	var showHooks = [];
+	function showPageHooks( pageName, deferred ) {
+		showHooks.forEach( function( fn ) {
+			fn( pageName, deferred );
+		} );
+	}
+
+	function registerPageHook( fn ) {
+		showHooks.push( fn );
+	}
+	
 	function showPage( pageName, deferred ) {
 		var subPage, heading;
 		addToHistory( pageName );
@@ -210,6 +221,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		} else if ( pageName === 'incomplete-uploads-page' ) {
 			showIncompleteUploads();
 		}
+		showPageHooks( pageName, deferred );
 	}
 
 	function showMonumentDetail(monument) {
