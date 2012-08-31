@@ -1,0 +1,660 @@
+/* Resets */
+/* apply a natural box layout model to all elements */
+* {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 100%;
+}
+
+body {
+	font-family: "Roboto", "Droid Sans", "Helvetica";
+	padding: 0;
+	margin: 0;
+	background-color: #F2F2F2;
+	color: #222;
+	top: 0;
+	bottom: 0;
+	position: absolute;
+	left: 0;
+	right: 0;
+}
+
+/* spinner related styles */
+#monument-detail.loading img,
+#results li.loading img {
+	visibility: hidden;
+}
+
+.mapLoader.loading,
+#monument-detail.loading .photo,
+#results li.loading,
+#results .footer.loading,
+.loading #results,
+.loading .content {
+	background-image: url(images/loader.gif);
+	background-position: center center;
+	background-repeat: no-repeat;
+	min-height: 50px;
+}
+
+.mapLoader.loading {
+	display: block;
+}
+
+.mapLoader {
+	display: none;
+	position: absolute;
+	width: 50px;
+	height: 50px;
+	top: 60px; /* height of header (52px + 8px) */
+	left: 8px;
+	z-index: 200; /* on android 4.0.4 the action bar with z-index 200 seems to obscure it for some reason */
+}
+
+#results li.loading {
+	background-position: left center;
+}
+
+#monument-detail.loading .photo {
+	background-position: right center;
+}
+
+#campaign-page.loading h3 {
+	display: none;
+}
+
+.loading #results li {
+	display: none;
+}
+
+#monument-detail .photo,
+.loading#results-page .content {
+	background: none;
+}
+
+#results.incomplete {
+	border-bottom: dotted 10px #ccc;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+#locationlookup-page .content {
+	background-position: left top;
+	padding-left: 62px;
+	line-height: 32px;
+	margin-left: 8px;
+	margin-top: 8px;
+}
+
+/* At last make external links easy to find? */
+a.external {
+	text-decoration: underline;
+	color: #00f;
+}
+a.broken {
+	color: #f00;
+}
+
+input {
+	/* see: http://stackoverflow.com/questions/9005550/input-elements-on-android-4-x-can-not-be-styled-when-focused */
+	-webkit-user-modify: read-write-plaintext-only;
+}
+
+select {
+	font-size: 100%;
+}
+
+/* General utility styles */
+
+.center {
+	text-align: center;
+}
+
+.hidden {
+	visibility: hidden; /* don't use display:none as this will affect map initialisation */
+}
+
+header.actionbar.hidden {
+	/* Because actionbars have display: box which seems to override this none */
+	display: none !important;
+}
+
+/* Generic page layout styles */
+
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+.page header.actionbar {
+	position: fixed;
+	height: 48px;
+	width: 100%;
+	background-color: #fff;
+	display: -webkit-box;
+	-webkit-box-align: center;
+	z-index: 200;
+	padding: 4px 5px;
+	top: 0;
+	border-bottom: solid 1px black;
+}
+
+.detail-page.page header.actionbar {
+	border-left: solid 1px black;
+}
+
+.page header.actionbar img {
+	height: 100%;
+	width: auto;
+	padding: 4px;
+}
+
+a.upload {
+	display: block;
+	text-align: center;
+	background-color: #F2F2F2;
+	padding: 10px 20px 10px 20px;
+	margin-top: -4px;
+	margin-left: -5px;
+	cursor: pointer;
+	text-transform: uppercase;
+	width: 104px;
+	font-size: 12px;
+}
+
+.page header.actionbar a.upload img {
+	height: auto;
+}
+
+.page header.tabbar {
+	position: fixed;
+	height: 48px;
+	top: 48px;
+	width: 100%;
+	background-color: #E0E0E0;
+	display: -webkit-box;
+	-webkit-box-align: center;
+	z-index: 200;
+	text-transform: uppercase;
+	font-variant: Bold;
+}
+
+.page header.tabbar a {
+	font-size: 12px;
+	height: 48px;
+	line-height: 48px;
+	text-align: center;
+	display: block;
+	padding: 2px 0px;
+	-webkit-box-flex: 1;
+	border-left: #D1D1D1 1px solid;
+}
+
+.page header.tabbar a.active {
+	border-bottom: #8F0000 4px solid;
+}
+
+.page header h2 {
+	margin: 0;
+	font-size: 1.2em;
+	margin-right: 5px;
+	-webkit-box-flex: 1;
+}
+
+.page header h2 select {
+	position: relative;
+	margin-top: 0;
+	border-bottom: 2px #D1D1D1 solid;
+	border-left: 2px #d1d1d1 solid;
+}
+
+.page .content {
+	position: absolute;
+	top: 48px;
+	right: 0px;
+	left: 0px;
+	font-size: 18px;
+	padding: 5px 10px;
+	background-color: #F2F2F2;
+}
+
+.page.has-tabbar .content {
+	top: 96px;
+}
+
+/* Generic look and feel styles */
+
+.content h3 {
+	color: #8F0000;
+	border-bottom: 1px #8F0000 solid;
+	text-align: right;
+	font-size: 14px;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+#detail-page .content h3 {
+	margin-left: 92px;
+}
+
+ol {
+	counter-reset: li;
+}
+
+ol > li {
+	position: relative;
+	padding-right: 30px;
+	display: block;
+	margin-bottom: 8px;
+	border-bottom: none;
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+ol > li::before {
+	content: counter(li);
+	counter-increment: li;
+	position: absolute;
+	right: 0;
+	top: 0;
+	color: #999;
+	font-weight: bold;
+	font-size: 2em;
+}
+
+ol,
+ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+li {
+	border-bottom: 1px solid #d1d1d1;
+	width: 100%;
+	list-style: none;
+}
+
+li a {
+	display: block;
+	padding: 20px 5px;
+}
+
+li a:hover {
+	opacity: 0.5;
+}
+
+button {
+	background-color: #8F0000;
+	color: #fff;
+	padding: 10px;
+	width: 100%;
+	font-size: 18px;
+	border: 0px;
+	cursor: pointer;
+	opacity: 0.9;
+}
+button[disabled] {
+	background-color: #6B0000;
+	color: #ccc;
+}
+
+input[type='text'] {
+	-webkit-appearance: none;
+	appearance: none;
+	border: 0px;
+	border-bottom: 1px solid #ccc;
+}
+
+.searchbar input[type='text'] {
+	font-size: 0.9em;
+}
+
+select {
+	-webkit-appearance: none;
+	appearance: none;
+	border: 0px;
+}
+
+/* Search styles */
+
+header h2 input[type='text'] {
+	width: 100%;
+}
+
+/* Popup dialogs styles */
+
+.popup-container-container {
+	display: none;
+}
+
+.popup-container {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+	left: 0px;
+	background: rgba(128, 128, 128, 0.5);
+	z-index: 300;
+	display: -webkit-box;
+	-webkit-box-pack: center;
+	-webkit-box-align: center;
+}
+
+.popup-container a.about-link {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.popup {
+	background-color: #eee;
+	padding: 5px 10px;
+	width: 80%;
+	-webkit-border-radius: 5px;
+}
+
+.popup header h2 {
+	font-size: 16px;
+	text-transform: Uppercase;
+	color: #999;
+}
+
+.popup button.close {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+/* Generic interaction items styles */
+
+header .back {
+	display: block;
+	background: url('images/button-dark-back.png') no-repeat;
+	background-size: 20px 31px;
+	width: 36px;
+	height: 100%;
+	margin-right: 5px;
+	background-position: right center;
+}
+
+.back {
+	-webkit-tap-highlight-color: rgba( 0, 0, 0, 0 );
+	tap-highlight-color: rgba( 0, 0, 0, 0 );
+}
+
+/* upload page */
+#upload-page .popup {
+	text-align: center;
+}
+
+ul.buttons li {
+	margin-top: 12px;
+	border-bottom: none;
+}
+
+ul.buttons li.small-button {
+	text-align: center;
+}
+
+ul.buttons li.small-button button {
+	width: 50%;
+}
+
+/* Monuments list styles */
+
+.monuments-list li {
+	min-height: 64px;
+	position: relative;
+	padding: 5px;
+	border-bottom: 1px solid #d1d1d1;
+	display: -webkit-box;
+	width: 100%;
+}
+
+.monuments-sorter .header {
+	border: none;
+}
+
+.monuments-sorter li button {
+	width: auto;
+	font-size: 0.7em;
+}
+
+.monuments-sorter li button.selected {
+	background-color: #DC3838;
+	font-weight: bold;
+	border: solid 1px #222;
+}
+
+button.requires-location {
+	opacity: 0.1;
+}
+
+.locationAvailable button.requires-location {
+	display: inline-block;
+	opacity: 1;
+}
+
+.monuments-list .monument-detail {
+	-webkit-box-flex: 1;
+	display: box;
+}
+
+.monuments-list .monument-name {
+	font-size: 14px;
+}
+
+.monuments-list .monument-location {
+	color: #999;
+	font-size: 12px;
+}
+.monuments-list .monument-thumbnail {
+	max-width: 64px;
+	max-height: 64px;
+}
+
+.monuments-list .distance {
+	color: #B0B0B0;
+	font-size: 0.7em;
+	font-weight: bold;
+}
+
+#incomplete-uploads-page input[type=checkbox] {
+	-webkit-transform: scale(2);
+	padding: 20px;
+	margin-top: 20px;
+}
+
+/* Maps styles */
+
+#map {
+	bottom: 0px;
+}
+
+.leaflet-control-zoom {
+	-webkit-transform: translate3d(0,0,0);
+	position: relative;
+	top: 0;
+	right: 0;
+	z-index: 7;
+}
+.leaflet-control-attribution {
+	-webkit-transform: translate3d(0,0,0);
+	position: relative;
+	bottom: 0;
+	left: 0;
+	z-index: 7;
+}
+
+button.myLocation,
+.leaflet-marker-pane,
+.leaflet-shadow-pane,
+.leaflet-overlay-pane {
+	/* hack to work around https://github.com/CloudMade/Leaflet/issues/335 */
+    -webkit-transform: translateZ(0px);
+}
+
+button.myLocation {
+	position: absolute;
+	z-index: 6;
+	width: 30px;
+	height: 30px;
+	overflow: hidden;
+	text-indent: -999px;
+	border: solid 1px #AAA;
+	background-color: white;
+	border-radius: 2px;
+	padding: 0;
+	top: 120px;
+	right: 24px;
+	background-repeat: no-repeat;
+	background-image: url(images/dot.png);
+	background-position: center center;
+}
+
+button.myLocation.loading {
+	background-image: url(images/loader.gif);
+	-webkit-background-size: 12px 12px;
+	background-size: 12px 12px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.leaflet-control-zoom {
+	padding: 8px;
+}
+
+.leaflet-control-zoom a {
+	width: 40px !important;
+	height: 40px !important;
+}
+
+/* Monument details styles */
+
+#monument-detail .monument-name {
+	font-size: 16px;
+}
+
+#monument-detail .monument-sub-details {
+	border-top: 1px solid #d1d1d1;
+	margin-top: 5px;
+	padding-top: 10px;
+	font-size: 12px;
+	color: #666;
+}
+
+#monument-detail .monument-country {
+	font-size: 12px;
+	color: #666;
+}
+
+#monument-detail strong {
+	font-weight: normal;
+	color: #333;
+}
+
+.monument-directions {
+	font-size: 200%;
+}
+
+/* Login specific styles */
+
+#login-page ul li {
+	border: 0px;
+}
+
+#login-page input[type='text'], 
+#login-page input[type='password'] {
+	width: 100%;
+	padding: 10px;
+	margin: 5px;
+}
+
+#login-page #login {
+	float: left;
+	padding: 5px;
+}
+
+#login-status {
+	margin-top: 100px;
+}
+
+#login-page input.error-input-field {
+	background-color: #FFFFE1;
+	border: 1px solid red;
+}
+
+.visibleLinks a,
+#error-page a,
+#about-page a,
+#completed-upload-detail a,
+#incomplete-upload-detail a,
+#login-page #login-create-account-msg a {
+	color: #666;
+	text-decoration: underline;
+}
+
+/* Upload confirmation specific CSS */
+
+#upload-confirm-page img.preview-image {
+	width: 80%;
+	height: auto;
+}
+
+#upload-progress-bar {
+	width: 100%;
+	height: 30px;
+	border: solid 1px black;
+}
+
+#upload-progress-bar div {
+	background-color: red;
+	background-color: #008F00;
+	height: 28px; /* height - border top and bottom */
+}
+
+/* Hack to make border look nicer on Android hdpi devices */
+@media screen and (-webkit-device-pixel-ratio: 1.5) {
+	#upload-progress-bar {
+		border: solid 2px black;
+	}
+	#upload-progress-bar div {
+		height: 26px; /* height - border top and bottom */
+	}
+}
+
+/* Recent upload page */
+#upload-latest-page img {
+	max-width: 100%;
+	height: auto;
+}
+
+#upload-latest-page .share a {
+	text-decoration: underline;
+}
+
+/* My Uploads styles */
+
+#completed-upload-detail {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+}
+
+#completed-upload-detail img {
+	width: 100%;
+	text-align: center;
+	-webkit-box-flex: 1;
+}
+
+#completed-upload-detail div {
+	width: 100%;
+}

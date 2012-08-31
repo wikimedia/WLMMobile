@@ -31,6 +31,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				appendTo( '#upload-progress-bar' );
 		}
 	} );
+	var hrefStylesheet = 'app.css';
 	var PHOTO_TEMPLATE = templates.getTemplate( 'upload-photo-description', true );
 	var commonsApi = new Api( WLMConfig.COMMONS_API );
 	var monuments = new MonumentsApi( WLMConfig.MONUMENT_API, commonsApi );
@@ -937,7 +938,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		if( l10n.isLangRTL( lang ) ) {
 			$( 'body' ).attr( 'dir', 'rtl' );
+			hrefStylesheet = 'app-rtl.css';
 		}
+		// load styles
+		$( '<link rel="stylesheet" >' ).attr( 'href', hrefStylesheet ).appendTo( document.head );
 
 		function filterMonuments() {
 			var value = this.value;
