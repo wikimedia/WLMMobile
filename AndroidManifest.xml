@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:windowSoftInputMode="adjustPan"
-      package="org.wikipedia.wlm" android:versionName="1.1" android:versionCode="5" android:installLocation="auto">
+      package="org.wikipedia.wlm" android:versionName="1.2" android:versionCode="6" android:installLocation="auto">
     <supports-screens
         android:largeScreens="true"
         android:normalScreens="true"
