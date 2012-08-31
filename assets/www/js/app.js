@@ -1354,18 +1354,26 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		api : api,
 		app: {
 			clearHistory: clearHistory,
+			doLogin: doLogin,
 			getCurrentPage: getCurrentPage,
 			getPosition: getPosition,
 			goBack: goBack,
 			listCampaigns: listCampaigns,
+			registerPageHook: registerPageHook,
+			showMonumentDetail: showMonumentDetail,
 			showMonumentsForPosition: showMonumentsForPosition,
 			showMonumentsList: showMonumentsList,
 			resolveImageThumbnail: resolveImageThumbnail,
-			showPage: showPage
+			showPage: showPage,
+			translateAdminLevels: translateAdminLevels,
+			uploadErrorHandler: uploadErrorHandler
 		},
+		commonsApi: commonsApi,
 		db: db,
 		monuments: monuments,
-		Monument: Monument
+		Monument: Monument,
+		Photo: Photo,
+		templates: templates
 	};
 	l10n.init().done( function() {
 		prefs.init().done( function() {
