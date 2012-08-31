@@ -58,7 +58,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	var uploadsRendered = 0, // For display caching: compare vs db.dirty
 		incompleteUploadsRendered = 0;
 	
-	var thumbSize = 64 * window.devicePixelRatio;
+	var thumbSize = WLMConfig.THUMB_SIZE;
 
 	var pageHistory = []; // TODO: retain history
 	var blacklist = [];
