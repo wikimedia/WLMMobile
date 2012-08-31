@@ -9,6 +9,9 @@ var WLMConfig = {
 	WIKI_LOVES_MONUMENTS_HOMEPAGE: 'http://www.wikilovesmonuments.org/',
 	WIKIPEDIA: 'https://$1.wikipedia.org',
 	WIKIPEDIA_API: 'https://$1.wikipedia.org/w/api.php',
-	VERSION_NUMBER: 1.2,
-	VERSION_NAME: 'Big Ben' // famous monument name (next should begin with C)
+	VERSION_NUMBER: '1.2.1',
+	VERSION_NAME: 'Big Ben', // famous monument name (next should begin with C)
+
+	// app specific
+	THUMB_SIZE: 64 * window.devicePixelRatio
 };
