@@ -52,7 +52,7 @@ define( [ 'jquery', 'utils' ], function() {
 		var suffix = ' ' +
 			pad( d.getFullYear(), 4 ) +
 			'-' +
-			pad( d.getMonth(), 2 ) +
+			pad( d.getMonth() + 1, 2 ) +
 			'-' +
 			pad( d.getDate(), 2 ) +
 			' ' +
