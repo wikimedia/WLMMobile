@@ -147,7 +147,7 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 
 			// Since clusterer needs to have a default view setup
 			map.setView( new L.LatLng( 0, 0 ), 3 );
-			clusterer = new LeafClusterer(map);
+			clusterer = new LeafClusterer( map, [], { maxZoom: 15, gridSize: 100 } );
 
 			if ( onmapchange ) { 
 				map.on( 'moveend', onmapchange );
