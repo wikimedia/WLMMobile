@@ -470,9 +470,16 @@ button.requires-location {
 }
 
 #incomplete-uploads-page input[type=checkbox] {
-	-webkit-transform: scale(2);
+	-webkit-transform: scale(3);
 	padding: 20px;
 	margin-top: 20px;
+	position: absolute;
+	top: 8px;
+	left: 8px;
+}
+
+#incomplete-uploads-page .monuments-list li {
+	padding-left: 60px;
 }
 
 /* Maps styles */
