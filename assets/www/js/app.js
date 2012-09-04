@@ -330,6 +330,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			}
 		}, {
 			enableHighAccuracy: true,
+			maximumAge: 1000,
 			timeout: 20000 // give up looking up location.. maybe they are in airplane mode
 		} );
 	}
