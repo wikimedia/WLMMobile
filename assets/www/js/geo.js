@@ -1,6 +1,6 @@
 /*global define, L, mw, $, chrome*/
 /*jslint sloppy: true, white:true, maxerr: 50, indent: 4, plusplus: true, vars:true */
-define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
+define( [ 'jquery', '../leaflet/leaflet-src', 'leaflet.markercluster' ], function() {
 
 	var map = null;
 	var clusterer = null;
@@ -147,7 +147,7 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 
 			// Since clusterer needs to have a default view setup
 			map.setView( new L.LatLng( 0, 0 ), 3 );
-			clusterer = new LeafClusterer( map, [], { maxZoom: 15, gridSize: 100 } );
+			clear();
 
 			if ( onmapchange ) { 
 				map.on( 'moveend', onmapchange );
@@ -156,7 +156,11 @@ define(['jquery', '../leaflet/leaflet-src', 'leafclusterer'], function() {
 	}
 
 	function clear() {
-		clusterer.clearMarkers();
+		if ( clusterer ) {
+			map.removeLayer( clusterer );
+		}
+		clusterer = new L.MarkerClusterGroup();
+		map.addLayer( clusterer );
 	}
 
 	function getMap() {
