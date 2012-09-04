@@ -171,25 +171,30 @@ define( [ 'jquery', '../leaflet/leaflet-src', 'leaflet.markercluster' ], functio
 		if ( typeof monument.lat === 'undefined' || typeof monument.lon === 'undefined' ) {
 			return;
 		}
-		var url = 'images/', iconOptions;
+		var url = 'images/', iconOptions,
+			shadowUrl = monument.image ? 'images/pin-shadow.png' : 'images/pin-no-photos-shadow.png';
 		url += monument.image ? 'pin.png' : 'pin-no-photos.png';
-		if ( L.VERSION === '0.3' ) { // TODO: upgrade leaflet to 4.0
-			 iconOptions = url;
-		} else {
-			iconOptions = {
-				iconUrl: url
-			};
-		}
+		iconOptions = {
+			clickable: true,
+			iconSize: new L.Point( 45, 47 ),
+			iconUrl: url,
+			shadowSize: new L.Point( 45, 47 ),
+			shadowUrl: shadowUrl
+		};
 		var markerIcon = new L.Icon( iconOptions );
-		markerIcon.shadowUrl = monument.image ? 'images/pin-shadow.png' : 'images/pin-no-photos-shadow.png';
-		markerIcon.shadowSize = new L.Point( 45, 47 );
-		markerIcon.iconSize = new L.Point( 45, 47 );
-		var marker = new L.Marker( new L.LatLng( monument.lat, monument.lon ), { icon: markerIcon } );
+		var markerPos = new L.LatLng( monument.lat, monument.lon )
+		var marker = new L.Marker( markerPos, { icon: markerIcon } );
 		var popup = "<div><strong>" + monument.name + "</strong></div>";
 		var popupDOM = $(popup).click(function() {
 			onClick(monument);
 		})[0];
-		marker.bindPopup(popupDOM, {closeButton: false});
+		var markerPopup = new L.Popup( { closeButton: false } );
+		markerPopup.setContent( popupDOM );
+		markerPopup.setLatLng( markerPos );
+
+		marker.on( 'click', function() {
+			markerPopup.openOn( map );
+		} );
 		clusterer.addLayer( marker );
 	}
 
