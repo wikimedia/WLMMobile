@@ -2,6 +2,7 @@
 /*jslint sloppy: true, white:true, maxerr: 50, indent: 4, plusplus: true, vars:true */
 define( [ 'jquery' ], function() {
 	var api, db, templates, commonsApi, showMonumentDetail, showPage, translateAdminLevels,
+		app,
 		doLogin, uploadErrorHandler,
 		uploadsRendered = 0, // For display caching: compare vs db.dirty
 		incompleteUploadsRendered = 0,
@@ -218,14 +219,7 @@ define( [ 'jquery' ], function() {
 						db.completeUpload( photo ).done( function() {
 							iter();
 						} );
-					} ).progress( function( state ) {
-						if( state === 'starting' ) {
-							$( '#upload-progress-state' ).html(mw.msg( 'upload-progress-starting' ));
-							showPage("upload-progress-page");
-						} else if ( state === 'in-progress' ) {
-							$("#upload-progress-state").html(mw.msg("upload-progress-in-progress"));
-						}
-					} ).fail( function( data ) {
+					} ).progress( app.uploadProgressHandler ).fail( function( data ) {
 						// @todo show error data here
 						if ( data === 'Aborted' ) {
 							// no-op
@@ -245,6 +239,7 @@ define( [ 'jquery' ], function() {
 	}
 
 	function UploadPage( WLMMobile ) {
+		app = WLMMobile.app;
 		api = WLMMobile.api;
 		db = WLMMobile.db;
 		Monument = WLMMobile.Monument;

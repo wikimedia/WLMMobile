@@ -552,6 +552,15 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		return displayError( code, info, info ? true : false );
 	}
 
+	function uploadProgressHandler( state ) {
+		if( state === 'starting' ) {
+			$( '#upload-progress-state' ).html( mw.msg( 'upload-progress-starting' ) );
+			showPage( 'upload-progress-page' );
+		} else if ( state === 'in-progress' ) {
+			$( '#upload-progress-state' ).html( mw.msg( 'upload-progress-in-progress' ) );
+		}
+	}
+
 	function showPhotoConfirmation(fileUrl) {
 		var comment = mw.msg( 'upload-comment', WLMConfig.VERSION_NUMBER );
 		var uploadConfirmTemplate = templates.getTemplate('upload-confirm-template');
@@ -591,14 +600,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				goBack(); // undo back button to skip upload progress page
 				goBack(); // undo back button to skip upload form
 				showPage( 'upload-latest-page' );
-			} ).progress( function( state ) {
-				if( state === 'starting' ) {
-					$( '#upload-progress-state' ).html(mw.msg( 'upload-progress-starting' ));
-					showPage("upload-progress-page");
-				} else if ( state === 'in-progress' ) {
-					$("#upload-progress-state").html(mw.msg("upload-progress-in-progress"));
-				}
-			} ).fail( function( data ) {
+			} ).progress( uploadProgressHandler ).fail( function( data ) {
 				var container;
 				if (data == "Aborted") {
 					// no-op
@@ -1120,7 +1122,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			resolveImageThumbnail: resolveImageThumbnail,
 			showPage: showPage,
 			translateAdminLevels: translateAdminLevels,
-			uploadErrorHandler: uploadErrorHandler
+			uploadErrorHandler: uploadErrorHandler,
+			uploadProgressHandler: uploadProgressHandler
 		},
 		commonsApi: commonsApi,
 		db: db,
