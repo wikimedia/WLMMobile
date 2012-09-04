@@ -552,7 +552,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 
 	function showPhotoConfirmation(fileUrl) {
-		var comment = 'Uploaded via WLM Mobile App';
+		var comment = mw.msg( 'upload-comment', WLMConfig.VERSION_NUMBER );
 		var uploadConfirmTemplate = templates.getTemplate('upload-confirm-template');
 		var fileName = curMonument.generateFilename();
 		console.log("Filename is " + fileName);
