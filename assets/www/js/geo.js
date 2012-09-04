@@ -190,7 +190,7 @@ define( [ 'jquery', '../leaflet/leaflet-src', 'leaflet.markercluster' ], functio
 			onClick(monument);
 		})[0];
 		marker.bindPopup(popupDOM, {closeButton: false});
-		clusterer.addMarker( marker );
+		clusterer.addLayer( marker );
 	}
 
 	function setCenterAndZoom( center, zoom, forceReset ) {
