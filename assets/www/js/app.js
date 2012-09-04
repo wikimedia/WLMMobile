@@ -220,8 +220,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 	function showMonumentDetail(monument) {
 		var monumentTemplate = templates.getTemplate('monument-details-template');
+		 // @FIXME remove dependency on CAMPAIGNS[monument.country].desc
 		var imageFetcher = commonsApi.getImageFetcher(300, 240);
-		// @FIXME remove dependency on CAMPAIGNS[monument.country].desc
 		var campaign = CAMPAIGNS[ monument.country ] ? CAMPAIGNS[ monument.country ].desc : monument.country;
 		var $monumentDetail = $( monumentTemplate( { monument: monument, campaign: campaign } ) );
 		$("#monument-detail").html($monumentDetail).localize();
@@ -948,18 +948,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			}
 
 			monumentSearchTimeout = window.setTimeout( function() {
-				var args = [].concat( getCurrentBoundingBox() ),
-					campaign = getCurrentCampaign();
+				var campaign = getCurrentCampaign();
 				$("#results").empty();
-				args.push( value );
 
-				if ( args.length === 5 ) {
-					console.log( 'searching with bounding box: ' + args.join( ',' ) );
-					monumentSearchReq = monuments.getInBoundingBox.apply( monuments, args );
-				} else {
-					console.log( 'searching with campaign ' + campaign.join( ',' ) );
-					monumentSearchReq = monuments.getForAdminLevel( campaign, value );
-				}
+				console.log( 'searching with campaign ' + campaign.join( ',' ) );
+				monumentSearchReq = monuments.getForAdminLevel( campaign, value );
 
 				monumentSearchReq.done( function( monuments ) {
 					showMonumentsList( monuments );
