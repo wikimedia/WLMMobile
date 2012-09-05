@@ -158,6 +158,11 @@ header.actionbar.hidden {
 	padding: 4px;
 }
 
+.page header.actionbar img.home {
+	height: 32px;
+	margin-bottom: 6px;
+}
+
 a.upload {
 	display: block;
 	text-align: center;
