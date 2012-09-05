@@ -30,10 +30,6 @@ define( [ 'jquery', 'utils' ], function() {
 		getLeaves: function( tree, lang, translate ) {
 			var data = { action: 'adminlevels', format: 'json', uselang: lang }, i, admtree = [],
 				cacheKey = 'root', d = new $.Deferred();
-			if ( translate ) {
-				data.admtranslate = 1;
-				cacheKey += ':translate';
-			}
 			if( tree ) {
 				for( i = 0; i < tree.length; i++ ) {
 					admtree.push( tree[ i ] );
@@ -41,6 +37,10 @@ define( [ 'jquery', 'utils' ], function() {
 				admtree = admtree.join( '|' );
 				cacheKey = admtree;
 				data.admtree = admtree;
+			}
+			if ( translate ) {
+				data.admtranslate = 1;
+				cacheKey += ':translate';
 			}
 			if ( cache[ cacheKey ] ) {
 				d.resolve( cache[ cacheKey ] );
