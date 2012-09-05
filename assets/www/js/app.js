@@ -31,6 +31,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				appendTo( '#upload-progress-bar' );
 		}
 	} );
+	var hrefStylesheet = 'app.css';
 	var CURRENT_LANGUAGE;
 	var PHOTO_TEMPLATE = templates.getTemplate( 'upload-photo-description', true );
 	var commonsApi = new Api( WLMConfig.COMMONS_API );
@@ -940,7 +941,18 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		if( l10n.isLangRTL( lang ) ) {
 			$( 'body' ).attr( 'dir', 'rtl' );
+			hrefStylesheet = 'app-rtl.css';
 		}
+		// load styles
+		$.ajax( {
+			url: hrefStylesheet, dataType: 'text'
+		} ).done( function( css ) {
+			$( document.documentElement ).removeClass( 'loading' );
+			$( '<style type="text/css" >' ).text( css ).appendTo( document.head );
+			initMap();
+			clearHistory();
+			showPage('welcome-page');
+		} );
 		CURRENT_LANGUAGE = lang;
 
 		function filterMonuments() {
@@ -1078,9 +1090,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		$(document).localize();
 		$( '#about-page-text a' ).eq( 0 ).attr( 'href', wlm_url );
 		$( '#about-page-text a' ).eq( 1 ).attr( 'href', wikipedia_url );
-		initMap();
-		clearHistory();
-		showPage('welcome-page');
 
 		// allow cancellation of current api upload request
 		$( '#upload-progress-page .back' ).click( function() {
