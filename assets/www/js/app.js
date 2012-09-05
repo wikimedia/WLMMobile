@@ -553,10 +553,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	}
 
 	function uploadProgressHandler( state ) {
+		$( '#upload-progress-page .back' ).attr( 'disabled', false );
 		if( state === 'starting' ) {
 			$( '#upload-progress-state' ).html( mw.msg( 'upload-progress-starting' ) );
 			showPage( 'upload-progress-page' );
 		} else if ( state === 'in-progress' ) {
+			$( '#upload-progress-page .back' ).attr( 'disabled', true );
 			$( '#upload-progress-state' ).html( mw.msg( 'upload-progress-in-progress' ) );
 		}
 	}
@@ -1079,7 +1081,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		// allow cancellation of current api upload request
 		$( '#upload-progress-page .back' ).click( function() {
 			console.log( 'request to cancel upload' );
-			api.cancel();
+			if ( !$( this ).is( ':disabled' ) ) {
+				api.cancel();
+			}
 		});
 
 		// setup dropdowns that allow switching a page
