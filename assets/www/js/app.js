@@ -21,7 +21,7 @@ function handleOpenURL(url)
 */
 require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument', 'preferences', 'database', 'admintree', 'photo',
 		'page-uploads',
-		'jquery.localize', 'campaigns-data', 'licenses-data', 'utils' ],
+		'jquery.localize', 'campaigns-data', 'campaign-loader', 'licenses-data', 'utils' ],
 	function( $, l10n, geo, Api, templates, MonumentsApi, Monument, prefs, db, AdminTreeApi, Photo, UploadPage ) {
 
 	var api = new Api( WLMConfig.WIKI_API, {
