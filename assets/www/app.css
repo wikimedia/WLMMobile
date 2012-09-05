@@ -392,6 +392,10 @@ header .back {
 	tap-highlight-color: rgba( 0, 0, 0, 0 );
 }
 
+.back:disabled {
+	opacity: 0.2;
+}
+
 /* upload page */
 #upload-page .popup {
 	text-align: center;
