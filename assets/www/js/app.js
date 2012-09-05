@@ -941,7 +941,12 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			hrefStylesheet = 'app-rtl.css';
 		}
 		// load styles
-		$( '<link rel="stylesheet" >' ).attr( 'href', hrefStylesheet ).appendTo( document.head );
+		$.ajax( {
+			url: hrefStylesheet, dataType: 'text'
+		} ).done( function( css ) {
+			$( document.documentElement ).removeClass( 'loading' );
+			$( '<style type="text/css" >' ).text( css ).appendTo( document.head );
+		} );
 
 		function filterMonuments() {
 			var value = this.value;
