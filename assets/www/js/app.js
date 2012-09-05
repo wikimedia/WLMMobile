@@ -946,6 +946,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		} ).done( function( css ) {
 			$( document.documentElement ).removeClass( 'loading' );
 			$( '<style type="text/css" >' ).text( css ).appendTo( document.head );
+			initMap();
+			clearHistory();
+			showPage('welcome-page');
 		} );
 
 		function filterMonuments() {
@@ -1083,9 +1086,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		$(document).localize();
 		$( '#about-page-text a' ).eq( 0 ).attr( 'href', wlm_url );
 		$( '#about-page-text a' ).eq( 1 ).attr( 'href', wikipedia_url );
-		initMap();
-		clearHistory();
-		showPage('welcome-page');
 
 		// allow cancellation of current api upload request
 		$( '#upload-progress-page .back' ).click( function() {
