@@ -224,10 +224,10 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		 // @FIXME remove dependency on CAMPAIGNS[monument.country].desc
 		var imageFetcher = commonsApi.getImageFetcher(300, 240);
 		var $monumentDetail = $( monumentTemplate( { monument: monument } ) );
+		$( '#monument-detail' ).html( $monumentDetail ).localize();
 		translateLevelsForMonument( monument ).done( function( names ) {
 			$( '#monument-detail .campaign' ).text( names.reverse().join( ', ' ) );
 		} );
-		$("#monument-detail").html($monumentDetail).localize();
 		if ( monument.image ) {
 			$( '#monument-detail' ).find( 'img.monument-thumbnail' ).removeAttr( 'src' );
 			$( '#monument-detail' ).addClass( 'loading' );
