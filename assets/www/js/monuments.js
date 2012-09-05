@@ -1,4 +1,5 @@
 define([ 'jquery', 'monument' ], function( $, Monument ) {
+	var cache = {};
 	function MonumentsApi( url, mwApi, lang ) {
 		this.url = url;
 		this.mwApi = mwApi;
@@ -6,7 +7,8 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 	}
 
 	MonumentsApi.prototype.request = function( params ) {
-		var that = this, options = {};
+		var that = this, options = {},
+			d, key = params.bbox;
 		// attaches a function to array to query for next set of results
 		// TODO: is there a better way that doesn't rely on an unknown property?
 		function addPointer( monuments, srcontinue ) {
@@ -47,10 +49,21 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 				if ( data.hasOwnProperty( 'continue' ) ) {
 					monuments = addPointer( monuments,  data[ 'continue' ].srcontinue );
 				}
+				if ( key ) {
+					cache[ key ] = monuments;
+				}
 				return monuments;
 			}
 		};
-		return $.ajax( options );
+		if ( cache[ key ] ) {
+			console.log( 'CACHE HIT' );
+			d = new $.Deferred();
+			d.resolve( cache[ key ] );
+			d.abort = function() {}; // caller expects result of ajax request so stub out abort function
+			return d;
+		} else {
+			return $.ajax( options );
+		}
 	};
 
 	MonumentsApi.prototype.getForCountry = function( country ) {
@@ -97,6 +110,7 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 			deltaLon = maxLon - minLon,
 			centerLat = ( deltaLat / 2 ) + minLat,
 			centerLon = ( deltaLon / 2 ) + minLon,
+			i, bbox,
 			bbCap = MAX_BOUNDING_BOX_DEGREES / 2;
 
 		if( deltaLat > MAX_BOUNDING_BOX_DEGREES ) {
@@ -107,7 +121,13 @@ define([ 'jquery', 'monument' ], function( $, Monument ) {
 			minLon = centerLon - bbCap;
 			maxLon = centerLon + bbCap;
 		}
-		return [ minLon, minLat, maxLon, maxLat ];
+		bbox = [ minLon, minLat, maxLon, maxLat ];
+		// limit bounding box to 5 decimal places to allow higher cacheability.
+		for ( i = 0; i < bbox.length; i++ ) {
+			bbox[ i ] = bbox[ i ].toFixed( 3 );
+		}
+		console.log( 'trim to ' + JSON.stringify( bbox ) );
+		return bbox;
 	};
 
 	MonumentsApi.prototype.getInBoundingBox = function( minLon, minLat, maxLon, maxLat, str ) {

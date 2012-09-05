@@ -20,8 +20,9 @@ function handleOpenURL(url)
 }
 */
 require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument', 'preferences', 'database', 'admintree', 'photo',
-		'jquery.localize', 'campaigns-data', 'licenses-data', 'utils' ],
-	function( $, l10n, geo, Api, templates, MonumentsApi, Monument, prefs, db, AdminTreeApi, Photo ) {
+		'page-uploads',
+		'jquery.localize', 'campaigns-data', 'campaign-loader', 'licenses-data', 'utils' ],
+	function( $, l10n, geo, Api, templates, MonumentsApi, Monument, prefs, db, AdminTreeApi, Photo, UploadPage ) {
 
 	var api = new Api( WLMConfig.WIKI_API, {
 		onProgressChanged: function( percent ) {
@@ -30,6 +31,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				appendTo( '#upload-progress-bar' );
 		}
 	} );
+	var CURRENT_LANGUAGE;
 	var PHOTO_TEMPLATE = templates.getTemplate( 'upload-photo-description', true );
 	var commonsApi = new Api( WLMConfig.COMMONS_API );
 	var monuments = new MonumentsApi( WLMConfig.MONUMENT_API, commonsApi );
@@ -54,11 +56,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 	var curPageName = null;
 	var curMonument = null; // Used to store state for take photo, etc
-	
-	var uploadsRendered = 0, // For display caching: compare vs db.dirty
-		incompleteUploadsRendered = 0;
-	
-	var thumbSize = 64 * window.devicePixelRatio;
+
+	var thumbSize = WLMConfig.THUMB_SIZE;
 
 	var pageHistory = []; // TODO: retain history
 	var blacklist = [];
@@ -151,6 +150,17 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		return translatedPageNames[ name ] || stripWikiText( name );
 	}
 
+	var showHooks = [];
+	function showPageHooks( pageName, deferred ) {
+		showHooks.forEach( function( fn ) {
+			fn( pageName, deferred );
+		} );
+	}
+
+	function registerPageHook( fn ) {
+		showHooks.push( fn );
+	}
+
 	function showPage( pageName, deferred ) {
 		var subPage, heading;
 		addToHistory( pageName );
@@ -205,20 +215,19 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			$page.find( 'h3' ).text( heading );
 			$( '#filter-campaign' ).attr( 'placeholder', subPage ?
 				mw.msg( 'search-region-placeholder' ) : mw.msg( 'search-country-placeholder' ) );
-		} else if ( pageName === 'uploads-page' ) {
-			showUploads();
-		} else if ( pageName === 'incomplete-uploads-page' ) {
-			showIncompleteUploads();
 		}
+		showPageHooks( pageName, deferred );
 	}
 
 	function showMonumentDetail(monument) {
 		var monumentTemplate = templates.getTemplate('monument-details-template');
+		 // @FIXME remove dependency on CAMPAIGNS[monument.country].desc
 		var imageFetcher = commonsApi.getImageFetcher(300, 240);
-		// @FIXME remove dependency on CAMPAIGNS[monument.country].desc
-		var campaign = CAMPAIGNS[ monument.country ] ? CAMPAIGNS[ monument.country ].desc : monument.country;
-		var $monumentDetail = $( monumentTemplate( { monument: monument, campaign: campaign } ) );
-		$("#monument-detail").html($monumentDetail).localize();
+		var $monumentDetail = $( monumentTemplate( { monument: monument } ) );
+		$( '#monument-detail' ).html( $monumentDetail ).localize();
+		translateLevelsForMonument( monument ).done( function( names ) {
+			$( '#monument-detail .campaign' ).text( names.reverse().join( ', ' ) );
+		} );
 		if ( monument.image ) {
 			$( '#monument-detail' ).find( 'img.monument-thumbnail' ).removeAttr( 'src' );
 			$( '#monument-detail' ).addClass( 'loading' );
@@ -324,6 +333,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			}
 		}, {
 			enableHighAccuracy: true,
+			maximumAge: 1000,
 			timeout: 20000 // give up looking up location.. maybe they are in airplane mode
 		} );
 	}
@@ -545,8 +555,19 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		return displayError( code, info, info ? true : false );
 	}
 
+	function uploadProgressHandler( state ) {
+		$( '#upload-progress-page .back' ).attr( 'disabled', false );
+		if( state === 'starting' ) {
+			$( '#upload-progress-state' ).html( mw.msg( 'upload-progress-starting' ) );
+			showPage( 'upload-progress-page' );
+		} else if ( state === 'in-progress' ) {
+			$( '#upload-progress-page .back' ).attr( 'disabled', true );
+			$( '#upload-progress-state' ).html( mw.msg( 'upload-progress-in-progress' ) );
+		}
+	}
+
 	function showPhotoConfirmation(fileUrl) {
-		var comment = 'Uploaded via WLM Mobile App';
+		var comment = mw.msg( 'upload-comment', WLMConfig.VERSION_NUMBER );
 		var uploadConfirmTemplate = templates.getTemplate('upload-confirm-template');
 		var fileName = curMonument.generateFilename();
 		console.log("Filename is " + fileName);
@@ -584,14 +605,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				goBack(); // undo back button to skip upload progress page
 				goBack(); // undo back button to skip upload form
 				showPage( 'upload-latest-page' );
-			} ).progress( function( state ) {
-				if( state === 'starting' ) {
-					$( '#upload-progress-state' ).html(mw.msg( 'upload-progress-starting' ));
-					showPage("upload-progress-page");
-				} else if ( state === 'in-progress' ) {
-					$("#upload-progress-state").html(mw.msg("upload-progress-in-progress"));
-				}
-			} ).fail( function( data ) {
+			} ).progress( uploadProgressHandler ).fail( function( data ) {
 				var container;
 				if (data == "Aborted") {
 					// no-op
@@ -642,89 +656,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		}
 	});
 	
-	$( '#select-all' ).click( function() {
-		var $items = $( '#incomplete-uploads-page .monuments-list input[type=checkbox]' )
-		if ( $items.length > 0 ) {
-			$items.each( function( i, item ) {
-				var $item = $( item );
-				$item.attr( 'checked', true );
-			} );
-			$( '#upload-all, #delete-all' ).removeAttr( 'disabled' );
-		}
-	} );
-	
-	$( '#delete-all' ).click( function() {
-		var queue = [];
-		$( '#incomplete-uploads-page .monuments-list input[type=checkbox]:checked' ).each( function( i, item ) {
-			var $item = $( item ),
-				photo = $item.data( 'photo' );
-			queue.push( photo );
-		} );
-
-		// @todo replace confirm() with a nicer in-app dialog?
-		if ( window.confirm( mw.message( 'delete-selected-prompt', queue.length ).plain() ) ) {
-			// Delete in sequence!
-			function iter() {
-				if ( queue.length > 0 ) {
-					var photo = queue.pop();
-					db.deleteUpload( photo ).then( function() {
-						iter();
-					} );
-				} else {
-					showIncompleteUploads();
-				}
-			}
-			iter();
-		}
-	} );
-	
-	$( '#upload-all' ).click( function() {
-		var queue = [];
-		$( '#incomplete-uploads-page .monuments-list input[type=checkbox]:checked' ).each( function( i, item ) {
-			var $item = $( item ),
-				monument = $item.data( 'monument' )
-				photo = $item.data( 'photo' );
-			photo = new Photo( photo.data );
-			queue.push( {monument: monument, photo: photo} );
-		} );
-
-		// Upload in sequence!
-		// @todo build a better progress bar
-		function iter() {
-			if ( queue.length > 0 ) {
-				var item = queue.pop(),
-					photo = item.photo,
-					monument = item.monument;
-				comment = 'Batch upload'; // ????
-				photo.uploadTo( api, comment, PHOTO_TEMPLATE ).done( function( imageinfo ) {
-					db.completeUpload( photo ).done( function() {
-						iter();
-					} );
-				} ).progress( function( state ) {
-					if( state === 'starting' ) {
-						$( '#upload-progress-state' ).html(mw.msg( 'upload-progress-starting' ));
-						showPage("upload-progress-page");
-					} else if ( state === 'in-progress' ) {
-						$("#upload-progress-state").html(mw.msg("upload-progress-in-progress"));
-					}
-				} ).fail( function( data ) {
-					// @todo show error data here
-					if (data == "Aborted") {
-						// no-op
-						console.log( "Upload got aborted." );
-						showPage( 'incomplete-uploads-page' );
-					} else {
-						uploadErrorHandler( data );
-					}
-				} );
-			} else {
-				// Show your now-completed uploads.
-				showPage( 'uploads-page' );
-			}
-		}
-		doLogin( iter );
-	} );
-
 	// Need to use callbacks instead of deferreds
 	// since callbacks need to be called multiple times
 	// For example, when the user tries to login but can not
@@ -862,7 +793,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		if ( monument.adm3 ) {
 			levels.push( monument.adm3 );
 		}
-		return admintree.getLeaves( levels, 'en', /* translate */ true ).pipe( function( tree ) {
+		return admintree.getLeaves( levels, CURRENT_LANGUAGE, /* translate */ true ).pipe( function( tree ) {
 			var names = [];
 			$.each( tree, function( i, level ) {
 				var name = stripWikiText( level.name );
@@ -877,157 +808,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		var $name = $uploadItem.find( '.monument-location' );
 		translateLevelsForMonument( monument ).done( function( names ) {
 			$name.text( names.join( ' > ' ) );
-		} );
-	}
-
-	// Expects user to be logged in
-	function showUploads() {
-		if ( uploadsRendered > db.dirty ) {
-			// we've already rendered the current display
-			return;
-		}
-		uploadsRendered = Date.now();
-
-		var username = api.userName,
-			$list = $( '#uploads-page .monuments-list' );
-		db.requestUploads( db.UPLOAD_COMPLETE ).done( function( uploads ) {
-			$list.empty();
-			if( uploads.length ) {
-				var thumbFetcher = api.getImageFetcher( thumbSize, thumbSize ); // important: use same API we upload to!
-				var uploadsTemplate = templates.getTemplate( 'upload-list-item-template' );
-				var uploadCompleteTemplate = templates.getTemplate( 'upload-completed-item-detail-template' );
-				$.each( uploads, function( i, upload ) {
-					var monument = new Monument( JSON.parse( upload.monument ), api );
-					var photo = JSON.parse( upload.photo );
-					var $uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
-
-					photo.data.fileUrl = WLMConfig.WIKI_BASE + 'File:' + encodeURIComponent( photo.data.fileTitle );
-					$uploadItem.click( function() {
-						$( '#completed-upload-detail' ).html( uploadCompleteTemplate( { upload: upload, monument: monument, photo: photo } ) );
-						$( '#completed-upload-detail .monumentLink' ).
-							data( 'monument', new Monument( monument, commonsApi ) ).
-							click( function() {
-								showMonumentDetail( $( this ).data( 'monument' ) );
-							} ).localize();
-						showPage( 'completed-upload-detail-page' );
-					} );
-
-					// Note that items uploaded before addition of the '.jpg' extension will fail here.
-					var $thumb = $uploadItem.find( 'img.monument-thumbnail' );
-					thumbFetcher.request( photo.data.fileTitle ).done( function( imageinfo ) {
-						$thumb.attr( 'src', imageinfo.thumburl );
-					} ).fail( function() {
-						$thumb.attr( 'src', 'images/placeholder-thumb.png' );
-					} );
-					$list.append( $uploadItem );
-					translateAdminLevels( $uploadItem, monument );
-				} );
-				thumbFetcher.send();
-			} else {
-				var emptyUploadTemplate = templates.getTemplate( 'upload-list-empty-template' );
-				$list.html( emptyUploadTemplate() ).localize();
-			}
-		} );
-	}
-
-	function showIncompleteUploads() {
-		if ( incompleteUploadsRendered > db.dirty ) {
-			// we've already rendered the current display
-			return;
-		}
-		incompleteUploadsRendered = Date.now();
-
-		var username = api.userName,
-			$list = $( '#incomplete-uploads-page .monuments-list' );
-		db.requestUploads( db.UPLOAD_INCOMPLETE ).done( function( uploads ) {
-			$list.empty();
-			var $buttons = $( '#delete-all, #upload-all' );
-			$buttons.attr( 'disabled', 'disabled' );
-
-			if( uploads.length ) {
-				$( '#select-all' ).removeAttr( 'disabled' );
-				var uploadsTemplate = templates.getTemplate( 'upload-incomplete-list-item-template' );
-				var uploadIncompleteTemplate = templates.getTemplate( 'upload-incomplete-item-detail-template' );
-				var thumbQueue = [];
-				$.each( uploads, function( i, upload ) {
-					var monument = JSON.parse( upload.monument );
-					var photo = JSON.parse( upload.photo );
-					var $uploadItem = $( uploadsTemplate( { upload: upload, monument: monument, photo: photo } ) );
-
-					$uploadItem.find( 'input[type=checkbox]' )
-						.data( 'monument', monument )
-						.data( 'photo', photo )
-						.click( function() {
-							var $checked = $( '#incomplete-uploads-page .monuments-list input[type=checkbox]:checked' );
-							if ( $checked.length > 0 ) {
-								$buttons.removeAttr( 'disabled' );
-							} else {
-								$buttons.attr( 'disabled', 'disabled' );
-							}
-						} );
-
-					$uploadItem.click( function() {
-						$( '#incomplete-upload-detail' ).html( uploadIncompleteTemplate( { upload: upload, monument: monument, photo: photo } ) ).localize();
-						$( '#incomplete-upload-detail .monumentLink' ).
-							data( 'monument', new Monument( monument, commonsApi ) ).
-							click( function() {
-								showMonumentDetail( $( this ).data( 'monument' ) );
-							} );
-						showPage( 'incomplete-upload-detail-page' );
-					} );
-					
-					$uploadItem.find( 'input' ).click( function( event ) {
-						// wheeee
-						event.stopPropagation();
-					} );
-					$list.append( $uploadItem );
-
-					// Create thumbnails from the originals so we don't have to keep them all in RAM
-					// Serialize loads & draws in a queue so we don't freeze the screen drawing them all at once. 
-					thumbQueue.push( function() {
-						var img = new Image(),
-							$img = $( img ),
-							d = $.Deferred();
-						$img.attr( 'src', photo.data.contentURL ).load( function() {
-							var ratio = img.width / img.height;
-							var thumbWidth, thumbHeight;
-							if ( ratio >= 1 ) {
-								thumbWidth = thumbSize;
-								thumbHeight = Math.floor( thumbSize / ratio );
-							} else {
-								thumbHeight = thumbSize;
-								thumbWidth = Math.floor( thumbSize * ratio );
-							}
-							var $canvas = $( '<canvas>' )
-									.attr( 'width', thumbWidth )
-									.attr( 'height', thumbHeight )
-									.addClass( 'monument-thumbnail' ),
-								ctx = $canvas[0].getContext( '2d' );
-							ctx.drawImage( img, 0, 0, thumbWidth, thumbHeight );
-							$uploadItem.find('img.monument-thumbnail').replaceWith( $canvas );
-							d.resolve();
-						} );
-						return d.promise();
-					} );
-
-					// Translate administrative level codes into proper text
-					translateAdminLevels( $uploadItem, monument );
-				} );
-				
-				function iterThumbQueue() {
-					if ( thumbQueue.length > 0 ) {
-						var func = thumbQueue.shift();
-						func().done( function() {
-							window.setTimeout( iterThumbQueue, 0 );
-						} );
-					}
-				}
-				iterThumbQueue();
-			} else {
-				$( '#select-all' ).attr( 'disabled', true );
-				var emptyUploadTemplate = templates.getTemplate( 'upload-incomplete-list-empty-template' );
-				$list.html( emptyUploadTemplate() ).localize();
-			}
 		} );
 	}
 
@@ -1161,6 +941,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		if( l10n.isLangRTL( lang ) ) {
 			$( 'body' ).attr( 'dir', 'rtl' );
 		}
+		CURRENT_LANGUAGE = lang;
 
 		function filterMonuments() {
 			var value = this.value;
@@ -1176,18 +957,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			}
 
 			monumentSearchTimeout = window.setTimeout( function() {
-				var args = [].concat( getCurrentBoundingBox() ),
-					campaign = getCurrentCampaign();
+				var campaign = getCurrentCampaign();
 				$("#results").empty();
-				args.push( value );
 
-				if ( args.length === 5 ) {
-					console.log( 'searching with bounding box: ' + args.join( ',' ) );
-					monumentSearchReq = monuments.getInBoundingBox.apply( monuments, args );
-				} else {
-					console.log( 'searching with campaign ' + campaign.join( ',' ) );
-					monumentSearchReq = monuments.getForAdminLevel( campaign, value );
-				}
+				console.log( 'searching with campaign ' + campaign.join( ',' ) );
+				monumentSearchReq = monuments.getForAdminLevel( campaign, value );
 
 				monumentSearchReq.done( function( monuments ) {
 					showMonumentsList( monuments );
@@ -1311,7 +1085,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		// allow cancellation of current api upload request
 		$( '#upload-progress-page .back' ).click( function() {
 			console.log( 'request to cancel upload' );
-			api.cancel();
+			if ( !$( this ).is( ':disabled' ) ) {
+				api.cancel();
+			}
 		});
 
 		// setup dropdowns that allow switching a page
@@ -1337,28 +1113,39 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		} );
 	}
 
-	l10n.init().done( function() {
-		prefs.init().done( function() {
-			db.init().done( init );
-			monuments.lang = prefs.get( 'uiLanguage' );
-		} );
-	});
 	window.WLMMobile = {
 		admintree: admintree,
 		api : api,
 		app: {
 			clearHistory: clearHistory,
+			doLogin: doLogin,
 			getCurrentPage: getCurrentPage,
 			getPosition: getPosition,
 			goBack: goBack,
 			listCampaigns: listCampaigns,
+			registerPageHook: registerPageHook,
+			showMonumentDetail: showMonumentDetail,
 			showMonumentsForPosition: showMonumentsForPosition,
 			showMonumentsList: showMonumentsList,
 			resolveImageThumbnail: resolveImageThumbnail,
-			showPage: showPage
+			showPage: showPage,
+			translateAdminLevels: translateAdminLevels,
+			uploadErrorHandler: uploadErrorHandler,
+			uploadProgressHandler: uploadProgressHandler
 		},
+		commonsApi: commonsApi,
 		db: db,
 		monuments: monuments,
-		Monument: Monument
+		Monument: Monument,
+		Photo: Photo,
+		templates: templates
 	};
+
+	l10n.init().done( function() {
+		prefs.init().done( function() {
+			db.init().done( init );
+			monuments.lang = prefs.get( 'uiLanguage' );
+			UploadPage( window.WLMMobile );
+		} );
+	});
 });
