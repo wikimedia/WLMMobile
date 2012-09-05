@@ -32,6 +32,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		}
 	} );
 	var hrefStylesheet = 'app.css';
+	var CURRENT_LANGUAGE;
 	var PHOTO_TEMPLATE = templates.getTemplate( 'upload-photo-description', true );
 	var commonsApi = new Api( WLMConfig.COMMONS_API );
 	var monuments = new MonumentsApi( WLMConfig.MONUMENT_API, commonsApi );
@@ -223,9 +224,11 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		var monumentTemplate = templates.getTemplate('monument-details-template');
 		 // @FIXME remove dependency on CAMPAIGNS[monument.country].desc
 		var imageFetcher = commonsApi.getImageFetcher(300, 240);
-		var campaign = CAMPAIGNS[ monument.country ] ? CAMPAIGNS[ monument.country ].desc : monument.country;
-		var $monumentDetail = $( monumentTemplate( { monument: monument, campaign: campaign } ) );
-		$("#monument-detail").html($monumentDetail).localize();
+		var $monumentDetail = $( monumentTemplate( { monument: monument } ) );
+		$( '#monument-detail' ).html( $monumentDetail ).localize();
+		translateLevelsForMonument( monument ).done( function( names ) {
+			$( '#monument-detail .campaign' ).text( names.reverse().join( ', ' ) );
+		} );
 		if ( monument.image ) {
 			$( '#monument-detail' ).find( 'img.monument-thumbnail' ).removeAttr( 'src' );
 			$( '#monument-detail' ).addClass( 'loading' );
@@ -791,7 +794,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		if ( monument.adm3 ) {
 			levels.push( monument.adm3 );
 		}
-		return admintree.getLeaves( levels, 'en', /* translate */ true ).pipe( function( tree ) {
+		return admintree.getLeaves( levels, CURRENT_LANGUAGE, /* translate */ true ).pipe( function( tree ) {
 			var names = [];
 			$.each( tree, function( i, level ) {
 				var name = stripWikiText( level.name );
@@ -950,6 +953,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			clearHistory();
 			showPage('welcome-page');
 		} );
+		CURRENT_LANGUAGE = lang;
 
 		function filterMonuments() {
 			var value = this.value;
