@@ -585,9 +585,18 @@ button.myLocation.loading {
 #about-page a,
 #completed-upload-detail a,
 #incomplete-upload-detail a,
-#login-page #login-create-account-msg a {
+#login-page #login-create-account-msg a,
+h2.toggle a {
 	color: #666;
 	text-decoration: underline;
+}
+
+h2.toggle {
+	font-weight: normal;
+	text-align: center;
+}
+h2.toggle .selected {
+	font-weight: bold;
 }
 
 /* Upload confirmation specific CSS */
