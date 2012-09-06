@@ -1064,7 +1064,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			}, {
 				// options
 				destinationType: Camera.DestinationType.FILE_URI,
-				saveToPhotoAlbum: true
+				saveToPhotoAlbum: true,
+				quality: 100 // don't recompress
 			});
 		});
 		$('#selectphoto').click(function() {
