@@ -462,6 +462,11 @@ button.requires-location {
 	max-height: 64px;
 }
 
+.photo .monument-thumbnail {
+	max-width: 300px;
+	max-height: 240px;
+}
+
 .monuments-list .distance {
 	color: #B0B0B0;
 	font-size: 0.7em;
