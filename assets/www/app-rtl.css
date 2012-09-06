@@ -10,10 +10,35 @@ html {
 	font-size: 100%;
 }
 
+body {
+	font-family: "Roboto", "Droid Sans", "Helvetica";
+	padding: 0;
+	margin: 0;
+	background-color: #F2F2F2;
+	color: #222;
+	top: 0;
+	bottom: 0;
+	position: absolute;
+	left: 0;
+	right: 0;
+}
+
 /* spinner related styles */
 #monument-detail.loading img,
 #results li.loading img {
 	visibility: hidden;
+}
+
+.mapLoader.loading,
+#monument-detail.loading .photo,
+#results li.loading,
+#results .footer.loading,
+.loading #results,
+.loading .content {
+	background-image: url(images/loader.gif);
+	background-position: center center;
+	background-repeat: no-repeat;
+	min-height: 50px;
 }
 
 .mapLoader.loading {
@@ -26,16 +51,16 @@ html {
 	width: 50px;
 	height: 50px;
 	top: 60px; /* height of header (52px + 8px) */
-	right: 8px;
+	left: 8px;
 	z-index: 200; /* on android 4.0.4 the action bar with z-index 200 seems to obscure it for some reason */
 }
 
 #results li.loading {
-	background-position: right center;
+	background-position: left center;
 }
 
 #monument-detail.loading .photo {
-	background-position: left center;
+	background-position: right center;
 }
 
 #campaign-page.loading h3 {
@@ -61,10 +86,10 @@ a {
 }
 
 #locationlookup-page .content {
-	background-position: right top;
-	padding-right: 62px;
+	background-position: left top;
+	padding-left: 62px;
 	line-height: 32px;
-	margin-right: 8px;
+	margin-left: 8px;
 	margin-top: 8px;
 }
 
@@ -105,8 +130,8 @@ header.actionbar.hidden {
 
 .page {
 	position: absolute;
-	right: 0;
 	left: 0;
+	right: 0;
 	top: 0;
 	bottom: 0;
 }
@@ -124,7 +149,7 @@ header.actionbar.hidden {
 }
 
 .detail-page.page header.actionbar {
-	border-right: solid 1px black;
+	border-left: solid 1px black;
 }
 
 .page header.actionbar img {
@@ -139,7 +164,7 @@ a.upload {
 	background-color: #F2F2F2;
 	padding: 10px 20px 10px 20px;
 	margin-top: -4px;
-	margin-right: -5px;
+	margin-left: -5px;
 	cursor: pointer;
 	text-transform: uppercase;
 	width: 104px;
@@ -171,7 +196,7 @@ a.upload {
 	display: block;
 	padding: 2px 0px;
 	-webkit-box-flex: 1;
-	border-right: #D1D1D1 1px solid;
+	border-left: #D1D1D1 1px solid;
 }
 
 .page header.tabbar a.active {
@@ -181,7 +206,7 @@ a.upload {
 .page header h2 {
 	margin: 0;
 	font-size: 1.2em;
-	margin-left: 5px;
+	margin-right: 5px;
 	-webkit-box-flex: 1;
 }
 
@@ -189,14 +214,14 @@ a.upload {
 	position: relative;
 	margin-top: 0;
 	border-bottom: 2px #D1D1D1 solid;
-	border-right: 2px #d1d1d1 solid;
+	border-left: 2px #d1d1d1 solid;
 }
 
 .page .content {
 	position: absolute;
 	top: 48px;
-	left: 0px;
 	right: 0px;
+	left: 0px;
 	font-size: 18px;
 	padding: 5px 10px;
 	background-color: #F2F2F2;
@@ -211,14 +236,14 @@ a.upload {
 .content h3 {
 	color: #8F0000;
 	border-bottom: 1px #8F0000 solid;
-	text-align: left;
+	text-align: right;
 	font-size: 14px;
 	font-weight: bold;
 	text-transform: uppercase;
 }
 
 #detail-page .content h3 {
-	margin-right: 92px;
+	margin-left: 92px;
 }
 
 ol {
@@ -227,7 +252,7 @@ ol {
 
 ol > li {
 	position: relative;
-	padding-left: 30px;
+	padding-right: 30px;
 	display: block;
 	margin-bottom: 8px;
 	border-bottom: none;
@@ -239,7 +264,7 @@ ol > li::before {
 	content: counter(li);
 	counter-increment: li;
 	position: absolute;
-	left: 0;
+	right: 0;
 	top: 0;
 	color: #999;
 	font-weight: bold;
@@ -315,8 +340,8 @@ header h2 input[type='text'] {
 	position: absolute;
 	top: 0px;
 	bottom: 0px;
-	left: 0px;
 	right: 0px;
+	left: 0px;
 	background: rgba(128, 128, 128, 0.5);
 	z-index: 300;
 	display: -webkit-box;
@@ -327,7 +352,7 @@ header h2 input[type='text'] {
 .popup-container a.about-link {
 	position: absolute;
 	top: 0;
-	right: 0;
+	left: 0;
 }
 
 .popup {
@@ -345,7 +370,7 @@ header h2 input[type='text'] {
 
 .popup button.close {
 	position: absolute;
-	right: 0;
+	left: 0;
 	top: 0;
 }
 
@@ -353,22 +378,17 @@ header h2 input[type='text'] {
 
 header .back {
 	display: block;
-	background: url('images/button-dark-back-ltr.png') no-repeat;
-	-webkit-background-size: 20px 31px;
+	background: url('images/button-dark-back-rtl.png') no-repeat;
 	background-size: 20px 31px;
 	width: 36px;
 	height: 100%;
-	margin-left: 5px;
-	background-position: left center;
+	margin-right: 5px;
+	background-position: right center;
 }
 
 .back {
 	-webkit-tap-highlight-color: rgba( 0, 0, 0, 0 );
 	tap-highlight-color: rgba( 0, 0, 0, 0 );
-}
-
-.back:disabled {
-	opacity: 0.2;
 }
 
 /* upload page */
@@ -454,16 +474,9 @@ button.requires-location {
 }
 
 #incomplete-uploads-page input[type=checkbox] {
-	-webkit-transform: scale(3);
+	-webkit-transform: scale(2);
 	padding: 20px;
 	margin-top: 20px;
-	position: absolute;
-	top: 8px;
-	left: 8px;
-}
-
-#incomplete-uploads-page .monuments-list li {
-	padding-left: 60px;
 }
 
 /* Maps styles */
@@ -476,14 +489,14 @@ button.requires-location {
 	-webkit-transform: translate3d(0,0,0);
 	position: relative;
 	top: 0;
-	left: 0;
+	right: 0;
 	z-index: 7;
 }
 .leaflet-control-attribution {
 	-webkit-transform: translate3d(0,0,0);
 	position: relative;
 	bottom: 0;
-	right: 0;
+	left: 0;
 	z-index: 7;
 }
 
@@ -507,7 +520,7 @@ button.myLocation {
 	border-radius: 2px;
 	padding: 0;
 	top: 120px;
-	left: 24px;
+	right: 24px;
 	background-repeat: no-repeat;
 	background-image: url(images/dot.png);
 	background-position: center center;
@@ -572,7 +585,7 @@ button.myLocation.loading {
 }
 
 #login-page #login {
-	float: right;
+	float: left;
 	padding: 5px;
 }
 

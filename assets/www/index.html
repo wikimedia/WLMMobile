@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="loading">
   <head>
   <title></title>
   
@@ -11,8 +11,8 @@
 	<link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />		
 	<link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />		
 	-->
+	<link rel="stylesheet" href="common.css" type="text/css">
 	<link rel="stylesheet" href="leaflet/leaflet.css" type="text/css">
-	<link rel="stylesheet" href="app.css" type="text/css" />
 	<script type="text/javascript" src="js/config.js"></script>
   </head>
   <body class='hidden'>
@@ -165,6 +165,8 @@
 |other_fields=
 }}
 
+[//commons.wikimedia.org/wiki/Special:UploadWizard?campaign=wlm-<%= encodeURIComponent(descData.monument.country) %>&id=<%= encodeURIComponent(descData.monument.id) %> <%= mw.message('upload-more-link') %>]
+
 =={{int:license-header}}==
 {{self|<%= descData.license %>}}
 
@@ -265,11 +267,11 @@
 	<div class="page" id="results-page">
 		<header class='actionbar'>
 			<a class='back' href="#"> </a>
-			<h2>
-				<select class="toggle-page">
-					<option value="results-page" data-msg-text="dropdown-list-view" selected></option>
-					<option value="map-page" data-msg-text="dropdown-map-view"></option>
-				</select>
+			<h2 class="toggle">
+				<msg key="toggle-view"></msg>
+				<span class="selected"><msg key="toggle-list-view"></msg></span>
+				/
+				<a class="page-link" data-page="map-page"><msg key="toggle-map-view"></msg></a>
 			</h2>
 			<a class="show-search"><img src='images/2-action-search.png' /></a>
 			<a class='page-link' data-page='settings-page'><img src='images/2-action-settings.png' /></a>
@@ -290,11 +292,11 @@
 	<div class="page" id="map-page">
 		<header class='actionbar'>
 			<a class='back' href="#"> </a>
-			<h2>
-				<select class="toggle-page">
-					<option value="map-page" data-msg-text="dropdown-map-view" selected></option>
-					<option value="results-page" data-msg-text="dropdown-list-view"></option>
-				</select>
+			<h2 class="toggle">
+				<msg key="toggle-view"></msg>
+				<a class="page-link" data-page="results-page"><msg key="toggle-list-view"></msg></a>
+				/
+				<span class="selected"><msg key="toggle-map-view"></msg></span>
 			</h2>
 			<a class='page-link' data-page='settings-page'><img src='images/2-action-settings.png' /></a>
 		</header>
@@ -305,11 +307,11 @@
 	<div class="page" id="uploads-page">
 		<header class='actionbar'>
 			<a class='back' href="#"></a>
-			<h2>
-			<select class="toggle-page">
-				<option value="uploads-page" selected data-msg-text="uploads-completed"></option>
-				<option value="incomplete-uploads-page" data-msg-text="uploads-incomplete"></option>
-			</select>
+			<h2 class="toggle">
+				<msg key="toggle-view"></msg>
+				<span class="selected"><msg key="toggle-uploads-complete"></msg></span>
+				/
+				<a class="page-link" data-page="incomplete-uploads-page"><msg key="toggle-uploads-incomplete"></msg></a>
 			</h2>
 			<a class='page-link' data-page='settings-page'><img src='images/2-action-settings.png' /></a>
 		</header>
@@ -321,11 +323,11 @@
 	<div class="page" id="incomplete-uploads-page">
 		<header class='actionbar'>
 			<a class='back' href="#"></a>
-			<h2>
-			<select class="toggle-page">
-				<option value="incomplete-uploads-page" selected data-msg-text="uploads-incomplete"></option>
-				<option value="uploads-page" data-msg-text="uploads-completed"></option>
-			</select>
+			<h2 class="toggle">
+				<msg key="toggle-view"></msg>
+				<a class="page-link" data-page="uploads-page"><msg key="toggle-uploads-complete"></msg></a>
+				/
+				<span class="selected"><msg key="toggle-uploads-incomplete"></msg></span>
 			</h2>
 			<a class='page-link' data-page='settings-page'><img src='images/2-action-settings.png' /></a>
 		</header>

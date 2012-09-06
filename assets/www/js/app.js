@@ -31,6 +31,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 				appendTo( '#upload-progress-bar' );
 		}
 	} );
+	var hrefStylesheet = 'app.css';
 	var CURRENT_LANGUAGE;
 	var PHOTO_TEMPLATE = templates.getTemplate( 'upload-photo-description', true );
 	var commonsApi = new Api( WLMConfig.COMMONS_API );
@@ -222,7 +223,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	function showMonumentDetail(monument) {
 		var monumentTemplate = templates.getTemplate('monument-details-template');
 		 // @FIXME remove dependency on CAMPAIGNS[monument.country].desc
-		var imageFetcher = commonsApi.getImageFetcher(300, 240);
+		var imageFetcher = commonsApi.getImageFetcher( 300 * window.devicePixelRatio, 240 * window.devicePixelRatio );
 		var $monumentDetail = $( monumentTemplate( { monument: monument } ) );
 		$( '#monument-detail' ).html( $monumentDetail ).localize();
 		translateLevelsForMonument( monument ).done( function( names ) {
@@ -940,7 +941,18 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		if( l10n.isLangRTL( lang ) ) {
 			$( 'body' ).attr( 'dir', 'rtl' );
+			hrefStylesheet = 'app-rtl.css';
 		}
+		// load styles
+		$.ajax( {
+			url: hrefStylesheet, dataType: 'text'
+		} ).done( function( css ) {
+			$( document.documentElement ).removeClass( 'loading' );
+			$( '<style type="text/css" >' ).text( css ).appendTo( document.head );
+			initMap();
+			clearHistory();
+			showPage('welcome-page');
+		} );
 		CURRENT_LANGUAGE = lang;
 
 		function filterMonuments() {
@@ -1052,7 +1064,8 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			}, {
 				// options
 				destinationType: Camera.DestinationType.FILE_URI,
-				saveToPhotoAlbum: true
+				saveToPhotoAlbum: true,
+				quality: 100 // don't recompress
 			});
 		});
 		$('#selectphoto').click(function() {
@@ -1078,9 +1091,6 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		$(document).localize();
 		$( '#about-page-text a' ).eq( 0 ).attr( 'href', wlm_url );
 		$( '#about-page-text a' ).eq( 1 ).attr( 'href', wikipedia_url );
-		initMap();
-		clearHistory();
-		showPage('welcome-page');
 
 		// allow cancellation of current api upload request
 		$( '#upload-progress-page .back' ).click( function() {
