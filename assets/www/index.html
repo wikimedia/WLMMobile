@@ -167,7 +167,6 @@
 
 [//commons.wikimedia.org/wiki/Special:UploadWizard?campaign=wlm-<%= encodeURIComponent(descData.monument.country) %>&id=<%= encodeURIComponent(descData.monument.id) %>&categories=<%
 var allCats = descData.cats;
-alert(descData.cats.join('|'));
 allCats.push('Mobile to desktop upload');
 var encodedCats = _.map( allCats, function( cat ) {
   return encodeURIComponent( cat );
