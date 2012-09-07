@@ -165,7 +165,15 @@
 |other_fields=
 }}
 
-[//commons.wikimedia.org/wiki/Special:UploadWizard?campaign=wlm-<%= encodeURIComponent(descData.monument.country) %>&id=<%= encodeURIComponent(descData.monument.id) %> <%= mw.message('upload-more-link') %>]
+[//commons.wikimedia.org/wiki/Special:UploadWizard?campaign=wlm-<%= encodeURIComponent(descData.monument.country) %>&id=<%= encodeURIComponent(descData.monument.id) %>&categories=<%
+var allCats = descData.cats;
+alert(descData.cats.join('|'));
+allCats.push('Mobile to desktop upload');
+var encodedCats = _.map( allCats, function( cat ) {
+  return encodeURIComponent( cat );
+} );
+print(encodedCats.join("|"));
+%> <%= mw.message('upload-more-link') %>]
 
 =={{int:license-header}}==
 {{self|<%= descData.license %>}}
