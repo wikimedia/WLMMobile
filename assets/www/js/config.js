@@ -9,7 +9,7 @@ var WLMConfig = {
 	WIKI_LOVES_MONUMENTS_HOMEPAGE: 'http://www.wikilovesmonuments.org/',
 	WIKIPEDIA: 'https://$1.wikipedia.org',
 	WIKIPEDIA_API: 'https://$1.wikipedia.org/w/api.php',
-	VERSION_NUMBER: '1.2.3',
+	VERSION_NUMBER: '1.2.3-1',
 	VERSION_NAME: 'Colosseum', // famous monument name (next should begin with D)
 
 	// app specific
