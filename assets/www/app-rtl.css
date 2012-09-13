@@ -10,35 +10,10 @@ html {
 	font-size: 100%;
 }
 
-body {
-	font-family: "Roboto", "Droid Sans", "Helvetica";
-	padding: 0;
-	margin: 0;
-	background-color: #F2F2F2;
-	color: #222;
-	top: 0;
-	bottom: 0;
-	position: absolute;
-	left: 0;
-	right: 0;
-}
-
 /* spinner related styles */
 #monument-detail.loading img,
 #results li.loading img {
 	visibility: hidden;
-}
-
-.mapLoader.loading,
-#monument-detail.loading .photo,
-#results li.loading,
-#results .footer.loading,
-.loading #results,
-.loading .content {
-	background-image: url(images/loader.gif);
-	background-position: center center;
-	background-repeat: no-repeat;
-	min-height: 50px;
 }
 
 .mapLoader.loading {
@@ -156,6 +131,11 @@ header.actionbar.hidden {
 	height: 100%;
 	width: auto;
 	padding: 4px;
+}
+
+.page header.actionbar img.home {
+	height: 32px;
+	margin-bottom: 6px;
 }
 
 a.upload {
@@ -379,6 +359,7 @@ header h2 input[type='text'] {
 header .back {
 	display: block;
 	background: url('images/button-dark-back-rtl.png') no-repeat;
+	-webkit-background-size: 20px 31px;
 	background-size: 20px 31px;
 	width: 36px;
 	height: 100%;
@@ -389,6 +370,10 @@ header .back {
 .back {
 	-webkit-tap-highlight-color: rgba( 0, 0, 0, 0 );
 	tap-highlight-color: rgba( 0, 0, 0, 0 );
+}
+
+.back:disabled {
+	opacity: 0.2;
 }
 
 /* upload page */
@@ -474,9 +459,16 @@ button.requires-location {
 }
 
 #incomplete-uploads-page input[type=checkbox] {
-	-webkit-transform: scale(2);
+	-webkit-transform: scale(3);
 	padding: 20px;
 	margin-top: 20px;
+	position: absolute;
+	top: 8px;
+	right: 8px;
+}
+
+#incomplete-uploads-page .monuments-list li {
+	padding-right: 60px;
 }
 
 /* Maps styles */
