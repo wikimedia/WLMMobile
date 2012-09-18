@@ -38,32 +38,33 @@ define(['jquery', 'propertiesFileReader'], function($, propertiesFileReader) {
 		//console.log('loading messages for ' + lang);
 		lang = normalizeLanguageCode(lang);
 		var url = /*ROOT_URL +*/ 'messages/messages-' + lang + '.properties';
-		console.log('Loading messages: ' + url);
-		$.ajax({
-			url: url,
-			//async: false, // fails on WinPhone7.1
-			dataType: 'text',
-			success: function(data) {
-				console.log('success loading ' + url);
-				try {
-					var messages = propertiesFileReader.parse(data);
-				} catch (e) {
-					// We have no messages for this particular language code
-					callback(false);
-					return;
-				}
-				$.each(messages, function(key, val) {
-					mw.messages.set(key, val);
-				});
-				callback(true);
-			},
-			error: function(xhr, status, err) {
-				console.log('failed to load ' + url + ': ' + status + '; ' + err);
+		var remoteUrl = WLMConfig.GITHUB_MESSAGES + url;
+
+		function parseResponse( data ) {
+			var messages, success;
+			try {
+				messages = propertiesFileReader.parse( data );
+				$.each( messages, function( key, val ) {
+					mw.messages.set( key, val );
+				} );
+				success = true;
+			} catch ( e ) {
+				// We have no messages for this particular language code
+				success = false;
+			}
+
+			callback( success );
+		}
+		console.log( 'Loading messages from github: ' + remoteUrl );
+		$.ajax( { url: remoteUrl } ).done( parseResponse ).fail( function() {
+			console.log( 'Falling back to local messages: ' + url );
+			$.ajax( { url: url } ).done( parseResponse ).error( function( xhr, status, err ) {
+				console.log( 'failed to load ' + url + ': ' + status + '; ' + err );
 				// We seem to get "success" on file not found, which feels wrong...
 				// We kinda expect to get 404 errors or similar?
-				callback(false);
-			}
-		});
+				callback( false );
+			} );
+		} );
 	}
 
 	function navigatorLang(success) {
