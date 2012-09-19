@@ -167,10 +167,10 @@
 
 [//commons.wikimedia.org/wiki/Special:UploadWizard?campaign=wlm-<%= encodeURIComponent(descData.monument.country) %>&id=<%= encodeURIComponent(descData.monument.id) %>&categories=<%
 var allCats = descData.cats;
-allCats.push('Mobile to desktop upload');
 var encodedCats = _.map( allCats, function( cat ) {
   return encodeURIComponent( cat );
 } );
+encodedCats.push( 'Mobile%20to%20desktop%20upload' );
 print(encodedCats.join("|"));
 %> {{upload-more-photos-of-this-monument}}]
 
