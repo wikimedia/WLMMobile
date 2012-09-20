@@ -1054,6 +1054,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 
 		// upload-page
 		$('#takephoto').click(function() {
+			// Attempt to clear memory from giant image preview of prior image
+			$( 'img.preview-image' ).removeAttr( 'src' );
+
 			navigator.camera.getPicture(function(data) {
 				// success
 				state.fileUri = data;
@@ -1069,6 +1072,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 			});
 		});
 		$('#selectphoto').click(function() {
+			// Attempt to clear memory from giant image preview of prior image
+			$( 'img.preview-image' ).removeAttr( 'src' );
+
 			navigator.camera.getPicture(function(data) {
 				// success
 				state.fileUri = data;
