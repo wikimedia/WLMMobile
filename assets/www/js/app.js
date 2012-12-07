@@ -185,7 +185,9 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 		}
 		// special casing for specific pages
 		// TODO: provide generic mechanism for this
-		navigator.geolocation.clearWatch( watchId );
+		if ( watchId ) {
+			navigator.geolocation.clearWatch( watchId );
+		}
 		var monuments = $( "#results" ).data( 'monuments' );
 		if( monuments && pageName === 'results-page' ) {
 			showMonumentsList( monuments );
