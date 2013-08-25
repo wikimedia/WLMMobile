@@ -36,7 +36,7 @@ require( [ 'jquery', 'l10n', 'geo', 'api', 'templates', 'monuments', 'monument',
 	var PHOTO_TEMPLATE = templates.getTemplate( 'upload-photo-description', true );
 	var commonsApi = new Api( WLMConfig.COMMONS_API );
 	var monuments = new MonumentsApi( WLMConfig.MONUMENT_API, commonsApi );
-	var wlmapi = 'http://toolserver.org/~erfgoed/api/api.php';
+	var wlmapi = 'https://tools.wmflabs.org/heritage/api/api.php';
 	var admintree = new AdminTreeApi( WLMConfig.MONUMENT_API );
 	var nearbyDeg = 1.5; // degree 'radius' approx on the bounding box
 	var state = {
