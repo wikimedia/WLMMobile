@@ -1,4 +1,4 @@
-package org.wikipedia.wlm;
+package org.wikilovesmonuments;
 
 import android.app.Activity;
 import android.content.pm.PackageInfo;
