@@ -2,7 +2,7 @@ $('html').addClass('android');
 
 // Android opens a.external externally automatically.
 
-platform.geoUrl = function(lat, lon, address) {
+platform.geoUrl = function(lat, lon, address, name) {
 	var hasLonLat = typeof lat !== 'undefined' && typeof lon !== 'undefined',
 		q = 'geo:0,0 ?q=carmen san diego', // should never happen
 		add = address ? encodeURIComponent( address ) : '';
@@ -11,8 +11,10 @@ platform.geoUrl = function(lat, lon, address) {
 		q = 'geo:' + latlng + '?q=' + latlng + ' (' + add + ')';
 	} else if ( address ) {
 		q = 'geo:0,0?q=' + add; // TODO
-    }
-console.log( q );
+    } else {
+		q = 'geo:0,0?q=' + name;
+	}
+	console.log( q );
     return q;
 }
 

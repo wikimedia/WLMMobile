@@ -15,7 +15,7 @@ define( [ 'jquery', 'utils' ], function() {
 				that[ key ] = value;
 			}
 		});
-		this.addressLink = platform.geoUrl( this.lat, this.lon, this.address );
+		this.addressLink = platform.geoUrl( this.lat, this.lon, this.address, this.name );
 		this.articleLink = this.processArticleLink();
 		this.mwApi = mwApi;
 	}
