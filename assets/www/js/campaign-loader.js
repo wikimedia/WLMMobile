@@ -52,9 +52,53 @@
 	}
 	// update cache with latest and greatest
 	$.ajax( { dataType: 'json',
-		url: 'http://commons.wikimedia.org/w/api.php?action=uploadcampaign&format=json&ucprop=config'
-	} ).done( function( data ) {
-		var campdata, camp, i;
+		url: 'https://commons.wikimedia.org/w/api.php?action=query&prop=revisions&format=json&rvprop=content&generator=allpages&gapnamespace=460&gaplimit=500'
+	} ).done( function( rawData ) {
+		var campdata, camp, i, data = { 'uploadcampaign': { 'campaigns': [] } };
+
+		$.each( rawData.query.pages, function( id, page ) {
+			console.log( page );
+			var dc = JSON.parse(page.revisions[0]['*']);
+
+			// Reverse mapping
+			if ( dc.defaults ) {
+				dc.defaultDescription = dc.defaults.description || '';
+				dc.defaultLat = dc.defaults.lat || '';
+				dc.defaultLon = dc.defaults.lon || '';
+				dc.defaultCategories = dc.defaults.categories || [];
+			}
+
+			if ( dc.autoAdd ) {
+				dc.autoWikiText = dc.autoAdd.wikitext || '';
+				dc.autoCategories = dc.autoAdd.categories || [];
+			}
+
+			if ( dc.fields && dc.fields[0] ) {
+				dc.idField = dc.fields[0].wikitext;
+				dc.idFieldInitialValue = dc.fields[0].initialValue;
+				dc.idFieldLabelPage = dc.fields[0].label;
+				dc.idFieldMaxLength = dc.fields[0].maxLength;
+			}
+			if ( dc.fields && dc.fields[1] ) {
+				dc.idField2 = dc.fields[1].wikitext;
+				dc.idField2InitialValue = dc.fields[1].initialValue;
+				dc.idField2LabelPage = dc.fields[1].label;
+				dc.idFieldMaxLength = dc.fields[1].maxLength;
+			}
+
+			if ( dc.licensing && dc.licensing.ownWork && dc.licensing.ownWork.licenses && dc.licensing.ownWork.licenses[0] ) {
+				// Typo, yes, yes
+				dc.defaultOwnWorkLicence = dc.licensing.ownWork.licenses[0];
+			}
+
+			var cam = {}
+			cam.name = page.title.split(':')[1];
+			cam.isenabled = dc.enabled ? 1 : 0;
+			cam.config = dc;
+
+			data.uploadcampaign.campaigns.push( cam );
+		} );
+
 		if ( data.uploadcampaign && data.uploadcampaign.campaigns ) {
 			campdata = data.uploadcampaign.campaigns;
 			for ( i = 0; i < campdata.length; i++ ) {
