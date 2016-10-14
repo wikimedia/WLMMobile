@@ -141,7 +141,13 @@ define(['jquery'], function() {
 				console.log("Code = " + r.responseCode);
 				console.log("Response = " + r.response);
 				console.log("Sent = " + r.bytesSent);
-				var data = JSON.parse(r.response);
+				var data;
+				try {
+					data = JSON.parse( r.response );
+				} catch( e ) {
+					// on iOS this comes through URI-encoded for some reason
+					data = JSON.parse( decodeURIComponent( r.response ) );
+				}
 				if( data.error ) {
 					d.reject( data );
 				} else if ( data && data.upload && data.upload.result === 'Success' ) {
